@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios";
 
 /**
  * Pre-configured Axios instance for all EVA API calls.
@@ -7,10 +7,10 @@ import axios from 'axios'
  * - withCredentials ensures the httpOnly Refresh_Token cookie is sent
  */
 const apiClient = axios.create({
-  baseURL: '/api/v1',
+  baseURL: "/api/v1",
   withCredentials: true,
-  headers: { 'Content-Type': 'application/json' },
-})
+  headers: { "Content-Type": "application/json" },
+});
 
 // ---------------------------------------------------------------------------
 // Request interceptor — attach Bearer token from Zustand auth store
@@ -24,10 +24,10 @@ apiClient.interceptors.request.use(
     // if (token) {
     //   config.headers.Authorization = `Bearer ${token}`
     // }
-    return config
+    return config;
   },
   (error) => Promise.reject(error),
-)
+);
 
 // ---------------------------------------------------------------------------
 // Response interceptor — handle 401 and trigger token refresh
@@ -45,8 +45,8 @@ apiClient.interceptors.response.use(
     //   error.config.headers.Authorization = `Bearer ${accessToken}`
     //   return apiClient(error.config)
     // }
-    return Promise.reject(error)
+    return Promise.reject(error);
   },
-)
+);
 
-export default apiClient
+export default apiClient;

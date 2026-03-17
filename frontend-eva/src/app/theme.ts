@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles'
+import { createTheme } from "@mui/material/styles";
 
 /**
  * EVA platform custom MUI theme.
@@ -8,24 +8,24 @@ import { createTheme } from '@mui/material/styles'
 const evaTheme = createTheme({
   palette: {
     primary: {
-      main: '#328f97', // --lagoon-deep
-      light: '#4fb8b2', // --lagoon
-      dark: '#173a40', // --sea-ink
-      contrastText: '#ffffff',
+      main: "#328f97", // --lagoon-deep
+      light: "#4fb8b2", // --lagoon
+      dark: "#173a40", // --sea-ink
+      contrastText: "#ffffff",
     },
     secondary: {
-      main: '#2f6a4a', // --palm
-      light: '#6ec89a',
-      dark: '#1a4a30',
-      contrastText: '#ffffff',
+      main: "#2f6a4a", // --palm
+      light: "#6ec89a",
+      dark: "#1a4a30",
+      contrastText: "#ffffff",
     },
     background: {
-      default: '#e7f3ec', // --bg-base
-      paper: '#f3faf5', // --foam
+      default: "#e7f3ec", // --bg-base
+      paper: "#f3faf5", // --foam
     },
     text: {
-      primary: '#173a40', // --sea-ink
-      secondary: '#416166', // --sea-ink-soft
+      primary: "#173a40", // --sea-ink
+      secondary: "#416166", // --sea-ink-soft
     },
   },
   typography: {
@@ -41,7 +41,7 @@ const evaTheme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: 'none',
+          textTransform: "none",
           fontWeight: 600,
         },
       },
@@ -53,6 +53,6 @@ const evaTheme = createTheme({
       },
     },
   },
-})
+});
 
-export default evaTheme
+export default evaTheme;

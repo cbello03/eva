@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react'
-import { ThemeProvider } from '@mui/material/styles'
-import CssBaseline from '@mui/material/CssBaseline'
-import evaTheme from './theme'
+import type { ReactNode } from "react";
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import evaTheme from "./theme";
 
 /**
  * Top-level provider wrapper for the EVA application.
@@ -15,15 +15,11 @@ import evaTheme from './theme'
  * composed in `__root.tsx`. This provider is meant to be
  * nested inside or alongside that existing setup.
  */
-export default function EvaProviders({
-  children,
-}: {
-  children: ReactNode
-}) {
+export default function EvaProviders({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider theme={evaTheme}>
       <CssBaseline />
       {children}
     </ThemeProvider>
-  )
+  );
 }
