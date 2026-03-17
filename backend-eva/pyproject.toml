@@ -5,26 +5,23 @@ description = "Backend para la plataforma de aprendizaje EVA"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "django>=5.0",
-    "django-ninja>=1.1",
-    "channels>=4.0",
-    "celery>=5.3",
-    "redis>=5.0",
-    "pyjwt>=2.8",
-    "bleach>=6.1",
-    "pydantic-settings>=2.2",
-    "psycopg2-binary>=2.9",
-    "uvicorn[standard]>=0.29",
-    "daphne>=4.1",
-    "dj-database-url>=3.1.2",
-    "channels-redis>=4.3.0",
+    "django>=6.0,<7.0",
+    "django-ninja>=1.4,<2.0",
+    "channels[daphne]>=4.3,<5.0",
+    "celery>=5.5,<6.0",
+    "redis>=5.0,<6.0",
+    "pyjwt>=2.10,<3.0",
+    "nh3>=0.2.21",
+    "pydantic-settings>=2.7,<3.0",
+    "psycopg[binary]>=3.2,<4.0",
+    "channels-redis>=4.3,<5.0",
 ]
 
 [dependency-groups]
 dev = [
     "pytest>=8.0",
     "pytest-django>=4.8",
-    "hypothesis>=6.98",
-    "ruff>=0.3",
-    "mypy>=1.9"
+    "hypothesis>=6.130",
+    "ruff>=0.14",
+    "mypy>=1.18",
 ]
