@@ -34,7 +34,8 @@ class EnvSettings(BaseSettings):
         alias="SECRET_KEY",
     )
     debug: bool = Field(default=True, alias="DEBUG")
-    allowed_hosts: str = Field(default="localhost,127.0.0.1", alias="ALLOWED_HOSTS")
+    allowed_hosts: str = Field(
+        default="localhost,127.0.0.1", alias="ALLOWED_HOSTS")
 
     # PostgreSQL
     db_name: str = Field(default="eva_db", alias="POSTGRES_DB")
@@ -44,7 +45,8 @@ class EnvSettings(BaseSettings):
     db_port: int = Field(default=5432, alias="POSTGRES_PORT")
 
     # Redis
-    redis_url: str = Field(default="redis://localhost:6379/0", alias="REDIS_URL")
+    redis_url: str = Field(
+        default="redis://localhost:6379/0", alias="REDIS_URL")
 
     # CORS
     cors_allowed_origins: str = Field(
@@ -75,6 +77,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "channels",
     "ninja",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
@@ -126,7 +129,9 @@ DATABASES = {
 # Password validation
 # ---------------------------------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
