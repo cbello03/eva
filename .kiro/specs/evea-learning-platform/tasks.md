@@ -37,7 +37,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Create `src/shared/` directory structure for shared components, hooks, utils, types
     - _Requirements: 24.1, 24.2, 24.3, 24.4, 24.5_
 
-- [ ] 2. Checkpoint — Verify project scaffolding
+- [-] 2. Checkpoint — Verify project scaffolding
   - Ensure both projects initialize without errors, ask the user if questions arise.
 
 - [ ] 3. Accounts app — Authentication and authorization
