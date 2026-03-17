@@ -329,7 +329,7 @@ The system consists of a Django backend (`backend-eva`) and a React frontend (`f
 
 #### Acceptance Criteria
 
-1. THE EVA frontend SHALL use TanStack Router with file-based routing for all page navigation
+1. THE EVA frontend SHALL use TanStack Start with file-based routing for all page navigation
 2. THE EVA frontend SHALL use TanStack Query for all server state management and API data fetching
 3. THE EVA frontend SHALL use Zustand for client-side state management (authentication state, UI state)
 4. THE EVA frontend SHALL use MUI components as the base component library with a custom theme

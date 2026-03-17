@@ -2,19 +2,19 @@
 
 ## Overview
 
-This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learning platform following a backend-first, then frontend approach. The backend uses Django + Django Ninja + Django Channels + Celery, and the frontend uses React + TanStack Router + TanStack Query + Zustand + MUI. All tasks are ordered so each builds on the previous, with no orphaned code.
+This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learning platform following a backend-first, then frontend approach. The backend uses Django + Django Ninja + Django Channels + Celery, and the frontend uses React + TanStack Start + TanStack Query + Zustand + MUI. All tasks are ordered so each builds on the previous, with no orphaned code.
 
 ## Tasks
 
-- [ ] 1. Project scaffolding and shared infrastructure
-  - [ ] 1.1 Initialize backend Django project with UV and configure settings
-    - Create `backend-eva/` with `config/` package: `settings.py` (pydantic-settings), `urls.py`, `asgi.py`, `wsgi.py`, `celery.py`
+- [x] 1. Project scaffolding and shared infrastructure
+  - [x] 1.1 Initialize backend Django project with UV and configure settings
+    - Create `backend-eva/` and inside use the django-admin startproject tool to generate the basic scallfolding with "django-admin startproject backend-eva .", then in the same folder django initializes that contains the `settings.py` create the `celery.py` file 
     - Configure PostgreSQL, Redis, Celery, Django Channels in settings
     - Add `pyproject.toml` with all dependencies (django, django-ninja, channels, celery, redis, hypothesis, pytest, pytest-django, ruff, mypy, bleach, pyjwt)
     - Create `manage.py` and empty `apps/` package
     - _Requirements: 23.2_
 
-  - [ ] 1.2 Create common utilities module
+  - [x] 1.2 Create common utilities module
     - Create `backend-eva/common/` with `models.py` (TimestampedModel base), `permissions.py` (role-based permission decorators for Student, Teacher, Admin), `pagination.py` (cursor/offset pagination), `sanitization.py` (XSS sanitization using bleach), `rate_limiting.py` (Redis-based rate limiter)
     - Create `backend-eva/common/exceptions.py` with all domain exception classes: `DomainError`, `DuplicateEmailError`, `InvalidCredentialsError`, `InsufficientRoleError`, `NotEnrolledError`, `CourseNotPublishedError`, `PublishValidationError`, `RateLimitExceededError`, `FileTooLargeError`, `TooManyFilesError`
     - Create `backend-eva/common/schemas.py` with `ErrorResponse` and `FieldError` Pydantic schemas
@@ -27,9 +27,9 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 48: XSS sanitization** — For any user-generated text containing HTML tags or JavaScript, stored content has dangerous elements removed/escaped, retrieved content never contains executable script tags
     - **Validates: Requirements 21.5**
 
-  - [ ] 1.4 Initialize frontend React project with Bun and configure tooling
-    - Create `frontend-eva/` with Vite + React + TypeScript scaffold
-    - Add `package.json` with all dependencies (react, @tanstack/react-router, @tanstack/react-query, zustand, @mui/material, react-hook-form, zod, axios, fast-check, vitest, @testing-library/react, oxlint)
+  - [x] 1.4 Initialize frontend React (tanstack start) project with Bun and configure tooling
+    - `frontend-eva/` already created
+    - Add `package.json` with all dependencies (@tanstack/react-query, zustand, @mui/material, react-hook-form, zod, axios, fast-check, vitest, @testing-library/react, oxlint, oxfmt)
     - Configure `vite.config.ts`, `tsconfig.json`
     - Create `src/app/` with `App.tsx`, `providers.tsx` (QueryClient, Router, Theme providers), `theme.ts` (MUI custom theme)
     - Create `src/lib/api-client.ts` (Axios instance with base URL, withCredentials, interceptors placeholder)
@@ -654,7 +654,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - _Requirements: 24.7, 24.8_
 
 - [ ] 21. Frontend — App shell, routing, and layout
-  - [ ] 21.1 Configure TanStack Router with file-based routing
+  - [ ] 21.1 Configure TanStack Start with file-based routing
     - Create `frontend-eva/src/routes/__root.tsx`: root layout with React Suspense, MUI ThemeProvider, navigation bar, notification indicator
     - Create `frontend-eva/src/routes/index.tsx`: landing page
     - Set up route guards for authenticated/role-based routes

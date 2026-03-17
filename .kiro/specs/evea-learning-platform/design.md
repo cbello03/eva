@@ -6,7 +6,7 @@ EVA (Entorno Virtual de Enseñanza-Aprendizaje) is a production-grade learning p
 
 The backend follows a modular Django apps architecture with a service layer pattern. Each domain (accounts, courses, exercises, gamification, progress, social, projects, collaboration, notifications) is an isolated Django app with its own models, services, schemas, and API routes. Cross-domain communication happens through service-layer imports, never direct model access across apps.
 
-The frontend is a feature-based React application using TanStack Router (file-based routing), TanStack Query (server state), Zustand (client state), MUI (component library), and CSS modules (styling). It communicates with the backend via REST for CRUD operations and WebSocket for real-time features (chat, notifications, collaborative workspaces).
+The frontend is a feature-based React application using TanStack Start (file-based routing), TanStack Query (server state), Zustand (client state), MUI (component library), and CSS modules (styling). It communicates with the backend via REST for CRUD operations and WebSocket for real-time features (chat, notifications, collaborative workspaces).
 
 ### Key Architectural Decisions
 
@@ -20,7 +20,7 @@ The frontend is a feature-based React application using TanStack Router (file-ba
 ```mermaid
 graph TB
     subgraph Frontend["frontend-eva (React SPA)"]
-        Router[TanStack Router]
+        Router[TanStack Start]
         Query[TanStack Query]
         Store[Zustand Store]
         UI[MUI Components]
@@ -62,7 +62,7 @@ The backend is organized as a Django project (`backend-eva`) with the following 
 
 ```
 backend-eva/
-├── config/                  # Django project settings
+├── backend-eva/                  # Django project settings
 │   ├── settings.py          # pydantic-settings based config
 │   ├── urls.py              # Root URL config mounting Django Ninja
 │   ├── asgi.py              # ASGI app with Channels routing
@@ -134,7 +134,7 @@ frontend-eva/
 │   │   ├── App.tsx
 │   │   ├── providers.tsx       # QueryClient, Router, Theme providers
 │   │   └── theme.ts            # MUI custom theme
-│   ├── routes/                 # TanStack Router file-based routes
+│   ├── routes/                 # TanStack Start file-based routes
 │   │   ├── __root.tsx          # Root layout with Suspense
 │   │   ├── index.tsx           # Landing page
 │   │   ├── login.tsx
