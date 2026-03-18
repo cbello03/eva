@@ -78,6 +78,8 @@ INSTALLED_APPS = [
     "channels",
     "ninja",
     "django_extensions",
+    # Domain apps
+    "apps.accounts",
 ]
 
 MIDDLEWARE = [
@@ -154,6 +156,11 @@ STATIC_URL = "static/"
 # Default primary key field type
 # ---------------------------------------------------------------------------
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# ---------------------------------------------------------------------------
+# Custom user model
+# ---------------------------------------------------------------------------
+AUTH_USER_MODEL = "accounts.User"
 
 # ---------------------------------------------------------------------------
 # Django Channels — Redis channel layer

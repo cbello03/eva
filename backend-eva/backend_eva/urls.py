@@ -9,6 +9,7 @@ from django.http import HttpRequest, HttpResponse
 from django.urls import path
 from ninja import NinjaAPI
 
+from apps.accounts.api import router as accounts_router
 from common.exceptions import DomainError, RateLimitExceededError
 from common.schemas import ErrorResponse
 
@@ -40,6 +41,11 @@ def domain_error_handler(
         response["Retry-After"] = str(exc.retry_after)
     return response
 
+
+# ---------------------------------------------------------------------------
+# Mount app routers
+# ---------------------------------------------------------------------------
+api.add_router("", accounts_router)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
