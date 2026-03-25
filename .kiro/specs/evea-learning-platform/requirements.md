@@ -329,11 +329,11 @@ The system consists of a Django backend (`backend-eva`) and a React frontend (`f
 
 #### Acceptance Criteria
 
-1. THE EVA frontend SHALL use TanStack Start with file-based routing for all page navigation
+1. THE EVA frontend SHALL use Next.js App Router with file-based routing (route groups, layouts, and pages in `src/app/`) for all page navigation
 2. THE EVA frontend SHALL use TanStack Query for all server state management and API data fetching
 3. THE EVA frontend SHALL use Zustand for client-side state management (authentication state, UI state)
 4. THE EVA frontend SHALL use MUI components as the base component library with a custom theme
-5. THE EVA frontend SHALL use CSS modules for all custom styling, with no utility-first CSS frameworks
-6. THE EVA frontend SHALL implement React Suspense with fallback loading indicators for all route-level components
+5. THE EVA frontend SHALL use Tailwind CSS for utility styling alongside MUI components, with a custom theme defined in `src/app/theme.ts`
+6. THE EVA frontend SHALL implement Next.js loading conventions (`loading.tsx`) and React Suspense with fallback loading indicators for all route-level components
 7. THE EVA frontend SHALL store the Access_Token in memory (Zustand store) and never persist it to localStorage or sessionStorage
 8. WHEN the Access_Token expires, THE EVA frontend SHALL automatically request a new token using the Refresh_Token cookie before retrying the failed request

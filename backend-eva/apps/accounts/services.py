@@ -190,6 +190,7 @@ class AuthService:
             "sub": str(user.pk),
             "role": user.role,
             "type": "access",
+            "jti": str(uuid.uuid4()),
             "iat": now,
             "exp": now + ACCESS_TOKEN_LIFETIME,
         }
@@ -202,6 +203,7 @@ class AuthService:
             "sub": str(user.pk),
             "family_id": str(family_id),
             "type": "refresh",
+            "jti": str(uuid.uuid4()),
             "iat": now,
             "exp": now + REFRESH_TOKEN_LIFETIME,
         }

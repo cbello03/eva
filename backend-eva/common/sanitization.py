@@ -10,7 +10,7 @@ ALLOWED_TAGS = {
 }
 
 ALLOWED_ATTRIBUTES: dict[str, set[str]] = {
-    "a": {"href", "title", "rel"},
+    "a": {"href", "title"},  # nh3 manages "rel" internally; do not include it
     "abbr": {"title"},
 }
 

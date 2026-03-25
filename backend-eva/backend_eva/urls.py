@@ -10,6 +10,9 @@ from django.urls import path
 from ninja import NinjaAPI
 
 from apps.accounts.api import router as accounts_router
+from apps.courses.api import router as courses_router
+from apps.exercises.api import router as exercises_router
+from apps.gamification.api import router as gamification_router
 from common.exceptions import DomainError, RateLimitExceededError
 from common.schemas import ErrorResponse
 
@@ -46,6 +49,9 @@ def domain_error_handler(
 # Mount app routers
 # ---------------------------------------------------------------------------
 api.add_router("", accounts_router)
+api.add_router("", courses_router)
+api.add_router("", exercises_router)
+api.add_router("", gamification_router)
 
 urlpatterns = [
     path("admin/", admin.site.urls),

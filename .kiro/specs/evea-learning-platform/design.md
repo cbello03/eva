@@ -2,11 +2,11 @@
 
 ## Overview
 
-EVA (Entorno Virtual de Enseñanza-Aprendizaje) is a production-grade learning platform combining four pedagogical models into a single system: Conductismo (gamification), Cognitivismo (adaptive learning), Conectivismo (social features), and Constructivismo (collaborative projects). The platform is a two-tier web application with a Django backend exposing a REST + WebSocket API and a React SPA frontend.
+EVA (Entorno Virtual de Enseñanza-Aprendizaje) is a production-grade learning platform combining four pedagogical models into a single system: Conductismo (gamification), Cognitivismo (adaptive learning), Conectivismo (social features), and Constructivismo (collaborative projects). The platform is a two-tier web application with a Django backend exposing a REST + WebSocket API and a React frontend powered by Next.js with App Router for SSR.
 
 The backend follows a modular Django apps architecture with a service layer pattern. Each domain (accounts, courses, exercises, gamification, progress, social, projects, collaboration, notifications) is an isolated Django app with its own models, services, schemas, and API routes. Cross-domain communication happens through service-layer imports, never direct model access across apps.
 
-The frontend is a feature-based React application using TanStack Start (file-based routing), TanStack Query (server state), Zustand (client state), MUI (component library), and CSS modules (styling). It communicates with the backend via REST for CRUD operations and WebSocket for real-time features (chat, notifications, collaborative workspaces).
+The frontend is a feature-based React application using Next.js with App Router for SSR (file-based routing), TanStack Query (server state), Zustand (client state), MUI (component library), and Tailwind CSS (styling). It communicates with the backend via REST for CRUD operations and WebSocket for real-time features (chat, notifications, collaborative workspaces).
 
 ### Key Architectural Decisions
 
@@ -19,8 +19,8 @@ The frontend is a feature-based React application using TanStack Start (file-bas
 
 ```mermaid
 graph TB
-    subgraph Frontend["frontend-eva (React SPA)"]
-        Router[TanStack Start]
+    subgraph Frontend["frontend-eva (Next.js App Router)"]
+        Router[Next.js Router]
         Query[TanStack Query]
         Store[Zustand Store]
         UI[MUI Components]
@@ -130,37 +130,41 @@ class CourseService:
 ```
 frontend-eva/
 ├── src/
-│   ├── app/                    # App shell, providers, theme
-│   │   ├── App.tsx
-│   │   ├── providers.tsx       # QueryClient, Router, Theme providers
-│   │   └── theme.ts            # MUI custom theme
-│   ├── routes/                 # TanStack Start file-based routes
-│   │   ├── __root.tsx          # Root layout with Suspense
-│   │   ├── index.tsx           # Landing page
-│   │   ├── login.tsx
-│   │   ├── register.tsx
+│   ├── app/                    # Next.js App Router
+│   │   ├── layout.tsx          # Root layout with providers, Suspense
+│   │   ├── page.tsx            # Landing page
+│   │   ├── login/
+│   │   │   └── page.tsx
+│   │   ├── register/
+│   │   │   └── page.tsx
 │   │   ├── dashboard/
-│   │   │   └── index.tsx       # Student dashboard
+│   │   │   └── page.tsx        # Student dashboard
 │   │   ├── courses/
-│   │   │   ├── index.tsx       # Course listing
-│   │   │   ├── $courseId.tsx    # Course detail
-│   │   │   └── $courseId/
+│   │   │   ├── page.tsx        # Course listing
+│   │   │   └── [courseId]/
+│   │   │       ├── page.tsx    # Course detail
 │   │   │       ├── lessons/
-│   │   │       │   └── $lessonId.tsx  # Lesson player
-│   │   │       ├── forum.tsx
-│   │   │       └── chat.tsx
+│   │   │       │   └── [lessonId]/
+│   │   │       │       └── page.tsx  # Lesson player
+│   │   │       ├── forum/
+│   │   │       │   └── page.tsx
+│   │   │       └── chat/
+│   │   │           └── page.tsx
 │   │   ├── teacher/
-│   │   │   ├── index.tsx       # Teacher dashboard
+│   │   │   ├── page.tsx        # Teacher dashboard
 │   │   │   ├── courses/
-│   │   │   │   └── $courseId/
-│   │   │   │       └── builder.tsx  # Course builder
+│   │   │   │   └── [courseId]/
+│   │   │   │       └── builder/
+│   │   │   │           └── page.tsx  # Course builder
 │   │   │   └── analytics/
-│   │   │       └── $courseId.tsx
+│   │   │       └── [courseId]/
+│   │   │           └── page.tsx
 │   │   ├── projects/
-│   │   │   ├── index.tsx
-│   │   │   └── $projectId.tsx
+│   │   │   ├── page.tsx
+│   │   │   └── [projectId]/
+│   │   │       └── page.tsx
 │   │   └── profile/
-│   │       └── index.tsx       # Profile + achievements
+│   │       └── page.tsx        # Profile + achievements
 │   ├── features/               # Feature modules
 │   │   ├── auth/
 │   │   │   ├── api.ts          # Auth API calls
@@ -186,9 +190,10 @@ frontend-eva/
 │   │   └── types/              # Shared TypeScript types
 │   └── lib/
 │       ├── api-client.ts       # Axios instance with interceptors
+│       ├── providers.tsx       # QueryClient, Theme providers
+│       ├── theme.ts            # MUI custom theme
 │       └── websocket.ts        # WebSocket connection manager
-├── index.html
-├── vite.config.ts
+├── next.config.ts
 ├── tsconfig.json
 └── package.json
 ```

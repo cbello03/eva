@@ -2,7 +2,7 @@
 
 ## Overview
 
-This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learning platform following a backend-first, then frontend approach. The backend uses Django + Django Ninja + Django Channels + Celery, and the frontend uses React + TanStack Start + TanStack Query + Zustand + MUI. All tasks are ordered so each builds on the previous, with no orphaned code.
+This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learning platform following a backend-first, then frontend approach. The backend uses Django + Django Ninja + Django Channels + Celery, and the frontend uses React + Next.js + TanStack Query + Zustand + MUI. All tasks are ordered so each builds on the previous, with no orphaned code.
 
 ## Tasks
 
@@ -27,11 +27,11 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 48: XSS sanitization** — For any user-generated text containing HTML tags or JavaScript, stored content has dangerous elements removed/escaped, retrieved content never contains executable script tags
     - **Validates: Requirements 21.5**
 
-  - [x] 1.4 Initialize frontend React (tanstack start) project with Bun and configure tooling
+  - [x] 1.4 Initialize frontend React (Next.js) project with Bun and configure tooling
     - `frontend-eva/` already created
     - Add `package.json` with all dependencies (@tanstack/react-query, zustand, @mui/material, react-hook-form, zod, axios, fast-check, vitest, @testing-library/react, oxlint, oxfmt)
-    - Configure `vite.config.ts`, `tsconfig.json`
-    - Create `src/app/` with `App.tsx`, `providers.tsx` (QueryClient, Router, Theme providers), `theme.ts` (MUI custom theme)
+    - Configure `next.config.ts`, `tsconfig.json`
+    - Create `src/app/layout.tsx` (root layout with providers, Suspense), `src/lib/providers.tsx` (QueryClient, Theme providers), `src/lib/theme.ts` (MUI custom theme)
     - Create `src/lib/api-client.ts` (Axios instance with base URL, withCredentials, interceptors placeholder)
     - Create `src/lib/websocket.ts` (WebSocket connection manager with reconnection logic)
     - Create `src/shared/` directory structure for shared components, hooks, utils, types
@@ -40,19 +40,18 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
 - [x] 2. Checkpoint — Verify project scaffolding
   - Ensure both projects initialize without errors, ask the user if questions arise.
 
-- [ ] 3. Accounts app — Authentication and authorization
-  - [ ] 3.1 Create accounts app models and migrations
+- [x] 3. Accounts app — Authentication and authorization
+  - [x] 3.1 Create accounts app models and migrations
     - Create `backend-eva/apps/accounts/` app with `models.py`: `Role` enum, `User` model (extending AbstractUser with email as USERNAME_FIELD, display_name, role, timezone), `RefreshToken` model (user FK, token_hash, family_id UUID, is_revoked, expires_at, indexes)
-    - Create and run migrations
     - Register models in `admin.py`
     - _Requirements: 1.1, 4.1_
 
-  - [ ] 3.2 Implement accounts schemas
+  - [x] 3.2 Implement accounts schemas
     - Create `backend-eva/apps/accounts/schemas.py` with Pydantic schemas: `RegisterIn` (email, password, display_name with validation), `LoginIn` (email, password), `TokenOut` (access_token), `UserOut` (id, email, display_name, role, timezone), `RoleChangeIn` (role)
     - Add password validation (≥8 chars, uppercase, lowercase, numeric) in RegisterIn
     - _Requirements: 1.1, 1.4, 1.5_
 
-  - [ ] 3.3 Implement AuthService
+  - [x] 3.3 Implement AuthService
     - Create `backend-eva/apps/accounts/services.py` with `AuthService` class:
     - `register()`: validate input, check duplicate email, hash password with Django's PBKDF2, create User with Student role, return User
     - `login()`: authenticate credentials, generate Access_Token (JWT, 15min, includes role claim) and Refresh_Token (JWT, 7 days, family_id), store RefreshToken hash, return TokenPair
@@ -61,7 +60,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - `change_role()`: update user role, invalidate all refresh tokens for that user
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.1, 3.2, 3.3, 3.4, 4.1, 4.3, 4.4_
 
-  - [ ] 3.4 Implement accounts API routes
+  - [x] 3.4 Implement accounts API routes
     - Create `backend-eva/apps/accounts/api.py` with Django Ninja router:
     - `POST /auth/register` — no auth, rate limited (5/min/IP), calls AuthService.register
     - `POST /auth/login` — no auth, rate limited (10/min/IP), calls AuthService.login, sets Refresh_Token as httpOnly secure cookie with CSRF protection
@@ -100,21 +99,21 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Test rate limiting on login and registration endpoints
     - _Requirements: 1.1–1.5, 2.1–2.6, 3.1–3.4, 4.1–4.5_
 
-- [ ] 4. Checkpoint — Verify authentication system
+- [x] 4. Checkpoint — Verify authentication system
   - Ensure all accounts tests pass, ask the user if questions arise.
 
-- [ ] 5. Courses app — Course management and enrollment
-  - [ ] 5.1 Create courses app models and migrations
+- [x] 5. Courses app — Course management and enrollment
+  - [x] 5.1 Create courses app models and migrations
     - Create `backend-eva/apps/courses/` app with `models.py`: `Course` (title, description, teacher FK, status enum draft/published, published_at), `Unit` (course FK, title, order, unique_together course+order), `Lesson` (unit FK, title, order, unique_together unit+order), `Enrollment` (student FK, course FK, is_active, enrolled_at, unique_together student+course)
     - Create and run migrations
     - Register models in `admin.py`
     - _Requirements: 5.1, 22.1_
 
-  - [ ] 5.2 Implement courses schemas
+  - [x] 5.2 Implement courses schemas
     - Create `backend-eva/apps/courses/schemas.py`: `CourseCreateIn`, `CourseUpdateIn`, `CourseOut` (with nested units/lessons), `UnitCreateIn`, `UnitOut`, `LessonCreateIn`, `LessonOut`, `EnrollmentOut`, `ReorderIn`
     - _Requirements: 5.1, 5.2, 22.4_
 
-  - [ ] 5.3 Implement CourseService
+  - [x] 5.3 Implement CourseService
     - Create `backend-eva/apps/courses/services.py` with `CourseService`:
     - `create_course()`: create draft course for teacher
     - `update_course()`: update course fields (teacher+owner only)
@@ -127,7 +126,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - `list_enrollments()`: return enrolled courses with progress percentage
     - _Requirements: 5.1–5.8, 22.1–22.5_
 
-  - [ ] 5.4 Implement courses API routes
+  - [x] 5.4 Implement courses API routes
     - Create `backend-eva/apps/courses/api.py` with Django Ninja router:
     - `GET /courses` — Bearer, list courses by role
     - `POST /courses` — Teacher, create course
@@ -162,17 +161,17 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Test ordering operations
     - _Requirements: 5.1–5.8, 22.1–22.5_
 
-- [ ] 6. Exercises app — Exercise system and lesson player
-  - [ ] 6.1 Create exercises app models and migrations
+- [x] 6. Exercises app — Exercise system and lesson player
+  - [x] 6.1 Create exercises app models and migrations
     - Create `backend-eva/apps/exercises/` app with `models.py`: `ExerciseType` enum, `Exercise` (lesson FK, exercise_type, question_text, order, config JSONField, difficulty 1-5, topic, is_collaborative, collab_group_size), `LessonSession` (student FK, lesson FK, current_exercise_index, retry_queue JSON, is_completed, completed_at, correct_first_attempt, total_exercises), `AnswerRecord` (student FK, exercise FK, session FK, submitted_answer JSON, is_correct, is_first_attempt, answered_at)
     - Create and run migrations
     - _Requirements: 6.1, 7.1_
 
-  - [ ] 6.2 Implement exercises schemas
+  - [x] 6.2 Implement exercises schemas
     - Create `backend-eva/apps/exercises/schemas.py`: `ExerciseCreateIn` (with type-specific config validation — MC: ≥2 options + 1 correct; fill_blank: blank_position + accepted_answers; matching: ≥2 pairs; free_text: rubric/model_answer), `ExerciseOut`, `AnswerIn`, `AnswerResult` (is_correct, correct_answer if wrong, feedback), `LessonSessionOut` (current exercise, progress percentage, retry queue)
     - _Requirements: 6.1–6.6, 7.1–7.6_
 
-  - [ ] 6.3 Implement ExerciseService and lesson player logic
+  - [x] 6.3 Implement ExerciseService and lesson player logic
     - Create `backend-eva/apps/exercises/services.py` with `ExerciseService`:
     - `create_exercise()`: validate type-specific config, assign order
     - `update_exercise()` / `delete_exercise()`: maintain order contiguity
@@ -183,7 +182,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Free text submissions: store for teacher review, trigger notification
     - _Requirements: 6.1–6.7, 7.1–7.6_
 
-  - [ ] 6.4 Implement exercises API routes
+  - [x] 6.4 Implement exercises API routes
     - Create `backend-eva/apps/exercises/api.py` with Django Ninja router:
     - `POST /lessons/{id}/exercises` — Teacher+Owner, create exercise
     - `PATCH /exercises/{id}` — Teacher+Owner, update exercise
@@ -213,20 +212,20 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Test free text submission storage and notification trigger
     - _Requirements: 6.1–6.7, 7.1–7.6_
 
-- [ ] 7. Checkpoint — Verify course and exercise system
+- [x] 7. Checkpoint — Verify course and exercise system
   - Ensure all courses and exercises tests pass, ask the user if questions arise.
 
-- [ ] 8. Gamification app — XP, levels, streaks, achievements, leaderboards
-  - [ ] 8.1 Create gamification app models and migrations
+- [x] 8. Gamification app — XP, levels, streaks, achievements, leaderboards
+  - [x] 8.1 Create gamification app models and migrations
     - Create `backend-eva/apps/gamification/` app with `models.py`: `GamificationProfile` (student OneToOne, total_xp, current_level, current_streak, longest_streak, last_activity_date), `XPTransaction` (student FK, amount, source_type, source_id, timestamp), `Achievement` (name unique, description, icon, condition_type, condition_value), `UserAchievement` (student FK, achievement FK, unlocked_at, unique_together student+achievement)
     - Create and run migrations
     - _Requirements: 8.1, 8.5, 9.5, 10.1, 10.5_
 
-  - [ ] 8.2 Implement gamification schemas
+  - [x] 8.2 Implement gamification schemas
     - Create `backend-eva/apps/gamification/schemas.py`: `GamificationProfileOut`, `XPTransactionOut`, `AchievementOut` (with unlock status and progress), `LeaderboardEntryOut`, `LeaderboardOut` (entries + requesting user rank/xp), `StreakOut`
     - _Requirements: 8.1–8.5, 9.1–9.5, 10.1–10.5, 11.1–11.4_
 
-  - [ ] 8.3 Implement GamificationService
+  - [x] 8.3 Implement GamificationService
     - Create `backend-eva/apps/gamification/services.py` with `GamificationService`:
     - `award_xp()`: create XPTransaction, update GamificationProfile.total_xp, update Redis sorted sets (weekly + alltime leaderboards), check level up
     - `check_level_up()`: calculate level thresholds using progression formula, advance level if threshold crossed, send notification
@@ -235,14 +234,14 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - `get_leaderboard()`: read from Redis sorted set, return top 100 + requesting user's rank/xp
     - _Requirements: 8.1–8.5, 9.1, 9.4, 9.5, 10.1–10.5, 11.1–11.4_
 
-  - [ ] 8.4 Implement gamification Celery tasks
+  - [x] 8.4 Implement gamification Celery tasks
     - Create `backend-eva/apps/gamification/tasks.py`:
     - `reset_expired_streaks`: daily at 00:00 UTC, find students with last_activity_date < yesterday, set current_streak=0
     - `reset_weekly_leaderboard`: every Monday 00:00 UTC, clear Redis weekly sorted set
     - Register tasks in Celery Beat schedule
     - _Requirements: 9.2, 9.3, 11.5_
 
-  - [ ] 8.5 Implement gamification API routes
+  - [x] 8.5 Implement gamification API routes
     - Create `backend-eva/apps/gamification/api.py` with Django Ninja router:
     - `GET /gamification/profile` — Bearer, return XP, level, streak, achievements
     - `GET /gamification/leaderboard` — Bearer, query param period=weekly|alltime
@@ -274,13 +273,13 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Test Celery tasks (streak reset, leaderboard reset)
     - _Requirements: 8.1–8.5, 9.1–9.5, 10.1–10.5, 11.1–11.5_
 
-- [ ] 9. Adaptive learning — within exercises/progress apps
-  - [ ] 9.1 Create adaptive learning models and migrations
+- [x] 9. Adaptive learning — within exercises/progress apps
+  - [x] 9.1 Create adaptive learning models and migrations
     - Add to `backend-eva/apps/progress/models.py`: `TopicMastery` (student FK, topic, course FK, correct_count, total_count, mastery_score, last_reviewed, unique_together student+topic+course), `SpacedRepetitionItem` (student FK, exercise FK, next_review_date, interval_days, review_count)
     - Create and run migrations
     - _Requirements: 12.1, 12.2, 12.4_
 
-  - [ ] 9.2 Implement AdaptiveService
+  - [x] 9.2 Implement AdaptiveService
     - Create `backend-eva/apps/exercises/adaptive.py` (or within services.py) with `AdaptiveService`:
     - `record_answer()`: update TopicMastery for the exercise's topic — increment correct_count/total_count, recalculate mastery_score with recency weighting
     - `get_mastery_scores()`: return mastery scores per topic for a student in a course
@@ -290,7 +289,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - `adjust_difficulty()`: after 3 consecutive correct → increase difficulty; after 2 consecutive incorrect → decrease difficulty
     - _Requirements: 12.1–12.6_
 
-  - [ ] 9.3 Implement spaced repetition Celery task
+  - [x] 9.3 Implement spaced repetition Celery task
     - Create task in `backend-eva/apps/progress/tasks.py`:
     - `process_spaced_repetition`: daily task, find SpacedRepetitionItems where next_review_date = today, create review sessions for affected students
     - Register in Celery Beat schedule
@@ -315,7 +314,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Test difficulty adjustment thresholds
     - _Requirements: 12.1–12.6_
 
-- [ ] 10. Checkpoint — Verify gamification and adaptive learning
+- [x] 10. Checkpoint — Verify gamification and adaptive learning
   - Ensure all gamification and adaptive learning tests pass, ask the user if questions arise.
 
 - [ ] 11. Social app — Forums and real-time chat
@@ -636,8 +635,8 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - _Requirements: 24.3, 24.7_
 
   - [ ] 20.3 Implement auth pages (Login, Register)
-    - Create `frontend-eva/src/routes/login.tsx`: login form with React Hook Form + Zod validation, email + password fields, error display, redirect on success
-    - Create `frontend-eva/src/routes/register.tsx`: registration form with email, password, display_name, password strength validation matching backend rules
+    - Create `frontend-eva/src/app/login/page.tsx`: login form with React Hook Form + Zod validation, email + password fields, error display, redirect on success
+    - Create `frontend-eva/src/app/register/page.tsx`: registration form with email, password, display_name, password strength validation matching backend rules
     - Create `frontend-eva/src/features/auth/components/` with form components
     - _Requirements: 1.1, 1.4, 1.5, 2.1, 24.1_
 
@@ -654,11 +653,11 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - _Requirements: 24.7, 24.8_
 
 - [ ] 21. Frontend — App shell, routing, and layout
-  - [ ] 21.1 Configure TanStack Start with file-based routing
-    - Create `frontend-eva/src/routes/__root.tsx`: root layout with React Suspense, MUI ThemeProvider, navigation bar, notification indicator
-    - Create `frontend-eva/src/routes/index.tsx`: landing page
-    - Set up route guards for authenticated/role-based routes
-    - Configure React Suspense with fallback loading indicators for all route-level components
+  - [ ] 21.1 Configure Next.js App Router with file-based routing
+    - Create `frontend-eva/src/app/layout.tsx`: root layout with React Suspense, MUI ThemeProvider, navigation bar, notification indicator
+    - Create `frontend-eva/src/app/page.tsx`: landing page
+    - Set up route guards for authenticated/role-based routes using Next.js middleware
+    - Configure React Suspense with `loading.tsx` files for all route-level components
     - _Requirements: 24.1, 24.6_
 
   - [ ] 21.2 Implement WebSocket connection manager
@@ -684,8 +683,8 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - _Requirements: 5.7, 22.1, 22.4_
 
   - [ ] 22.2 Implement course pages
-    - Create `frontend-eva/src/routes/courses/index.tsx`: course listing page with search/filter, enrollment status
-    - Create `frontend-eva/src/routes/courses/$courseId.tsx`: course detail page with unit/lesson hierarchy, enroll/unenroll button, progress display
+    - Create `frontend-eva/src/app/courses/page.tsx`: course listing page with search/filter, enrollment status
+    - Create `frontend-eva/src/app/courses/[courseId]/page.tsx`: course detail page with unit/lesson hierarchy, enroll/unenroll button, progress display
     - Create `frontend-eva/src/features/courses/components/`: CourseCard, CourseList, UnitAccordion, LessonItem
     - _Requirements: 5.7, 22.1, 22.4, 24.4, 24.5_
 
@@ -697,7 +696,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - _Requirements: 6.1, 7.1_
 
   - [ ] 23.2 Implement lesson player page and exercise components
-    - Create `frontend-eva/src/routes/courses/$courseId/lessons/$lessonId.tsx`: lesson player page with progress bar, exercise rendering, feedback display, retry queue handling
+    - Create `frontend-eva/src/app/courses/[courseId]/lessons/[lessonId]/page.tsx`: lesson player page with progress bar, exercise rendering, feedback display, retry queue handling
     - Create `frontend-eva/src/features/exercises/components/`:
       - `MultipleChoiceExercise`: radio button options, selection, feedback
       - `FillBlankExercise`: text input with blank indicator, feedback
@@ -721,8 +720,8 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - _Requirements: 8.1–8.5, 9.1–9.5, 10.1–10.5, 11.1–11.4_
 
   - [ ] 24.2 Implement student dashboard page
-    - Create `frontend-eva/src/routes/dashboard/index.tsx`: student dashboard with XP, level, streak, enrolled courses, recent activity
-    - Create `frontend-eva/src/routes/profile/index.tsx`: profile page with achievements, stats
+    - Create `frontend-eva/src/app/dashboard/page.tsx`: student dashboard with XP, level, streak, enrolled courses, recent activity
+    - Create `frontend-eva/src/app/profile/page.tsx`: profile page with achievements, stats
     - _Requirements: 20.1, 24.4_
 
 - [ ] 25. Frontend — Student progress tracking
@@ -753,8 +752,8 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - _Requirements: 13.1–13.6, 14.1–14.6_
 
   - [ ] 27.2 Implement forum and chat pages
-    - Create `frontend-eva/src/routes/courses/$courseId/forum.tsx`: course forum page with thread list and creation
-    - Create `frontend-eva/src/routes/courses/$courseId/chat.tsx`: course chat page with WebSocket connection to `ws/chat/{course_id}/`
+    - Create `frontend-eva/src/app/courses/[courseId]/forum/page.tsx`: course forum page with thread list and creation
+    - Create `frontend-eva/src/app/courses/[courseId]/chat/page.tsx`: course chat page with WebSocket connection to `ws/chat/{course_id}/`
     - _Requirements: 13.1, 14.1, 24.1_
 
 - [ ] 28. Frontend — Projects and peer review
@@ -769,8 +768,8 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - _Requirements: 18.1–18.6_
 
   - [ ] 28.2 Implement project pages
-    - Create `frontend-eva/src/routes/projects/index.tsx`: project listing
-    - Create `frontend-eva/src/routes/projects/$projectId.tsx`: project detail with submission and review
+    - Create `frontend-eva/src/app/projects/page.tsx`: project listing
+    - Create `frontend-eva/src/app/projects/[projectId]/page.tsx`: project detail with submission and review
     - _Requirements: 18.1–18.6, 24.1_
 
 - [ ] 29. Frontend — Collaborative learning
@@ -790,12 +789,12 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - _Requirements: 15.1, 16.1–16.5_
 
   - [ ] 30.2 Implement teacher dashboard pages
-    - Create `frontend-eva/src/routes/teacher/index.tsx`: teacher dashboard with course list (status, enrollment count, last modified)
-    - Create `frontend-eva/src/routes/teacher/analytics/$courseId.tsx`: course analytics page with aggregate stats, student list, performance heatmap
+    - Create `frontend-eva/src/app/teacher/page.tsx`: teacher dashboard with course list (status, enrollment count, last modified)
+    - Create `frontend-eva/src/app/teacher/analytics/[courseId]/page.tsx`: course analytics page with aggregate stats, student list, performance heatmap
     - _Requirements: 15.1, 16.1–16.4_
 
   - [ ] 30.3 Implement course builder pages
-    - Create `frontend-eva/src/routes/teacher/courses/$courseId/builder.tsx`: visual course builder with editable tree view (units → lessons → exercises)
+    - Create `frontend-eva/src/app/teacher/courses/[courseId]/builder/page.tsx`: visual course builder with editable tree view (units → lessons → exercises)
     - Create `frontend-eva/src/features/teacher/components/`:
       - `CourseTree`: editable hierarchy tree
       - `ExerciseForm`: form for each exercise type with validation matching backend rules
@@ -820,7 +819,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
 
   - [ ] 32.2 Create Dockerfiles for backend and frontend
     - Create `backend-eva/Dockerfile`: Python base, UV for dependency management, install dependencies, copy source
-    - Create `frontend-eva/Dockerfile`: Node/Bun base, install dependencies, copy source, Vite dev server
+    - Create `frontend-eva/Dockerfile`: Node/Bun base, install dependencies, copy source, Next.js dev server
     - _Requirements: 23.1_
 
   - [ ] 32.3 Create environment configuration

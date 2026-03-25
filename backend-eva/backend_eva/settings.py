@@ -80,6 +80,10 @@ INSTALLED_APPS = [
     "django_extensions",
     # Domain apps
     "apps.accounts",
+    "apps.courses",
+    "apps.exercises",
+    "apps.gamification",
+    "apps.progress",
 ]
 
 MIDDLEWARE = [
@@ -184,6 +188,24 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "UTC"
+
+# Celery Beat schedule
+from celery.schedules import crontab  # noqa: E402
+
+CELERY_BEAT_SCHEDULE = {
+    "reset-expired-streaks": {
+        "task": "gamification.reset_expired_streaks",
+        "schedule": crontab(hour=0, minute=0),  # Daily at 00:00 UTC
+    },
+    "reset-weekly-leaderboard": {
+        "task": "gamification.reset_weekly_leaderboard",
+        "schedule": crontab(hour=0, minute=0, day_of_week=1),  # Monday 00:00 UTC
+    },
+    "process-spaced-repetition": {
+        "task": "progress.process_spaced_repetition",
+        "schedule": crontab(hour=1, minute=0),  # Daily at 01:00 UTC
+    },
+}
 
 # ---------------------------------------------------------------------------
 # Redis cache
