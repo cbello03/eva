@@ -66,20 +66,3 @@ EVA es una plataforma educativa integral diseñada para ofrecer una experiencia 
 2. Sigue las instrucciones específicas en el [README del backend](./backend-eva/README.md).
 
 ---
-
-## 👨‍💻 Contribución
-
-1. Haz un **Fork** del proyecto.
-2. Crea una nueva rama (**Branch**): `git checkout -b feature/NuevaFuncionalidad`.
-3. Haz tus cambios y **Commit**: `git commit -am 'Añadir nueva funcionalidad'`.
-4. Sube tus cambios (**Push**): `git push origin feature/NuevaFuncionalidad`.
-5. Abre un **Pull Request**.
-
----
-
-## 📄 Licencia
-Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
-
----
-
-Desarrollado con ❤️ por [Tu Nombre/Empresa].
