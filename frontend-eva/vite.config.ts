@@ -1,26 +1,23 @@
-import { defineConfig } from "vite";
-import { devtools } from "@tanstack/devtools-vite";
-import tsconfigPaths from "vite-tsconfig-paths";
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 
-import { tanstackStart } from "@tanstack/react-start/plugin/vite";
-
-import viteReact from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
-import { nitro } from "nitro/vite";
-
-const config = defineConfig({
+export default defineConfig({
   plugins: [
-    devtools(),
-    nitro({ rollupConfig: { external: [/^@sentry\//] } }),
-    tsconfigPaths({ projects: ["./tsconfig.json"] }),
-    tailwindcss(),
-    tanstackStart(),
-    viteReact({
-      babel: {
-        plugins: ["babel-plugin-react-compiler"],
-      },
-    }),
+    TanStackRouterVite(), // <-- ¡Este es el plugin mágico!
+    react()
   ],
+  server: {
+    port: 5173,
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+        secure: false,
+      }
+    }
+  },
+  test: {
+    passWithNoTests: true,
+  },
 });
-
-export default config;

@@ -1,25 +1,30 @@
-import type { ReactNode } from "react";
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import evaTheme from "./theme";
+import React from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { theme } from './theme';
 
-/**
- * Top-level provider wrapper for the EVA application.
- *
- * Wraps children with:
- * - MUI ThemeProvider (custom EVA theme)
- * - CssBaseline (normalize browser defaults)
- *
- * Note: TanStack Query provider is already set up in
- * `src/integrations/tanstack-query/root-provider.tsx` and
- * composed in `__root.tsx`. This provider is meant to be
- * nested inside or alongside that existing setup.
- */
-export default function EvaProviders({ children }: { children: ReactNode }) {
+// Configuración global del estado del servidor
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 3, // 3 reintentos por consulta para fallos transitorios [cite: 893]
+      refetchOnWindowFocus: false,
+    },
+    mutations: {
+      retry: false, // Sin reintento automático en operaciones de escritura [cite: 894]
+    },
+  },
+});
+
+export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider theme={evaTheme}>
-      <CssBaseline />
-      {children}
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        {/* CssBaseline normaliza los estilos en todos los navegadores */}
+        <CssBaseline />
+        {children}
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

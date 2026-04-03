@@ -1,52 +1,65 @@
-import axios from "axios";
+import axios from 'axios';
+import { useAuthStore } from '../features/auth/store';
 
-/**
- * Pre-configured Axios instance for all EVA API calls.
- *
- * - baseURL points to the versioned API prefix
- * - withCredentials ensures the httpOnly Refresh_Token cookie is sent
- */
-const apiClient = axios.create({
-  baseURL: "/api/v1",
-  withCredentials: true,
-  headers: { "Content-Type": "application/json" },
+export const apiClient = axios.create({
+  baseURL: '/api/v1',
+  withCredentials: true, // Vital para enviar la cookie httpOnly del Refresh Token
 });
 
-// ---------------------------------------------------------------------------
-// Request interceptor — attach Bearer token from Zustand auth store
-// ---------------------------------------------------------------------------
-apiClient.interceptors.request.use(
-  (config) => {
-    // TODO: once the auth store is created (features/auth/store.ts),
-    // read the access token and attach it:
-    //
-    // const token = useAuthStore.getState().accessToken
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`
-    // }
-    return config;
-  },
-  (error) => Promise.reject(error),
-);
+// Interceptor de Solicitud: Adjuntar el Access Token en memoria
+apiClient.interceptors.request.use((config) => {
+  const accessToken = useAuthStore.getState().accessToken;
+  if (accessToken && config.headers) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+  return config;
+});
 
-// ---------------------------------------------------------------------------
-// Response interceptor — handle 401 and trigger token refresh
-// ---------------------------------------------------------------------------
+// Interceptor de Respuesta: Refresh automático y manejo de errores globales
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
-    // TODO: once the auth store + refresh endpoint exist, implement
-    // automatic token refresh on 401:
-    //
-    // if (error.response?.status === 401 && !error.config._retry) {
-    //   error.config._retry = true
-    //   const { accessToken } = await refreshToken()
-    //   useAuthStore.getState().setAccessToken(accessToken)
-    //   error.config.headers.Authorization = `Bearer ${accessToken}`
-    //   return apiClient(error.config)
-    // }
-    return Promise.reject(error);
-  },
-);
+    const originalRequest = error.config;
 
-export default apiClient;
+    // Si recibimos un 401 y no hemos reintentado ya esta misma petición
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        // Hacemos el post directo con axios para evitar un bucle infinito con nuestro propio interceptor
+        const refreshResponse = await axios.post('/api/v1/auth/refresh', {}, {
+          withCredentials: true 
+        });
+
+        const { access_token } = refreshResponse.data;
+
+        // Actualizamos Zustand con el nuevo token
+        useAuthStore.getState().setAccessToken(access_token);
+
+        // Actualizamos el header y reintentamos la petición original
+        originalRequest.headers.Authorization = `Bearer ${access_token}`;
+        return apiClient(originalRequest);
+        
+      } catch (refreshError) {
+        // Si el refresh falla (ej. Refresh Token expiró), cerramos sesión por completo
+        useAuthStore.getState().logout();
+        window.location.href = '/login'; // Redirección forzada al login
+        return Promise.reject(refreshError);
+      }
+    }
+
+    // Manejo de errores de UI (Requisito de la estrategia del Frontend)
+    if (error.response?.status === 403) {
+      console.error("Acceso denegado: No tienes permisos para esta acción.");
+    } else if (error.response?.status === 429) {
+      const retryAfter = error.response.headers['retry-after'];
+      console.warn(`Límite de tasa excedido. Por favor espere ${retryAfter ? retryAfter + ' segundos' : ''}.`);
+    } else if (error.response?.status >= 500) {
+      console.error("Algo salió mal en el servidor.");
+    } else if (!error.response) {
+      console.error("Sin conexión de red.");
+    }
+
+    return Promise.reject(error);
+  }
+);

@@ -1,183 +1,102 @@
-type MessageHandler = (data: unknown) => void;
+import { useAuthStore } from '../features/auth/store';
 
-interface QueuedMessage {
-  data: string;
-  timestamp: number;
-}
-
-/**
- * WebSocket connection manager with:
- * - Automatic reconnection using exponential backoff (1s → 30s cap)
- * - Message queue for messages sent while disconnected
- * - Stale-connection detection via ping/pong (30 s interval)
- */
 export class WebSocketManager {
   private ws: WebSocket | null = null;
   private url: string;
-  private handlers: Map<string, Set<MessageHandler>> = new Map();
-  private messageQueue: QueuedMessage[] = [];
-
-  // Reconnection state
   private reconnectAttempts = 0;
-  private readonly maxReconnectDelay = 30_000; // 30 s
-  private readonly baseReconnectDelay = 1_000; // 1 s
-  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
-  private intentionallyClosed = false;
-
-  // Ping / pong keep-alive
-  private readonly pingInterval = 30_000; // 30 s
-  private pingTimer: ReturnType<typeof setInterval> | null = null;
-  private pongReceived = true;
-
-  constructor(url: string) {
-    this.url = url;
+  private maxReconnectAttempts = 5;
+  private messageQueue: any[] = [];
+  private pingInterval: NodeJS.Timeout | null = null;
+  
+  // Tiempos de backoff exponencial: 1s, 2s, 4s, 8s, 16s... (máximo 30s)
+  private getBackoffTime() {
+    const time = Math.pow(2, this.reconnectAttempts) * 1000;
+    return Math.min(time, 30000); 
   }
 
-  // -----------------------------------------------------------------------
-  // Public API
-  // -----------------------------------------------------------------------
-
-  /** Open the WebSocket connection. */
-  connect(): void {
-    this.intentionallyClosed = false;
-    this.createConnection();
+  constructor(endpoint: string) {
+    // endpoint debe ser algo como 'ws/notifications/' o 'ws/chat/1/'
+    const baseUrl = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const host = window.location.host;
+    this.url = `${baseUrl}//${host}/${endpoint}`;
   }
 
-  /** Gracefully close the connection (no auto-reconnect). */
-  disconnect(): void {
-    this.intentionallyClosed = true;
-    this.clearTimers();
-    this.ws?.close();
-    this.ws = null;
-  }
-
-  /** Send a JSON-serialisable message. Queues if not connected. */
-  send(event: string, payload: unknown): void {
-    const message = JSON.stringify({ event, payload });
-
-    if (this.ws?.readyState === WebSocket.OPEN) {
-      this.ws.send(message);
-    } else {
-      this.messageQueue.push({ data: message, timestamp: Date.now() });
+  public connect() {
+    const token = useAuthStore.getState().accessToken;
+    if (!token) {
+      console.warn('Intento de conexión WebSocket sin token.');
+      return;
     }
-  }
 
-  /** Subscribe to a named event. Returns an unsubscribe function. */
-  on(event: string, handler: MessageHandler): () => void {
-    if (!this.handlers.has(event)) {
-      this.handlers.set(event, new Set());
-    }
-    this.handlers.get(event)!.add(handler);
-
-    return () => {
-      this.handlers.get(event)?.delete(handler);
-    };
-  }
-
-  /** Current connection state. */
-  get connected(): boolean {
-    return this.ws?.readyState === WebSocket.OPEN;
-  }
-
-  // -----------------------------------------------------------------------
-  // Internal helpers
-  // -----------------------------------------------------------------------
-
-  private createConnection(): void {
-    this.ws = new WebSocket(this.url);
+    // Autenticación vía query param requerida por el backend Django Channels
+    const fullUrl = `${this.url}?token=${token}`;
+    this.ws = new WebSocket(fullUrl);
 
     this.ws.onopen = () => {
+      console.log(`Conectado a ${this.url}`);
       this.reconnectAttempts = 0;
-      this.flushQueue();
+      this.flushMessageQueue(); // Enviar mensajes encolados
       this.startPingPong();
     };
 
-    this.ws.onmessage = (event: MessageEvent) => {
-      try {
-        const parsed = JSON.parse(event.data as string) as {
-          event?: string;
-          payload?: unknown;
-        };
-
-        // Handle pong responses for keep-alive
-        if (parsed.event === "pong") {
-          this.pongReceived = true;
-          return;
-        }
-
-        if (parsed.event) {
-          const handlers = this.handlers.get(parsed.event);
-          handlers?.forEach((handler) => handler(parsed.payload));
-        }
-      } catch {
-        // Non-JSON message — ignore
-      }
+    this.ws.onmessage = (event) => {
+      // Aquí despacharías eventos según tu arquitectura (ej. a Zustand o React Query)
+      console.log('Mensaje recibido:', event.data);
     };
 
-    this.ws.onclose = () => {
+    this.ws.onclose = (event) => {
       this.stopPingPong();
-      if (!this.intentionallyClosed) {
-        this.scheduleReconnect();
+      // Si no es un cierre limpio, intentar reconectar
+      if (event.code !== 1000 && this.reconnectAttempts < this.maxReconnectAttempts) {
+        const backoff = this.getBackoffTime();
+        console.log(`Reconectando en ${backoff / 1000}s...`);
+        setTimeout(() => {
+          this.reconnectAttempts++;
+          this.connect();
+        }, backoff);
       }
     };
 
-    this.ws.onerror = () => {
-      // The browser fires `onclose` after `onerror`, so reconnection
-      // is handled there. Nothing extra needed here.
+    this.ws.onerror = (error) => {
+      console.error('Error en WebSocket:', error);
+      // El evento onclose se disparará después de onerror
     };
   }
 
-  /** Exponential backoff: 1 s, 2 s, 4 s, 8 s, … capped at 30 s. */
-  private getReconnectDelay(): number {
-    const delay = this.baseReconnectDelay * Math.pow(2, this.reconnectAttempts);
-    return Math.min(delay, this.maxReconnectDelay);
+  public send(data: any) {
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      this.ws.send(JSON.stringify(data));
+    } else {
+      console.warn('WebSocket no está abierto. Encolando mensaje...');
+      this.messageQueue.push(data);
+    }
   }
 
-  private scheduleReconnect(): void {
-    const delay = this.getReconnectDelay();
-    this.reconnectAttempts++;
-    this.reconnectTimer = setTimeout(() => this.createConnection(), delay);
-  }
-
-  /** Flush any messages that were queued while disconnected. */
-  private flushQueue(): void {
+  private flushMessageQueue() {
     while (this.messageQueue.length > 0) {
-      const msg = this.messageQueue.shift()!;
-      this.ws?.send(msg.data);
+      const msg = this.messageQueue.shift();
+      this.send(msg);
     }
   }
 
-  // -----------------------------------------------------------------------
-  // Ping / pong keep-alive
-  // -----------------------------------------------------------------------
-
-  private startPingPong(): void {
-    this.stopPingPong();
-    this.pongReceived = true;
-
-    this.pingTimer = setInterval(() => {
-      if (!this.pongReceived) {
-        // Server didn't respond — connection is stale, force reconnect
-        this.ws?.close();
-        return;
-      }
-      this.pongReceived = false;
-      this.ws?.send(JSON.stringify({ event: "ping" }));
-    }, this.pingInterval);
+  private startPingPong() {
+    // Detección de conexión obsoleta cada 30 segundos
+    this.pingInterval = setInterval(() => {
+      this.send({ type: 'ping' });
+    }, 30000);
   }
 
-  private stopPingPong(): void {
-    if (this.pingTimer) {
-      clearInterval(this.pingTimer);
-      this.pingTimer = null;
+  private stopPingPong() {
+    if (this.pingInterval) {
+      clearInterval(this.pingInterval);
+      this.pingInterval = null;
     }
   }
 
-  private clearTimers(): void {
-    this.stopPingPong();
-    if (this.reconnectTimer) {
-      clearTimeout(this.reconnectTimer);
-      this.reconnectTimer = null;
+  public disconnect() {
+    if (this.ws) {
+      this.ws.close(1000, 'Desconexión intencional del cliente');
+      this.ws = null;
     }
   }
 }
