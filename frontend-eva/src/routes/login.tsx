@@ -21,10 +21,6 @@ function Login() {
   
   const { register, handleSubmit, formState: { errors } } = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: 'demo@eva.com',
-      password: 'demo_password123'
-    }
   });
 
   const onSubmit = (data: LoginData) => {
