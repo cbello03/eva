@@ -1,6 +1,7 @@
 """Tests for AdaptiveService — mastery, spaced repetition, difficulty adjustment."""
 
 import datetime
+import uuid
 
 import pytest
 
@@ -25,9 +26,10 @@ from apps.progress.models import SpacedRepetitionItem, TopicMastery
 
 @pytest.fixture
 def teacher(db):
+    uid = uuid.uuid4().hex[:8]
     return User.objects.create_user(
-        username="teacher",
-        email="teacher@test.com",
+        username=f"adp_teacher_{uid}",
+        email=f"adp_teacher_{uid}@test.com",
         password="Pass1234",
         display_name="Teacher",
         role=Role.TEACHER,
@@ -36,9 +38,10 @@ def teacher(db):
 
 @pytest.fixture
 def student(db):
+    uid = uuid.uuid4().hex[:8]
     return User.objects.create_user(
-        username="student",
-        email="student@test.com",
+        username=f"adp_student_{uid}",
+        email=f"adp_student_{uid}@test.com",
         password="Pass1234",
         display_name="Student",
         role=Role.STUDENT,

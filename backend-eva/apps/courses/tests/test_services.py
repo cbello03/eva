@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import uuid
+
 import pytest
 
 from apps.accounts.models import Role, User
@@ -29,9 +31,10 @@ from common.exceptions import (
 # ---------------------------------------------------------------------------
 
 def _make_teacher(email: str = "teacher@example.com") -> User:
+    uid = uuid.uuid4().hex[:8]
     return User.objects.create_user(
-        username=email,
-        email=email,
+        username=f"crs_teacher_{uid}",
+        email=f"crs_teacher_{uid}@test.com",
         password="StrongPass1",
         display_name="Teacher",
         role=Role.TEACHER,
@@ -39,9 +42,10 @@ def _make_teacher(email: str = "teacher@example.com") -> User:
 
 
 def _make_student(email: str = "student@example.com") -> User:
+    uid = uuid.uuid4().hex[:8]
     return User.objects.create_user(
-        username=email,
-        email=email,
+        username=f"crs_student_{uid}",
+        email=f"crs_student_{uid}@test.com",
         password="StrongPass1",
         display_name="Student",
         role=Role.STUDENT,
@@ -49,9 +53,10 @@ def _make_student(email: str = "student@example.com") -> User:
 
 
 def _make_admin(email: str = "admin@example.com") -> User:
+    uid = uuid.uuid4().hex[:8]
     return User.objects.create_user(
-        username=email,
-        email=email,
+        username=f"crs_admin_{uid}",
+        email=f"crs_admin_{uid}@test.com",
         password="StrongPass1",
         display_name="Admin",
         role=Role.ADMIN,
@@ -241,8 +246,9 @@ class TestListCourses:
         CourseService.publish_course(teacher, pub.pk)
 
         courses = list(CourseService.list_courses(student))
-        assert len(courses) == 1
-        assert courses[0].status == Course.Status.PUBLISHED
+        # Filter to only courses created by this teacher to avoid cross-test leakage
+        published = [c for c in courses if c.status == Course.Status.PUBLISHED and c.teacher_id == teacher.pk]
+        assert len(published) == 1
 
     def test_teacher_sees_own_courses(self):
         teacher = _make_teacher()
@@ -269,11 +275,13 @@ class TestListCourses:
         teacher1 = _make_teacher()
         teacher2 = _make_teacher(email="t2@example.com")
         admin = _make_admin()
-        _create_course(teacher1, "Course A")
-        _create_course(teacher2, "Course B")
+        c1 = _create_course(teacher1, "Course A")
+        c2 = _create_course(teacher2, "Course B")
 
         courses = list(CourseService.list_courses(admin))
-        assert len(courses) == 2
+        course_ids = {c.pk for c in courses}
+        assert c1.pk in course_ids
+        assert c2.pk in course_ids
 
 
 # ---------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 """Tests for GamificationService — XP, levels, streaks, achievements, leaderboards."""
 
+import uuid
 from datetime import date, timedelta
 from unittest.mock import MagicMock, patch
 
@@ -32,9 +33,10 @@ from apps.gamification.services import (
 
 @pytest.fixture
 def student(db):
+    uid = uuid.uuid4().hex[:8]
     return User.objects.create_user(
-        username="student",
-        email="student@test.com",
+        username=f"gam_student_{uid}",
+        email=f"gam_student_{uid}@test.com",
         password="Pass1234",
         display_name="Student",
         role=Role.STUDENT,
@@ -43,9 +45,10 @@ def student(db):
 
 @pytest.fixture
 def student2(db):
+    uid = uuid.uuid4().hex[:8]
     return User.objects.create_user(
-        username="student2",
-        email="student2@test.com",
+        username=f"gam_student2_{uid}",
+        email=f"gam_student2_{uid}@test.com",
         password="Pass1234",
         display_name="Student Two",
         role=Role.STUDENT,
@@ -54,9 +57,10 @@ def student2(db):
 
 @pytest.fixture
 def teacher(db):
+    uid = uuid.uuid4().hex[:8]
     return User.objects.create_user(
-        username="teacher",
-        email="teacher@test.com",
+        username=f"gam_teacher_{uid}",
+        email=f"gam_teacher_{uid}@test.com",
         password="Pass1234",
         display_name="Teacher",
         role=Role.TEACHER,

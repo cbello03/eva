@@ -1,5 +1,7 @@
 """Tests for ExerciseService — exercise CRUD and lesson player logic."""
 
+import uuid
+
 import pytest
 
 from apps.accounts.models import Role, User
@@ -24,9 +26,10 @@ from common.exceptions import InsufficientRoleError, NotEnrolledError
 
 @pytest.fixture
 def teacher(db):
+    uid = uuid.uuid4().hex[:8]
     return User.objects.create_user(
-        username="teacher",
-        email="teacher@test.com",
+        username=f"ex_teacher_{uid}",
+        email=f"ex_teacher_{uid}@test.com",
         password="Pass1234",
         display_name="Teacher",
         role=Role.TEACHER,
@@ -35,9 +38,10 @@ def teacher(db):
 
 @pytest.fixture
 def other_teacher(db):
+    uid = uuid.uuid4().hex[:8]
     return User.objects.create_user(
-        username="other",
-        email="other@test.com",
+        username=f"ex_oteacher_{uid}",
+        email=f"ex_oteacher_{uid}@test.com",
         password="Pass1234",
         display_name="Other",
         role=Role.TEACHER,
@@ -46,9 +50,10 @@ def other_teacher(db):
 
 @pytest.fixture
 def student(db):
+    uid = uuid.uuid4().hex[:8]
     return User.objects.create_user(
-        username="student",
-        email="student@test.com",
+        username=f"ex_student_{uid}",
+        email=f"ex_student_{uid}@test.com",
         password="Pass1234",
         display_name="Student",
         role=Role.STUDENT,

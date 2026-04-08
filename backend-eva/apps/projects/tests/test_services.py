@@ -1,5 +1,6 @@
 """Tests for ProjectService — project creation, submissions, reviews, and peer review."""
 
+import uuid
 from datetime import timedelta
 from io import BytesIO
 from unittest.mock import MagicMock
@@ -45,9 +46,10 @@ VALID_RUBRIC = [{"criterion": "Quality", "max_score": 10}]
 
 @pytest.fixture
 def teacher(db):
+    uid = uuid.uuid4().hex[:8]
     return User.objects.create_user(
-        username="teacher",
-        email="teacher@test.com",
+        username=f"proj_teacher_{uid}",
+        email=f"proj_teacher_{uid}@test.com",
         password="Pass1234",
         display_name="Teacher",
         role=Role.TEACHER,
@@ -56,9 +58,10 @@ def teacher(db):
 
 @pytest.fixture
 def other_teacher(db):
+    uid = uuid.uuid4().hex[:8]
     return User.objects.create_user(
-        username="other_teacher",
-        email="other_teacher@test.com",
+        username=f"proj_oteacher_{uid}",
+        email=f"proj_oteacher_{uid}@test.com",
         password="Pass1234",
         display_name="Other Teacher",
         role=Role.TEACHER,
@@ -67,9 +70,10 @@ def other_teacher(db):
 
 @pytest.fixture
 def student(db):
+    uid = uuid.uuid4().hex[:8]
     return User.objects.create_user(
-        username="student",
-        email="student@test.com",
+        username=f"proj_student_{uid}",
+        email=f"proj_student_{uid}@test.com",
         password="Pass1234",
         display_name="Student",
         role=Role.STUDENT,
@@ -147,11 +151,12 @@ def _make_file(name="test.txt", size=100, content=None):
 
 def _make_students(db, count, course):
     """Create multiple enrolled students."""
+    uid = uuid.uuid4().hex[:8]
     students = []
     for i in range(count):
         s = User.objects.create_user(
-            username=f"student_{i}",
-            email=f"student_{i}@test.com",
+            username=f"proj_s{i}_{uid}",
+            email=f"proj_s{i}_{uid}@test.com",
             password="Pass1234",
             display_name=f"Student {i}",
             role=Role.STUDENT,

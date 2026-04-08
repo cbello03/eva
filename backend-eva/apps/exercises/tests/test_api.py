@@ -7,6 +7,8 @@ model_rebuild issue with field_validator schemas in Django Ninja 1.6.
 
 from __future__ import annotations
 
+import uuid
+
 import pytest
 from ninja.testing import TestClient as NinjaTestClient
 
@@ -28,8 +30,9 @@ ninja_client = NinjaTestClient(api)
 
 
 def _create_user(email: str, role: str = Role.STUDENT, password: str = "Pass1234") -> User:
+    uid = uuid.uuid4().hex[:8]
     user = AuthService.register(
-        RegisterIn(email=email, password=password, display_name=email.split("@")[0])
+        RegisterIn(email=email, password=password, display_name=f"user_{uid}")
     )
     if role != Role.STUDENT:
         user.role = role
@@ -53,7 +56,8 @@ def _auth_header(token: str) -> dict[str, str]:
 
 @pytest.fixture
 def teacher(db):
-    return _create_user("teacher@test.com", Role.TEACHER)
+    uid = uuid.uuid4().hex[:8]
+    return _create_user(f"exapi_teacher_{uid}@test.com", Role.TEACHER)
 
 
 @pytest.fixture
@@ -63,7 +67,8 @@ def teacher_token(teacher):
 
 @pytest.fixture
 def student(db):
-    return _create_user("student@test.com", Role.STUDENT)
+    uid = uuid.uuid4().hex[:8]
+    return _create_user(f"exapi_student_{uid}@test.com", Role.STUDENT)
 
 
 @pytest.fixture
