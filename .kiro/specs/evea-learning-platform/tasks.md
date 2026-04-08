@@ -519,7 +519,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
 - [x] 15. Checkpoint — Verify collaboration and notifications
   - Ensure all collaboration and notification tests pass, ask the user if questions arise.
 
-- [ ] 16. Progress app — Student progress tracking and teacher analytics
+- [x] 16. Progress app — Student progress tracking and teacher analytics
   - [x] 16.1 Create progress app models and migrations
     - Create `backend-eva/apps/progress/` app with `models.py`: `CourseProgress` (student FK, course FK, completion_percentage, total_score, lessons_completed, total_lessons, unique_together student+course), `LessonProgress` (student FK, lesson FK, is_completed, score, completed_at, unique_together student+lesson), `DailyActivity` (student FK, date, lessons_completed, xp_earned, time_spent_minutes, unique_together student+date)
     - Note: `TopicMastery` and `SpacedRepetitionItem` already created in task 9.1
@@ -587,7 +587,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
 - [x] 17. Checkpoint — Verify progress and analytics
   - Ensure all progress and analytics tests pass, ask the user if questions arise.
 
-- [ ] 18. Backend integration — Wire all apps together and configure ASGI/Celery
+- [x] 18. Backend integration — Wire all apps together and configure ASGI/Celery
   - [x] 18.1 Configure ASGI routing for all WebSocket consumers
     - Update `backend-eva/config/asgi.py` to include all WebSocket routes:
     - `ws/chat/{course_id}/` → ChatConsumer
@@ -619,7 +619,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
 - [x] 19. Checkpoint — Verify full backend integration
   - Ensure all backend tests pass, ask the user if questions arise.
 
-- [ ] 20. Frontend — Auth feature module and API client
+- [x] 20. Frontend — Auth feature module and API client
   - [x] 20.1 Implement API client with token refresh interceptor
     - Complete `frontend-eva/src/lib/api-client.ts`:
     - Axios instance with baseURL `/api/v1`, withCredentials: true
@@ -652,7 +652,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Test login/register form validation
     - _Requirements: 24.7, 24.8_
 
-- [ ] 21. Frontend — App shell, routing, and layout
+- [x] 21. Frontend — App shell, routing, and layout
   - [x] 21.1 Configure Next.js App Router with file-based routing
     - Create `frontend-eva/src/app/layout.tsx`: root layout with React Suspense, MUI ThemeProvider, navigation bar, notification indicator
     - Create `frontend-eva/src/app/page.tsx`: landing page
@@ -675,7 +675,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Connect to WebSocket `ws/notifications/` for real-time delivery
     - _Requirements: 19.1–19.5_
 
-- [ ] 22. Frontend — Course browsing and enrollment
+- [x] 22. Frontend — Course browsing and enrollment
   - [x] 22.1 Implement courses feature module
     - Create `frontend-eva/src/features/courses/api.ts`: listCourses, getCourse, enrollInCourse, unenrollFromCourse, listEnrollments
     - Create `frontend-eva/src/features/courses/hooks.ts`: `useCourses()`, `useCourse()`, `useEnroll()`, `useUnenroll()`, `useEnrollments()`
@@ -688,7 +688,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Create `frontend-eva/src/features/courses/components/`: CourseCard, CourseList, UnitAccordion, LessonItem
     - _Requirements: 5.7, 22.1, 22.4, 24.4, 24.5_
 
-- [ ] 23. Frontend — Lesson player (Duolingo-style)
+- [x] 23. Frontend — Lesson player (Duolingo-style)
   - [x] 23.1 Implement exercises feature module
     - Create `frontend-eva/src/features/exercises/api.ts`: startLesson, submitAnswer, resumeLesson
     - Create `frontend-eva/src/features/exercises/hooks.ts`: `useLessonSession()`, `useSubmitAnswer()`
@@ -707,7 +707,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
       - `LessonComplete`: completion screen with XP earned
     - _Requirements: 6.1–6.7, 7.1–7.6, 24.4_
 
-- [ ] 24. Frontend — Gamification features
+- [x] 24. Frontend — Gamification features
   - [x] 24.1 Implement gamification feature module
     - Create `frontend-eva/src/features/gamification/api.ts`: getProfile, getLeaderboard, getAchievements, getXPHistory
     - Create `frontend-eva/src/features/gamification/hooks.ts`: `useGamificationProfile()`, `useLeaderboard()`, `useAchievements()`
@@ -724,7 +724,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Create `frontend-eva/src/app/profile/page.tsx`: profile page with achievements, stats
     - _Requirements: 20.1, 24.4_
 
-- [ ] 25. Frontend — Student progress tracking
+- [x] 25. Frontend — Student progress tracking
   - [x] 25.1 Implement progress feature module
     - Create `frontend-eva/src/features/progress/api.ts`: getDashboard, getCourseProgress, getActivityHeatmap, getMasteryScores
     - Create `frontend-eva/src/features/progress/hooks.ts`: `useProgressDashboard()`, `useCourseProgress()`, `useActivityHeatmap()`, `useMasteryScores()`
@@ -738,7 +738,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
 - [x] 26. Checkpoint — Verify core frontend features
   - Ensure all frontend tests pass, ask the user if questions arise.
 
-- [ ] 27. Frontend — Social features (forum and chat)
+- [x] 27. Frontend — Social features (forum and chat)
   - [x] 27.1 Implement social feature module
     - Create `frontend-eva/src/features/social/api.ts`: listThreads, createThread, getThread, createReply, flagPost, toggleUpvote
     - Create `frontend-eva/src/features/social/hooks.ts`: `useForumThreads()`, `useThread()`, `useCreateThread()`, `useCreateReply()`, `useUpvote()`
@@ -756,7 +756,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Create `frontend-eva/src/app/courses/[courseId]/chat/page.tsx`: course chat page with WebSocket connection to `ws/chat/{course_id}/`
     - _Requirements: 13.1, 14.1, 24.1_
 
-- [ ] 28. Frontend — Projects and peer review
+- [x] 28. Frontend — Projects and peer review
   - [x] 28.1 Implement projects feature module
     - Create `frontend-eva/src/features/projects/api.ts`: getProject, submitProject, submitReview, getReviews
     - Create `frontend-eva/src/features/projects/hooks.ts`: `useProject()`, `useSubmitProject()`, `useSubmitReview()`, `useReviews()`
@@ -772,7 +772,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Create `frontend-eva/src/app/projects/[projectId]/page.tsx`: project detail with submission and review
     - _Requirements: 18.1–18.6, 24.1_
 
-- [ ] 29. Frontend — Collaborative learning
+- [x] 29. Frontend — Collaborative learning
   - [x] 29.1 Implement collaboration feature module
     - Create `frontend-eva/src/features/collaboration/api.ts`: joinCollabExercise, submitGroupWork, getGroupInfo
     - Create `frontend-eva/src/features/collaboration/hooks.ts`: `useCollabGroup()`, `useJoinCollab()`, `useSubmitGroupWork()`
@@ -782,7 +782,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
       - `GroupSubmitForm`: group submission form
     - _Requirements: 17.1–17.5_
 
-- [ ] 30. Frontend — Teacher dashboard
+- [x] 30. Frontend — Teacher dashboard
   - [x] 30.1 Implement teacher dashboard feature module
     - Create `frontend-eva/src/features/teacher/api.ts`: getCourseAnalytics, getStudentList, getStudentDetail, getHeatmap
     - Create `frontend-eva/src/features/teacher/hooks.ts`: `useCourseAnalytics()`, `useStudentList()`, `useStudentDetail()`, `useHeatmap()`
@@ -806,7 +806,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
 - [x] 31. Checkpoint — Verify all frontend features
   - Ensure all frontend tests pass, ask the user if questions arise.
 
-- [ ] 32. Docker development environment
+- [x] 32. Docker development environment
   - [x] 32.1 Create Docker Compose configuration
     - Create `docker-compose.yml` with 6 services:
       - `backend`: Django app (Dockerfile in backend-eva/), depends on postgres + redis, volume mount for source code, health check
@@ -833,7 +833,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Configure Celery services to depend on backend
     - _Requirements: 23.5_
 
-- [ ] 33. Final checkpoint — Full system verification
+- [x] 33. Final checkpoint — Full system verification
   - Ensure all backend and frontend tests pass
   - Verify Docker Compose starts all 6 services successfully
   - Ask the user if questions arise.
