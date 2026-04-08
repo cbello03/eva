@@ -91,7 +91,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 9: Role change invalidates existing tokens** — After role change, all previous tokens rejected
     - **Validates: Requirements 4.4**
 
-  - [ ]* 3.6 Write unit tests for accounts
+  - [x] 3.6 Write unit tests for accounts
     - Test registration with known valid/invalid inputs
     - Test login with correct and incorrect credentials
     - Test token refresh flow and replay detection edge cases
@@ -154,7 +154,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 50: Enrollment initializes progress** — New enrollment creates CourseProgress and LessonProgress for every lesson in the course
     - **Validates: Requirements 22.3**
 
-  - [ ]* 5.6 Write unit tests for courses
+  - [x] 5.6 Write unit tests for courses
     - Test course CRUD operations
     - Test publish validation edge cases
     - Test enrollment lifecycle (enroll, duplicate, unenroll, re-enroll)
@@ -206,7 +206,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 18: Lesson session save and resume round trip** — Resuming restores exact state: exercise index, retry queue, completion counts
     - **Validates: Requirements 7.6**
 
-  - [ ]* 6.6 Write unit tests for exercises
+  - [x] 6.6 Write unit tests for exercises
     - Test each exercise type creation and validation
     - Test lesson player flow: start, answer, retry, complete
     - Test free text submission storage and notification trigger
@@ -265,7 +265,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 25: Leaderboard ordering and completeness** — Returns ≤100 entries sorted by XP desc; requesting student's rank always included even if not in top 100
     - **Validates: Requirements 11.2, 11.3**
 
-  - [ ]* 8.7 Write unit tests for gamification
+  - [ ] 8.7 Write unit tests for gamification
     - Test XP award and level-up calculations
     - Test streak increment, reset, and milestone detection
     - Test achievement evaluation and idempotence
@@ -307,7 +307,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 30: Adaptive difficulty adjustment** — 3 consecutive correct → equal or higher difficulty next; 2 consecutive incorrect → equal or lower difficulty next
     - **Validates: Requirements 12.6**
 
-  - [ ]* 9.5 Write unit tests for adaptive learning
+  - [ ] 9.5 Write unit tests for adaptive learning
     - Test mastery score calculation with specific answer sequences
     - Test review recommendation logic
     - Test spaced repetition interval progression
@@ -317,17 +317,17 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
 - [x] 10. Checkpoint — Verify gamification and adaptive learning
   - Ensure all gamification and adaptive learning tests pass, ask the user if questions arise.
 
-- [ ] 11. Social app — Forums and real-time chat
-  - [ ] 11.1 Create social app models and migrations
+- [x] 11. Social app — Forums and real-time chat
+  - [x] 11.1 Create social app models and migrations
     - Create `backend-eva/apps/social/` app with `models.py`: `ForumThread` (course FK, author FK, title, body, is_hidden, last_activity_at), `ForumReply` (thread FK, author FK, body, is_hidden, upvote_count), `ReplyUpvote` (reply FK, user FK, unique_together reply+user), `ChatMessage` (course FK, author FK, content max 2000, sent_at)
     - Create and run migrations
     - _Requirements: 13.1, 13.2, 14.1, 14.4_
 
-  - [ ] 11.2 Implement social schemas
+  - [x] 11.2 Implement social schemas
     - Create `backend-eva/apps/social/schemas.py`: `ThreadCreateIn`, `ThreadOut`, `ReplyCreateIn`, `ReplyOut` (with upvote_count), `ChatMessageOut`, `ThreadListOut` (paginated, 20 per page)
     - _Requirements: 13.2, 13.4, 14.3_
 
-  - [ ] 11.3 Implement SocialService (forums)
+  - [x] 11.3 Implement SocialService (forums)
     - Create `backend-eva/apps/social/services.py` with `ForumService`:
     - `create_thread()`: require title + body, associate with course and author, sanitize content
     - `list_threads()`: return threads sorted by last_activity_at desc, paginated 20/page
@@ -336,7 +336,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - `toggle_upvote()`: create/delete ReplyUpvote, update upvote_count
     - _Requirements: 13.1–13.6_
 
-  - [ ] 11.4 Implement chat WebSocket consumer
+  - [x] 11.4 Implement chat WebSocket consumer
     - Create `backend-eva/apps/social/consumers.py` with `ChatConsumer` (Django Channels):
     - `connect()`: authenticate JWT from query param, verify enrollment in course, join channel group, send last 50 messages as history
     - `receive()`: validate message, persist ChatMessage to DB, broadcast to group
@@ -344,7 +344,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Configure routing in `config/asgi.py`
     - _Requirements: 14.1–14.6_
 
-  - [ ] 11.5 Implement social API routes
+  - [x] 11.5 Implement social API routes
     - Create `backend-eva/apps/social/api.py` with Django Ninja router:
     - `GET /courses/{id}/forum/threads` — Bearer+Enrolled, paginated thread list
     - `POST /courses/{id}/forum/threads` — Bearer+Enrolled, create thread
@@ -366,25 +366,25 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 35: Chat room enrollment enforcement** — Unenrolled user rejected; enrolled user connects successfully
     - **Validates: Requirements 14.5**
 
-  - [ ]* 11.7 Write unit tests for social
+  - [ ] 11.7 Write unit tests for social
     - Test forum CRUD, pagination, flagging
     - Test upvote toggle behavior
     - Test chat consumer connect/disconnect/message flow
     - Test enrollment enforcement on WebSocket
     - _Requirements: 13.1–13.6, 14.1–14.6_
 
-- [ ] 12. Projects app — Real-world projects and peer review
-  - [ ] 12.1 Create projects app models and migrations
+- [x] 12. Projects app — Real-world projects and peer review
+  - [x] 12.1 Create projects app models and migrations
     - Create `backend-eva/apps/projects/` app with `models.py`: `Project` (course FK, teacher FK, title, description, rubric JSON, submission_deadline, peer_review_enabled, peer_reviewers_count default 2), `ProjectSubmission` (project FK, student FK, description, is_late, submitted_at, unique_together project+student), `SubmissionFile` (submission FK, file FileField, filename, file_size), `ProjectReview` (submission FK, reviewer FK, review_type teacher/peer, scores JSON, feedback, is_complete), `PeerReviewAssignment` (submission FK, reviewer FK, is_completed, unique_together submission+reviewer)
     - Create and run migrations
     - _Requirements: 18.1–18.6_
 
-  - [ ] 12.2 Implement projects schemas
+  - [x] 12.2 Implement projects schemas
     - Create `backend-eva/apps/projects/schemas.py`: `ProjectCreateIn` (title, description, rubric, deadline, peer_review_enabled), `ProjectOut`, `SubmissionOut`, `ReviewIn` (scores per criterion, feedback), `ReviewOut`, `PeerReviewAssignmentOut`
     - Validate file constraints: max 10MB per file, max 5 files
     - _Requirements: 18.1, 18.2_
 
-  - [ ] 12.3 Implement ProjectService
+  - [x] 12.3 Implement ProjectService
     - Create `backend-eva/apps/projects/services.py` with `ProjectService`:
     - `create_project()`: require title, description, rubric with scored criteria, deadline
     - `submit_project()`: accept files (max 10MB each, max 5), text description, flag as late if after deadline
@@ -394,7 +394,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - `get_reviews()`: return reviews; peer reviews visible only when all assigned reviews complete
     - _Requirements: 18.1–18.6_
 
-  - [ ] 12.4 Implement projects API routes
+  - [x] 12.4 Implement projects API routes
     - Create `backend-eva/apps/projects/api.py` with Django Ninja router:
     - `POST /projects` — Teacher, create project
     - `GET /projects/{id}` — Bearer+Enrolled, project detail
@@ -412,7 +412,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 43: Peer review visibility** — Reviews visible to author only when all assigned reviews are complete
     - **Validates: Requirements 18.6**
 
-  - [ ]* 12.6 Write unit tests for projects
+  - [-] 12.6 Write unit tests for projects
     - Test project creation and validation
     - Test submission with file constraints
     - Test late submission detection
@@ -420,13 +420,13 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Test review visibility rules
     - _Requirements: 18.1–18.6_
 
-- [ ] 13. Collaboration app — Group exercises and shared workspaces
-  - [ ] 13.1 Create collaboration app models and migrations
+- [x] 13. Collaboration app — Group exercises and shared workspaces
+  - [x] 13.1 Create collaboration app models and migrations
     - Create `backend-eva/apps/collaboration/` app with `models.py`: `CollabGroup` (exercise FK, max_size, workspace_state JSON, is_submitted), `CollabGroupMember` (group FK, student FK, joined_at, last_contribution_at, unique_together group+student), `CollabSubmission` (group FK, submitted_answer JSON, submitted_at)
     - Create and run migrations
     - _Requirements: 17.1, 17.2_
 
-  - [ ] 13.2 Implement CollaborationService
+  - [x] 13.2 Implement CollaborationService
     - Create `backend-eva/apps/collaboration/services.py` with `CollaborationService`:
     - `join_exercise()`: find group with available slots (members < max_size) or create new group, add student as member
     - `submit_group_work()`: record CollabSubmission, award equal XP to all group members via GamificationService
@@ -434,7 +434,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - `check_inactive_members()`: find members with no contribution within 48 hours, notify member + teacher
     - _Requirements: 17.1–17.5_
 
-  - [ ] 13.3 Implement collaboration WebSocket consumer
+  - [x] 13.3 Implement collaboration WebSocket consumer
     - Create `backend-eva/apps/collaboration/consumers.py` with `CollabConsumer`:
     - `connect()`: authenticate JWT, verify group membership, join channel group for exercise+group
     - `receive()`: update workspace_state, broadcast to group members, update last_contribution_at
@@ -442,14 +442,14 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Configure routing in `config/asgi.py`
     - _Requirements: 17.3_
 
-  - [ ] 13.4 Implement collaboration API routes
+  - [x] 13.4 Implement collaboration API routes
     - Create `backend-eva/apps/collaboration/api.py` with Django Ninja router:
     - `POST /exercises/{id}/collab/join` — Student+Enrolled, join collaborative exercise
     - `POST /collab/groups/{id}/submit` — Student+GroupMember, submit group work
     - `GET /collab/groups/{id}` — Student+GroupMember, get group info and workspace state
     - _Requirements: 17.1–17.5_
 
-  - [ ] 13.5 Implement collaboration Celery task
+  - [x] 13.5 Implement collaboration Celery task
     - Create `backend-eva/apps/collaboration/tasks.py`:
     - `check_inactive_collab_members`: periodic task, find group members with last_contribution_at > 48 hours from exercise start, notify via NotificationService
     - _Requirements: 17.5_
@@ -467,13 +467,13 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Test inactive member detection
     - _Requirements: 17.1–17.5_
 
-- [ ] 14. Notifications app — In-app and email notifications
-  - [ ] 14.1 Create notifications app models and migrations
+- [x] 14. Notifications app — In-app and email notifications
+  - [x] 14.1 Create notifications app models and migrations
     - Create `backend-eva/apps/notifications/` app with `models.py`: `Notification` (recipient FK, notification_type, title, body, data JSON, channel enum in_app/email/both, is_read, email_sent)
     - Create and run migrations
     - _Requirements: 19.1_
 
-  - [ ] 14.2 Implement NotificationService
+  - [x] 14.2 Implement NotificationService
     - Create `backend-eva/apps/notifications/services.py` with `NotificationService`:
     - `create_notification()`: create Notification record, dispatch to configured channels
     - `send_in_app()`: push via WebSocket to user's notification channel
@@ -483,7 +483,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - `mark_all_read()`: bulk update, reset Redis count
     - _Requirements: 19.1–19.5_
 
-  - [ ] 14.3 Implement notification WebSocket consumer
+  - [x] 14.3 Implement notification WebSocket consumer
     - Create `backend-eva/apps/notifications/consumers.py` with `NotificationConsumer`:
     - `connect()`: authenticate JWT, join user-specific channel group
     - Real-time delivery: when notification created, send to user's WebSocket if connected
@@ -491,13 +491,13 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Configure routing in `config/asgi.py`
     - _Requirements: 19.3_
 
-  - [ ] 14.4 Implement notification Celery tasks
+  - [x] 14.4 Implement notification Celery tasks
     - Create `backend-eva/apps/notifications/tasks.py`:
     - `send_email_notification`: send email for notifications with channel=email|both, retry policy: 3 attempts with exponential backoff
     - Configure `autoretry_for`, `retry_backoff=True`, `max_retries=3`, `retry_backoff_max=300`
     - _Requirements: 19.6_
 
-  - [ ] 14.5 Implement notifications API routes
+  - [x] 14.5 Implement notifications API routes
     - Create `backend-eva/apps/notifications/api.py` with Django Ninja router:
     - `GET /notifications` — Bearer, paginated notification list
     - `GET /notifications/unread-count` — Bearer, unread count

@@ -84,6 +84,10 @@ INSTALLED_APPS = [
     "apps.exercises",
     "apps.gamification",
     "apps.progress",
+    "apps.social",
+    "apps.projects",
+    "apps.collaboration",
+    "apps.notifications",
 ]
 
 MIDDLEWARE = [
@@ -204,6 +208,10 @@ CELERY_BEAT_SCHEDULE = {
     "process-spaced-repetition": {
         "task": "progress.process_spaced_repetition",
         "schedule": crontab(hour=1, minute=0),  # Daily at 01:00 UTC
+    },
+    "check-inactive-collab-members": {
+        "task": "collaboration.check_inactive_collab_members",
+        "schedule": crontab(hour=2, minute=0),  # Daily at 02:00 UTC
     },
 }
 

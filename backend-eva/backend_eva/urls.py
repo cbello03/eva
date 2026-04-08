@@ -13,6 +13,10 @@ from apps.accounts.api import router as accounts_router
 from apps.courses.api import router as courses_router
 from apps.exercises.api import router as exercises_router
 from apps.gamification.api import router as gamification_router
+from apps.social.api import router as social_router
+from apps.projects.api import router as projects_router
+from apps.collaboration.api import router as collaboration_router
+from apps.notifications.api import router as notifications_router
 from common.exceptions import DomainError, RateLimitExceededError
 from common.schemas import ErrorResponse
 
@@ -52,6 +56,10 @@ api.add_router("", accounts_router)
 api.add_router("", courses_router)
 api.add_router("", exercises_router)
 api.add_router("", gamification_router)
+api.add_router("", social_router)
+api.add_router("", projects_router)
+api.add_router("", collaboration_router)
+api.add_router("", notifications_router)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
