@@ -265,7 +265,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 25: Leaderboard ordering and completeness** — Returns ≤100 entries sorted by XP desc; requesting student's rank always included even if not in top 100
     - **Validates: Requirements 11.2, 11.3**
 
-  - [ ] 8.7 Write unit tests for gamification
+  - [x] 8.7 Write unit tests for gamification
     - Test XP award and level-up calculations
     - Test streak increment, reset, and milestone detection
     - Test achievement evaluation and idempotence
@@ -307,7 +307,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 30: Adaptive difficulty adjustment** — 3 consecutive correct → equal or higher difficulty next; 2 consecutive incorrect → equal or lower difficulty next
     - **Validates: Requirements 12.6**
 
-  - [ ] 9.5 Write unit tests for adaptive learning
+  - [x] 9.5 Write unit tests for adaptive learning
     - Test mastery score calculation with specific answer sequences
     - Test review recommendation logic
     - Test spaced repetition interval progression
@@ -366,7 +366,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 35: Chat room enrollment enforcement** — Unenrolled user rejected; enrolled user connects successfully
     - **Validates: Requirements 14.5**
 
-  - [ ] 11.7 Write unit tests for social
+  - [x] 11.7 Write unit tests for social
     - Test forum CRUD, pagination, flagging
     - Test upvote toggle behavior
     - Test chat consumer connect/disconnect/message flow
@@ -412,7 +412,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 43: Peer review visibility** — Reviews visible to author only when all assigned reviews are complete
     - **Validates: Requirements 18.6**
 
-  - [-] 12.6 Write unit tests for projects
+  - [x] 12.6 Write unit tests for projects
     - Test project creation and validation
     - Test submission with file constraints
     - Test late submission detection
@@ -460,7 +460,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 40: Collaborative submission awards equal XP** — Every group member receives XPTransaction with same amount
     - **Validates: Requirements 17.4**
 
-  - [ ]* 13.7 Write unit tests for collaboration
+  - [x] 13.7 Write unit tests for collaboration
     - Test group assignment with various slot availability
     - Test group submission and XP distribution
     - Test WebSocket workspace updates
@@ -509,24 +509,24 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 44: Notification unread count consistency** — Unread count = count of Notification records where is_read=False; marking read decrements by exactly 1
     - **Validates: Requirements 19.4, 19.5**
 
-  - [ ]* 14.7 Write unit tests for notifications
+  - [x] 14.7 Write unit tests for notifications
     - Test notification creation for each event type
     - Test WebSocket delivery
     - Test email task retry behavior
     - Test mark read / mark all read
     - _Requirements: 19.1–19.6_
 
-- [ ] 15. Checkpoint — Verify collaboration and notifications
+- [x] 15. Checkpoint — Verify collaboration and notifications
   - Ensure all collaboration and notification tests pass, ask the user if questions arise.
 
 - [ ] 16. Progress app — Student progress tracking and teacher analytics
-  - [ ] 16.1 Create progress app models and migrations
+  - [x] 16.1 Create progress app models and migrations
     - Create `backend-eva/apps/progress/` app with `models.py`: `CourseProgress` (student FK, course FK, completion_percentage, total_score, lessons_completed, total_lessons, unique_together student+course), `LessonProgress` (student FK, lesson FK, is_completed, score, completed_at, unique_together student+lesson), `DailyActivity` (student FK, date, lessons_completed, xp_earned, time_spent_minutes, unique_together student+date)
     - Note: `TopicMastery` and `SpacedRepetitionItem` already created in task 9.1
     - Create and run migrations
     - _Requirements: 20.1–20.5, 16.1–16.5_
 
-  - [ ] 16.2 Implement ProgressService
+  - [x] 16.2 Implement ProgressService
     - Create `backend-eva/apps/progress/services.py` with `ProgressService`:
     - `initialize_course_progress()`: create CourseProgress + LessonProgress for every lesson in course
     - `update_lesson_progress()`: mark lesson completed, update score, recalculate CourseProgress completion_percentage
@@ -536,7 +536,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - `get_mastery_scores()`: return TopicMastery data per topic
     - _Requirements: 20.1–20.5_
 
-  - [ ] 16.3 Implement AnalyticsService (teacher analytics)
+  - [x] 16.3 Implement AnalyticsService (teacher analytics)
     - Create `backend-eva/apps/progress/analytics.py` with `AnalyticsService`:
     - `get_course_analytics()`: total enrolled, average completion rate, average score, average time per lesson
     - `get_student_list()`: per-student progress percentage, score, streak, last activity
@@ -544,13 +544,13 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - `get_performance_heatmap()`: exercise accuracy rates across topics
     - _Requirements: 16.1–16.4_
 
-  - [ ] 16.4 Implement analytics Celery task
+  - [x] 16.4 Implement analytics Celery task
     - Create task in `backend-eva/apps/progress/tasks.py`:
     - `aggregate_analytics`: hourly task, pre-compute aggregate statistics for teacher dashboard
     - Register in Celery Beat schedule
     - _Requirements: 16.5_
 
-  - [ ] 16.5 Implement progress and analytics API routes
+  - [x] 16.5 Implement progress and analytics API routes
     - Create `backend-eva/apps/progress/api.py` with Django Ninja router:
     - Student progress endpoints:
       - `GET /progress/dashboard` — Student, overall stats
@@ -576,7 +576,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 46: Activity heatmap data range** — Returns exactly 90 calendar days, one entry per day, zero values for inactive days
     - **Validates: Requirements 20.4**
 
-  - [ ]* 16.7 Write unit tests for progress and analytics
+  - [x] 16.7 Write unit tests for progress and analytics
     - Test progress initialization on enrollment
     - Test lesson completion updates
     - Test dashboard data aggregation
@@ -584,11 +584,11 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Test heatmap data generation
     - _Requirements: 20.1–20.5, 16.1–16.5_
 
-- [ ] 17. Checkpoint — Verify progress and analytics
+- [x] 17. Checkpoint — Verify progress and analytics
   - Ensure all progress and analytics tests pass, ask the user if questions arise.
 
 - [ ] 18. Backend integration — Wire all apps together and configure ASGI/Celery
-  - [ ] 18.1 Configure ASGI routing for all WebSocket consumers
+  - [x] 18.1 Configure ASGI routing for all WebSocket consumers
     - Update `backend-eva/config/asgi.py` to include all WebSocket routes:
     - `ws/chat/{course_id}/` → ChatConsumer
     - `ws/notifications/` → NotificationConsumer
@@ -596,7 +596,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Add JWT authentication middleware for WebSocket connections
     - _Requirements: 14.1, 17.3, 19.3_
 
-  - [ ] 18.2 Configure Celery Beat schedule with all periodic tasks
+  - [x] 18.2 Configure Celery Beat schedule with all periodic tasks
     - Update `backend-eva/config/celery.py` with complete beat schedule:
     - Streak reset: daily 00:00 UTC
     - Leaderboard reset: weekly Monday 00:00 UTC
@@ -605,22 +605,22 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Inactive collab member check: periodic
     - _Requirements: 9.2, 9.3, 11.5, 12.4, 16.5, 17.5_
 
-  - [ ] 18.3 Mount all API routers in root URL configuration
+  - [x] 18.3 Mount all API routers in root URL configuration
     - Update `backend-eva/config/urls.py` to mount all app routers under `/api/v1/`:
     - accounts, courses, exercises, gamification, progress, social, projects, collaboration, notifications
     - Configure CORS middleware allowing only configured frontend origin
     - _Requirements: 21.6_
 
-  - [ ]* 18.4 Write backend integration tests
+  - [x] 18.4 Write backend integration tests
     - Test cross-app flows: enrollment → lesson start → answer → XP award → achievement check → notification
     - Test WebSocket authentication and enrollment enforcement
     - _Requirements: 7.4, 8.1, 10.3, 19.2_
 
-- [ ] 19. Checkpoint — Verify full backend integration
+- [x] 19. Checkpoint — Verify full backend integration
   - Ensure all backend tests pass, ask the user if questions arise.
 
 - [ ] 20. Frontend — Auth feature module and API client
-  - [ ] 20.1 Implement API client with token refresh interceptor
+  - [x] 20.1 Implement API client with token refresh interceptor
     - Complete `frontend-eva/src/lib/api-client.ts`:
     - Axios instance with baseURL `/api/v1`, withCredentials: true
     - Request interceptor: attach Access_Token from Zustand store as Bearer header
@@ -628,13 +628,13 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Handle 403 (access denied notification), 429 (retry-after notification), 5xx (generic error)
     - _Requirements: 24.2, 24.7, 24.8_
 
-  - [ ] 20.2 Implement auth Zustand store and hooks
+  - [x] 20.2 Implement auth Zustand store and hooks
     - Create `frontend-eva/src/features/auth/store.ts`: Zustand store with accessToken (in memory only), user object, isAuthenticated, setAccessToken, setUser, logout
     - Create `frontend-eva/src/features/auth/api.ts`: login, register, logout, refreshToken, getMe API functions
     - Create `frontend-eva/src/features/auth/hooks.ts`: `useAuth()`, `useUser()`, `useLogin()`, `useRegister()`, `useLogout()` hooks using TanStack Query mutations
     - _Requirements: 24.3, 24.7_
 
-  - [ ] 20.3 Implement auth pages (Login, Register)
+  - [x] 20.3 Implement auth pages (Login, Register)
     - Create `frontend-eva/src/app/login/page.tsx`: login form with React Hook Form + Zod validation, email + password fields, error display, redirect on success
     - Create `frontend-eva/src/app/register/page.tsx`: registration form with email, password, display_name, password strength validation matching backend rules
     - Create `frontend-eva/src/features/auth/components/` with form components
@@ -646,21 +646,21 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - **Property 52: Automatic token refresh on 401** — On 401 response, API client calls refresh endpoint, updates Zustand store, retries original request exactly once
     - **Validates: Requirements 24.8**
 
-  - [ ]* 20.5 Write unit tests for auth feature
+  - [x] 20.5 Write unit tests for auth feature
     - Test Zustand store state transitions
     - Test API client interceptor behavior
     - Test login/register form validation
     - _Requirements: 24.7, 24.8_
 
 - [ ] 21. Frontend — App shell, routing, and layout
-  - [ ] 21.1 Configure Next.js App Router with file-based routing
+  - [x] 21.1 Configure Next.js App Router with file-based routing
     - Create `frontend-eva/src/app/layout.tsx`: root layout with React Suspense, MUI ThemeProvider, navigation bar, notification indicator
     - Create `frontend-eva/src/app/page.tsx`: landing page
     - Set up route guards for authenticated/role-based routes using Next.js middleware
     - Configure React Suspense with `loading.tsx` files for all route-level components
     - _Requirements: 24.1, 24.6_
 
-  - [ ] 21.2 Implement WebSocket connection manager
+  - [x] 21.2 Implement WebSocket connection manager
     - Complete `frontend-eva/src/lib/websocket.ts`:
     - WebSocket class with JWT auth via query param
     - Automatic reconnection with exponential backoff (1s, 2s, 4s, 8s, max 30s)
@@ -668,7 +668,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - Stale connection detection via ping/pong (30s interval)
     - _Requirements: 14.6, 19.3_
 
-  - [ ] 21.3 Implement notification feature module
+  - [x] 21.3 Implement notification feature module
     - Create `frontend-eva/src/features/notifications/api.ts`: getNotifications, getUnreadCount, markRead, markAllRead
     - Create `frontend-eva/src/features/notifications/hooks.ts`: `useNotifications()`, `useUnreadCount()`, `useMarkRead()`
     - Create `frontend-eva/src/features/notifications/components/`: NotificationBell (with unread count badge), NotificationList, NotificationItem
@@ -676,26 +676,26 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - _Requirements: 19.1–19.5_
 
 - [ ] 22. Frontend — Course browsing and enrollment
-  - [ ] 22.1 Implement courses feature module
+  - [x] 22.1 Implement courses feature module
     - Create `frontend-eva/src/features/courses/api.ts`: listCourses, getCourse, enrollInCourse, unenrollFromCourse, listEnrollments
     - Create `frontend-eva/src/features/courses/hooks.ts`: `useCourses()`, `useCourse()`, `useEnroll()`, `useUnenroll()`, `useEnrollments()`
     - Create `frontend-eva/src/features/courses/types.ts`: Course, Unit, Lesson, Enrollment TypeScript types
     - _Requirements: 5.7, 22.1, 22.4_
 
-  - [ ] 22.2 Implement course pages
+  - [x] 22.2 Implement course pages
     - Create `frontend-eva/src/app/courses/page.tsx`: course listing page with search/filter, enrollment status
     - Create `frontend-eva/src/app/courses/[courseId]/page.tsx`: course detail page with unit/lesson hierarchy, enroll/unenroll button, progress display
     - Create `frontend-eva/src/features/courses/components/`: CourseCard, CourseList, UnitAccordion, LessonItem
     - _Requirements: 5.7, 22.1, 22.4, 24.4, 24.5_
 
 - [ ] 23. Frontend — Lesson player (Duolingo-style)
-  - [ ] 23.1 Implement exercises feature module
+  - [x] 23.1 Implement exercises feature module
     - Create `frontend-eva/src/features/exercises/api.ts`: startLesson, submitAnswer, resumeLesson
     - Create `frontend-eva/src/features/exercises/hooks.ts`: `useLessonSession()`, `useSubmitAnswer()`
     - Create `frontend-eva/src/features/exercises/types.ts`: Exercise, LessonSession, AnswerResult types
     - _Requirements: 6.1, 7.1_
 
-  - [ ] 23.2 Implement lesson player page and exercise components
+  - [x] 23.2 Implement lesson player page and exercise components
     - Create `frontend-eva/src/app/courses/[courseId]/lessons/[lessonId]/page.tsx`: lesson player page with progress bar, exercise rendering, feedback display, retry queue handling
     - Create `frontend-eva/src/features/exercises/components/`:
       - `MultipleChoiceExercise`: radio button options, selection, feedback
@@ -708,7 +708,7 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - _Requirements: 6.1–6.7, 7.1–7.6, 24.4_
 
 - [ ] 24. Frontend — Gamification features
-  - [ ] 24.1 Implement gamification feature module
+  - [x] 24.1 Implement gamification feature module
     - Create `frontend-eva/src/features/gamification/api.ts`: getProfile, getLeaderboard, getAchievements, getXPHistory
     - Create `frontend-eva/src/features/gamification/hooks.ts`: `useGamificationProfile()`, `useLeaderboard()`, `useAchievements()`
     - Create `frontend-eva/src/features/gamification/components/`:
@@ -719,13 +719,13 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
       - `LevelUpModal`: celebration modal on level up
     - _Requirements: 8.1–8.5, 9.1–9.5, 10.1–10.5, 11.1–11.4_
 
-  - [ ] 24.2 Implement student dashboard page
+  - [x] 24.2 Implement student dashboard page
     - Create `frontend-eva/src/app/dashboard/page.tsx`: student dashboard with XP, level, streak, enrolled courses, recent activity
     - Create `frontend-eva/src/app/profile/page.tsx`: profile page with achievements, stats
     - _Requirements: 20.1, 24.4_
 
 - [ ] 25. Frontend — Student progress tracking
-  - [ ] 25.1 Implement progress feature module
+  - [x] 25.1 Implement progress feature module
     - Create `frontend-eva/src/features/progress/api.ts`: getDashboard, getCourseProgress, getActivityHeatmap, getMasteryScores
     - Create `frontend-eva/src/features/progress/hooks.ts`: `useProgressDashboard()`, `useCourseProgress()`, `useActivityHeatmap()`, `useMasteryScores()`
     - Create `frontend-eva/src/features/progress/components/`:
@@ -735,11 +735,11 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
       - `MasteryChart`: topic mastery visualization
     - _Requirements: 20.1–20.5, 24.4_
 
-- [ ] 26. Checkpoint — Verify core frontend features
+- [x] 26. Checkpoint — Verify core frontend features
   - Ensure all frontend tests pass, ask the user if questions arise.
 
 - [ ] 27. Frontend — Social features (forum and chat)
-  - [ ] 27.1 Implement social feature module
+  - [x] 27.1 Implement social feature module
     - Create `frontend-eva/src/features/social/api.ts`: listThreads, createThread, getThread, createReply, flagPost, toggleUpvote
     - Create `frontend-eva/src/features/social/hooks.ts`: `useForumThreads()`, `useThread()`, `useCreateThread()`, `useCreateReply()`, `useUpvote()`
     - Create `frontend-eva/src/features/social/components/`:
@@ -751,13 +751,13 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
       - `ChatMessage`: individual message display
     - _Requirements: 13.1–13.6, 14.1–14.6_
 
-  - [ ] 27.2 Implement forum and chat pages
+  - [x] 27.2 Implement forum and chat pages
     - Create `frontend-eva/src/app/courses/[courseId]/forum/page.tsx`: course forum page with thread list and creation
     - Create `frontend-eva/src/app/courses/[courseId]/chat/page.tsx`: course chat page with WebSocket connection to `ws/chat/{course_id}/`
     - _Requirements: 13.1, 14.1, 24.1_
 
 - [ ] 28. Frontend — Projects and peer review
-  - [ ] 28.1 Implement projects feature module
+  - [x] 28.1 Implement projects feature module
     - Create `frontend-eva/src/features/projects/api.ts`: getProject, submitProject, submitReview, getReviews
     - Create `frontend-eva/src/features/projects/hooks.ts`: `useProject()`, `useSubmitProject()`, `useSubmitReview()`, `useReviews()`
     - Create `frontend-eva/src/features/projects/components/`:
@@ -767,13 +767,13 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
       - `ReviewList`: display reviews (teacher + peer)
     - _Requirements: 18.1–18.6_
 
-  - [ ] 28.2 Implement project pages
+  - [x] 28.2 Implement project pages
     - Create `frontend-eva/src/app/projects/page.tsx`: project listing
     - Create `frontend-eva/src/app/projects/[projectId]/page.tsx`: project detail with submission and review
     - _Requirements: 18.1–18.6, 24.1_
 
 - [ ] 29. Frontend — Collaborative learning
-  - [ ] 29.1 Implement collaboration feature module
+  - [x] 29.1 Implement collaboration feature module
     - Create `frontend-eva/src/features/collaboration/api.ts`: joinCollabExercise, submitGroupWork, getGroupInfo
     - Create `frontend-eva/src/features/collaboration/hooks.ts`: `useCollabGroup()`, `useJoinCollab()`, `useSubmitGroupWork()`
     - Create `frontend-eva/src/features/collaboration/components/`:
@@ -783,17 +783,17 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
     - _Requirements: 17.1–17.5_
 
 - [ ] 30. Frontend — Teacher dashboard
-  - [ ] 30.1 Implement teacher dashboard feature module
+  - [x] 30.1 Implement teacher dashboard feature module
     - Create `frontend-eva/src/features/teacher/api.ts`: getCourseAnalytics, getStudentList, getStudentDetail, getHeatmap
     - Create `frontend-eva/src/features/teacher/hooks.ts`: `useCourseAnalytics()`, `useStudentList()`, `useStudentDetail()`, `useHeatmap()`
     - _Requirements: 15.1, 16.1–16.5_
 
-  - [ ] 30.2 Implement teacher dashboard pages
+  - [x] 30.2 Implement teacher dashboard pages
     - Create `frontend-eva/src/app/teacher/page.tsx`: teacher dashboard with course list (status, enrollment count, last modified)
     - Create `frontend-eva/src/app/teacher/analytics/[courseId]/page.tsx`: course analytics page with aggregate stats, student list, performance heatmap
     - _Requirements: 15.1, 16.1–16.4_
 
-  - [ ] 30.3 Implement course builder pages
+  - [x] 30.3 Implement course builder pages
     - Create `frontend-eva/src/app/teacher/courses/[courseId]/builder/page.tsx`: visual course builder with editable tree view (units → lessons → exercises)
     - Create `frontend-eva/src/features/teacher/components/`:
       - `CourseTree`: editable hierarchy tree
@@ -803,11 +803,11 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
       - `PerformanceHeatmap`: exercise accuracy heatmap visualization
     - _Requirements: 15.1–15.5, 16.1–16.4_
 
-- [ ] 31. Checkpoint — Verify all frontend features
+- [x] 31. Checkpoint — Verify all frontend features
   - Ensure all frontend tests pass, ask the user if questions arise.
 
 - [ ] 32. Docker development environment
-  - [ ] 32.1 Create Docker Compose configuration
+  - [x] 32.1 Create Docker Compose configuration
     - Create `docker-compose.yml` with 6 services:
       - `backend`: Django app (Dockerfile in backend-eva/), depends on postgres + redis, volume mount for source code, health check
       - `frontend`: React app (Dockerfile in frontend-eva/), volume mount for source code, hot-reload
@@ -817,17 +817,17 @@ This plan implements the EVA (Entorno Virtual de Enseñanza-Aprendizaje) learnin
       - `celery-beat`: same image as backend, runs `celery -A config beat`, depends on postgres + redis + backend
     - _Requirements: 23.1, 23.3, 23.4, 23.5_
 
-  - [ ] 32.2 Create Dockerfiles for backend and frontend
+  - [x] 32.2 Create Dockerfiles for backend and frontend
     - Create `backend-eva/Dockerfile`: Python base, UV for dependency management, install dependencies, copy source
     - Create `frontend-eva/Dockerfile`: Node/Bun base, install dependencies, copy source, Next.js dev server
     - _Requirements: 23.1_
 
-  - [ ] 32.3 Create environment configuration
+  - [x] 32.3 Create environment configuration
     - Create `.env.example` with all required environment variables: DATABASE_URL, REDIS_URL, SECRET_KEY, ALLOWED_HOSTS, CORS_ALLOWED_ORIGINS, CELERY_BROKER_URL, EMAIL_* settings
     - Create `.env` (gitignored) with development defaults
     - _Requirements: 23.2_
 
-  - [ ] 32.4 Configure health checks and service dependencies
+  - [x] 32.4 Configure health checks and service dependencies
     - Add health checks for PostgreSQL (`pg_isready`) and Redis (`redis-cli ping`)
     - Configure backend service to wait for healthy postgres and redis using `depends_on` with `condition: service_healthy`
     - Configure Celery services to depend on backend

@@ -78,6 +78,7 @@ INSTALLED_APPS = [
     "channels",
     "ninja",
     "django_extensions",
+    "corsheaders",
     # Domain apps
     "apps.accounts",
     "apps.courses",
@@ -92,6 +93,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -231,3 +233,11 @@ CACHES = {
 APPS_DIR = BASE_DIR / "apps"
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
+
+# ---------------------------------------------------------------------------
+# CORS — allow only configured frontend origin
+# ---------------------------------------------------------------------------
+CORS_ALLOWED_ORIGINS = [
+    o.strip() for o in env.cors_allowed_origins.split(",") if o.strip()
+]
+CORS_ALLOW_CREDENTIALS = True

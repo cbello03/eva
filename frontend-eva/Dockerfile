@@ -1,3 +1,18 @@
+# ---------- dev stage (used by docker-compose) ----------
+FROM oven/bun:1 AS dev
+
+WORKDIR /app
+
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
+
+# Source is volume-mounted in docker-compose, but copy for standalone builds
+COPY . .
+
+EXPOSE 3000
+
+CMD ["bun", "run", "dev"]
+
 # ---------- deps stage ----------
 FROM oven/bun:1 AS deps
 
@@ -13,8 +28,8 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN bun run build
 
-# ---------- runtime stage ----------
-FROM node:22-alpine
+# ---------- production stage ----------
+FROM node:22-alpine AS production
 
 WORKDIR /app
 

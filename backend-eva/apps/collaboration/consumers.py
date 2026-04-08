@@ -7,7 +7,7 @@ from urllib.parse import parse_qs
 
 import jwt
 from channels.db import database_sync_to_async
-from channels.generic.websocket import AsyncJsonWebSocketConsumer
+from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from django.conf import settings
 from django.utils import timezone as tz
 
@@ -16,7 +16,7 @@ from apps.accounts.services import JWT_ALGORITHM
 from apps.collaboration.models import CollabGroup, CollabGroupMember
 
 
-class CollabConsumer(AsyncJsonWebSocketConsumer):
+class CollabConsumer(AsyncJsonWebsocketConsumer):
     """Django Channels consumer for collaborative exercise workspaces.
 
     Connection URL: ``ws://<host>/ws/collab/<exercise_id>/<group_id>/?token=<jwt>``

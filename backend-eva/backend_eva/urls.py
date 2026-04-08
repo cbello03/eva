@@ -17,6 +17,7 @@ from apps.social.api import router as social_router
 from apps.projects.api import router as projects_router
 from apps.collaboration.api import router as collaboration_router
 from apps.notifications.api import router as notifications_router
+from apps.progress.api import router as progress_router
 from common.exceptions import DomainError, RateLimitExceededError
 from common.schemas import ErrorResponse
 
@@ -60,6 +61,7 @@ api.add_router("", social_router)
 api.add_router("", projects_router)
 api.add_router("", collaboration_router)
 api.add_router("", notifications_router)
+api.add_router("", progress_router)
 
 urlpatterns = [
     path("admin/", admin.site.urls),

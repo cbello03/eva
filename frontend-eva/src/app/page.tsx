@@ -1,66 +1,105 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
+import Link from "next/link";
+import { Box, Button, Container, Typography, Stack } from "@mui/material";
+import { School, EmojiEvents, Group } from "@mui/icons-material";
+import { useAuth } from "@/features/auth/hooks";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+export default function LandingPage() {
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace("/dashboard");
+    }
+  }, [isAuthenticated, router]);
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <Container maxWidth="md">
+      <Box
+        sx={{
+          mt: 12,
+          mb: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h2" component="h1" gutterBottom>
+          Learn smarter, together
+        </Typography>
+        <Typography variant="h6" color="text.secondary" sx={{ mb: 4, maxWidth: 560 }}>
+          EVA combines interactive lessons, gamification, and social learning
+          into one platform. Build skills at your own pace.
+        </Typography>
+
+        <Stack direction="row" spacing={2}>
+          <Button
+            component={Link}
+            href="/register"
+            variant="contained"
+            size="large"
+          >
+            Get started
+          </Button>
+          <Button
+            component={Link}
+            href="/login"
+            variant="outlined"
+            size="large"
+          >
+            Log in
+          </Button>
+        </Stack>
+      </Box>
+
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        spacing={4}
+        sx={{ mt: 4, mb: 8, justifyContent: "center", alignItems: "center" }}
+      >
+        <FeatureCard
+          icon={<School fontSize="large" color="primary" />}
+          title="Interactive lessons"
+          description="Duolingo-style exercises with instant feedback and retry mechanics."
         />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+        <FeatureCard
+          icon={<EmojiEvents fontSize="large" color="secondary" />}
+          title="XP & achievements"
+          description="Earn points, level up, maintain streaks, and climb the leaderboard."
+        />
+        <FeatureCard
+          icon={<Group fontSize="large" color="primary" />}
+          title="Social learning"
+          description="Forums, real-time chat, and collaborative projects with peers."
+        />
+      </Stack>
+    </Container>
+  );
+}
+
+function FeatureCard({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
+  return (
+    <Box sx={{ textAlign: "center", flex: 1, maxWidth: 280 }}>
+      <Box sx={{ mb: 1 }}>{icon}</Box>
+      <Typography variant="h6" gutterBottom>
+        {title}
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        {description}
+      </Typography>
+    </Box>
   );
 }

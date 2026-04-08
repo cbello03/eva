@@ -148,6 +148,39 @@ class TestRecordAnswer:
         assert tm.correct_count == 2
         assert tm.total_count == 3
 
+    def test_specific_sequence_ccicic(self, student, lesson):
+        """Trace mastery through C-C-I-C-I-C sequence and verify final score."""
+        ex = _make_exercise(lesson, topic="algebra")
+        sequence = [True, True, False, True, False, True]
+
+        score = 0.0
+        for correct in sequence:
+            AdaptiveService.record_answer(student, ex, is_correct=correct)
+            score = ALPHA * (1.0 if correct else 0.0) + (1 - ALPHA) * score
+
+        tm = TopicMastery.objects.get(student=student, topic="algebra")
+        assert tm.mastery_score == pytest.approx(score)
+        assert tm.correct_count == 4
+        assert tm.total_count == 6
+
+    def test_all_incorrect_converges_to_zero(self, student, lesson):
+        """Repeated incorrect answers drive mastery toward 0."""
+        ex = _make_exercise(lesson, topic="algebra")
+        for _ in range(10):
+            AdaptiveService.record_answer(student, ex, is_correct=False)
+
+        tm = TopicMastery.objects.get(student=student, topic="algebra")
+        assert tm.mastery_score < 0.01
+
+    def test_all_correct_converges_toward_one(self, student, lesson):
+        """Repeated correct answers drive mastery toward 1.0."""
+        ex = _make_exercise(lesson, topic="algebra")
+        for _ in range(20):
+            AdaptiveService.record_answer(student, ex, is_correct=True)
+
+        tm = TopicMastery.objects.get(student=student, topic="algebra")
+        assert tm.mastery_score > 0.95
+
 
 # ------------------------------------------------------------------
 # get_mastery_scores
@@ -239,6 +272,29 @@ class TestShouldRecommendReview:
         """Unit with no exercises → no recommendation."""
         rec = AdaptiveService.should_recommend_review(student, unit.pk)
         assert rec.should_review is False
+
+    def test_exact_threshold_not_weak(self, student, unit, lesson):
+        """Mastery exactly at 0.6 should NOT trigger review (< 0.6 required)."""
+        _make_exercise(lesson, topic="algebra")
+        TopicMastery.objects.create(
+            student=student, topic="algebra", course=unit.course,
+            correct_count=6, total_count=10, mastery_score=MASTERY_THRESHOLD,
+        )
+
+        rec = AdaptiveService.should_recommend_review(student, unit.pk)
+        assert rec.should_review is False
+
+    def test_just_below_threshold_is_weak(self, student, unit, lesson):
+        """Mastery at 0.59 should trigger review."""
+        _make_exercise(lesson, topic="algebra")
+        TopicMastery.objects.create(
+            student=student, topic="algebra", course=unit.course,
+            correct_count=5, total_count=10, mastery_score=0.59,
+        )
+
+        rec = AdaptiveService.should_recommend_review(student, unit.pk)
+        assert rec.should_review is True
+        assert len(rec.weak_topics) == 1
 
 
 # ------------------------------------------------------------------
@@ -391,6 +447,41 @@ class TestScheduleSpacedRepetition:
         AdaptiveService.schedule_spaced_repetition(student, ex, is_correct=True)
         assert SpacedRepetitionItem.objects.count() == 0
 
+    def test_review_count_increments_through_progression(self, student, lesson):
+        """review_count should increment by 1 on each correct review."""
+        ex = _make_exercise(lesson)
+        today = datetime.date.today()
+
+        SpacedRepetitionItem.objects.create(
+            student=student, exercise=ex,
+            interval_days=1,
+            next_review_date=today + datetime.timedelta(days=1),
+            review_count=0,
+        )
+
+        for expected_count in range(1, 5):
+            AdaptiveService.schedule_spaced_repetition(student, ex, is_correct=True)
+            item = SpacedRepetitionItem.objects.get(student=student, exercise=ex)
+            assert item.review_count == expected_count
+
+    def test_incorrect_preserves_review_count(self, student, lesson):
+        """Incorrect answer resets interval but does not reset review_count."""
+        ex = _make_exercise(lesson)
+        today = datetime.date.today()
+
+        SpacedRepetitionItem.objects.create(
+            student=student, exercise=ex,
+            interval_days=7,
+            next_review_date=today + datetime.timedelta(days=7),
+            review_count=3,
+        )
+
+        AdaptiveService.schedule_spaced_repetition(student, ex, is_correct=False)
+        item = SpacedRepetitionItem.objects.get(student=student, exercise=ex)
+        assert item.interval_days == 1
+        # review_count is preserved (not reset)
+        assert item.review_count == 3
+
 
 # ------------------------------------------------------------------
 # adjust_difficulty
@@ -468,3 +559,50 @@ class TestAdjustDifficulty:
         ex = _make_exercise(lesson, difficulty=3)
         suggested = AdaptiveService.adjust_difficulty(student, ex)
         assert suggested == 3
+
+    def test_only_most_recent_answers_matter(self, student, lesson, enrollment):
+        """Old incorrect answers should not prevent increase if last 3 are correct."""
+        import datetime as dt
+
+        session = self._create_session(student, lesson)
+        ex = _make_exercise(lesson, difficulty=2)
+
+        # Old incorrect answers with explicit earlier timestamps
+        base_time = dt.datetime(2024, 1, 1, 12, 0, 0, tzinfo=dt.timezone.utc)
+        a1 = self._record_answer(student, ex, session, is_correct=False)
+        a1.answered_at = base_time
+        a1.save(update_fields=["answered_at"])
+
+        a2 = self._record_answer(student, ex, session, is_correct=False)
+        a2.answered_at = base_time + dt.timedelta(seconds=1)
+        a2.save(update_fields=["answered_at"])
+
+        # Recent 3 correct answers with later timestamps
+        for i in range(3):
+            a = self._record_answer(student, ex, session, is_correct=True)
+            a.answered_at = base_time + dt.timedelta(seconds=10 + i)
+            a.save(update_fields=["answered_at"])
+
+        suggested = AdaptiveService.adjust_difficulty(student, ex)
+        assert suggested == 3
+
+    def test_single_answer_no_change(self, student, lesson, enrollment):
+        """A single correct answer should not trigger difficulty increase."""
+        session = self._create_session(student, lesson)
+        ex = _make_exercise(lesson, difficulty=3)
+
+        self._record_answer(student, ex, session, is_correct=True)
+
+        suggested = AdaptiveService.adjust_difficulty(student, ex)
+        assert suggested == 3
+
+    def test_two_correct_no_change(self, student, lesson, enrollment):
+        """Two correct answers (below threshold of 3) should not increase difficulty."""
+        session = self._create_session(student, lesson)
+        ex = _make_exercise(lesson, difficulty=2)
+
+        self._record_answer(student, ex, session, is_correct=True)
+        self._record_answer(student, ex, session, is_correct=True)
+
+        suggested = AdaptiveService.adjust_difficulty(student, ex)
+        assert suggested == 2

@@ -1,4 +1,4 @@
-"""Progress Celery tasks — spaced repetition scheduling."""
+"""Progress Celery tasks — spaced repetition scheduling and analytics aggregation."""
 
 import datetime
 import logging
@@ -47,3 +47,33 @@ def process_spaced_repetition() -> int:
     )
 
     return students_with_reviews
+
+
+@shared_task(name="progress.aggregate_analytics")
+def aggregate_analytics() -> int:
+    """Hourly task: pre-compute aggregate statistics for the teacher dashboard.
+
+    Iterates over all published courses and calls
+    AnalyticsService.get_course_analytics to refresh cached aggregate data
+    (total enrolled, average completion rate, average score, average time
+    per lesson).
+
+    Returns the number of courses processed.
+    """
+    from apps.courses.models import Course
+    from apps.progress.analytics import AnalyticsService
+
+    courses = Course.objects.filter(status=Course.Status.PUBLISHED)
+    count = 0
+
+    for course in courses:
+        try:
+            AnalyticsService.get_course_analytics(course.pk)
+            count += 1
+        except Exception:
+            logger.exception(
+                "Failed to aggregate analytics for course %d", course.pk
+            )
+
+    logger.info("Aggregated analytics for %d courses", count)
+    return count

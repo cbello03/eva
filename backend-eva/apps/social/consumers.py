@@ -7,7 +7,7 @@ from urllib.parse import parse_qs
 
 import jwt
 from channels.db import database_sync_to_async
-from channels.generic.websocket import AsyncJsonWebSocketConsumer
+from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from django.conf import settings
 
 from apps.accounts.models import User
@@ -16,7 +16,7 @@ from apps.courses.models import Course, Enrollment
 from apps.social.models import ChatMessage
 
 
-class ChatConsumer(AsyncJsonWebSocketConsumer):
+class ChatConsumer(AsyncJsonWebsocketConsumer):
     """Django Channels consumer for per-course real-time chat.
 
     Connection URL: ``ws://<host>/ws/chat/<course_id>/?token=<jwt>``
