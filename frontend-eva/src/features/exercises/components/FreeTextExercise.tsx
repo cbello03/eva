@@ -27,14 +27,14 @@ export default function FreeTextExercise({
         {questionText}
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        Write your answer below. This will be submitted for teacher review.
+        Escribe tu respuesta a continuación. Será enviada para revisión del profesor.
       </Typography>
       <TextField
         fullWidth
         multiline
         minRows={4}
         maxRows={10}
-        placeholder="Type your answer…"
+        placeholder="Escribe tu respuesta…"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         disabled={disabled}
@@ -45,7 +45,7 @@ export default function FreeTextExercise({
         onClick={handleSubmit}
         disabled={disabled || !value.trim()}
       >
-        Submit for Review
+        Enviar para revisión
       </Button>
     </Paper>
   );

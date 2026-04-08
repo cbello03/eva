@@ -27,7 +27,7 @@ export default function LeaderboardTable() {
   return (
     <Box>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-        <Typography variant="h6">Leaderboard</Typography>
+        <Typography variant="h6">Tabla de posiciones</Typography>
         <ToggleButtonGroup
           value={period}
           exclusive
@@ -36,14 +36,14 @@ export default function LeaderboardTable() {
           }}
           size="small"
         >
-          <ToggleButton value="weekly">Weekly</ToggleButton>
-          <ToggleButton value="alltime">All Time</ToggleButton>
+          <ToggleButton value="weekly">Semanal</ToggleButton>
+          <ToggleButton value="alltime">Histórico</ToggleButton>
         </ToggleButtonGroup>
       </Box>
 
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
-          Failed to load leaderboard.
+          Error al cargar la tabla de posiciones.
         </Alert>
       )}
 
@@ -55,7 +55,7 @@ export default function LeaderboardTable() {
         <>
           {data.user_rank != null && (
             <Chip
-              label={`Your rank: #${data.user_rank} · ${data.user_xp.toLocaleString()} XP`}
+              label={`Tu posición: #${data.user_rank} · ${data.user_xp.toLocaleString()} XP`}
               color="primary"
               variant="outlined"
               size="small"
@@ -63,11 +63,11 @@ export default function LeaderboardTable() {
             />
           )}
           <TableContainer component={Paper} variant="outlined">
-            <Table size="small" aria-label="Leaderboard">
+            <Table size="small" aria-label="Tabla de posiciones">
               <TableHead>
                 <TableRow>
-                  <TableCell width={60}>Rank</TableCell>
-                  <TableCell>Student</TableCell>
+                  <TableCell width={60}>Posición</TableCell>
+                  <TableCell>Estudiante</TableCell>
                   <TableCell align="right">XP</TableCell>
                 </TableRow>
               </TableHead>
@@ -96,7 +96,7 @@ export default function LeaderboardTable() {
                   <TableRow>
                     <TableCell colSpan={3} align="center">
                       <Typography variant="body2" color="text.secondary">
-                        No entries yet.
+                        Aún no hay entradas.
                       </Typography>
                     </TableCell>
                   </TableRow>

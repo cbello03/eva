@@ -49,7 +49,7 @@ export default function ProfilePage() {
   if (profileError) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Alert severity="error">Failed to load profile data.</Alert>
+        <Alert severity="error">Error al cargar los datos del perfil.</Alert>
       </Container>
     );
   }
@@ -57,7 +57,7 @@ export default function ProfilePage() {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        {user?.display_name ?? "Profile"}
+        {user?.display_name ?? "Perfil"}
       </Typography>
 
       {/* Stats cards */}
@@ -66,7 +66,7 @@ export default function ProfilePage() {
           <Card variant="outlined">
             <CardContent>
               <Typography variant="overline" color="text.secondary">
-                XP &amp; Level
+                XP y Nivel
               </Typography>
               {profile && (
                 <XPDisplay
@@ -82,7 +82,7 @@ export default function ProfilePage() {
           <Card variant="outlined">
             <CardContent>
               <Typography variant="overline" color="text.secondary">
-                Streak
+                Racha
               </Typography>
               {profile && (
                 <StreakDisplay
@@ -99,7 +99,7 @@ export default function ProfilePage() {
 
       {/* Achievements */}
       <Typography variant="h6" gutterBottom>
-        Achievements
+        Logros
       </Typography>
       {achievements && <AchievementGrid achievements={achievements} />}
 
@@ -107,7 +107,7 @@ export default function ProfilePage() {
 
       {/* Recent XP History */}
       <Typography variant="h6" gutterBottom>
-        Recent XP Activity
+        Actividad de XP reciente
       </Typography>
       {xpHistory && xpHistory.length > 0 ? (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
@@ -139,7 +139,7 @@ export default function ProfilePage() {
         </Box>
       ) : (
         <Typography variant="body2" color="text.secondary">
-          No XP activity yet.
+          Sin actividad de XP aún.
         </Typography>
       )}
     </Container>

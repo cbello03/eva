@@ -34,7 +34,7 @@ export default function ThreadList({
       <Box sx={{ textAlign: "center", py: 4 }}>
         <ForumIcon sx={{ fontSize: 48, color: "text.disabled", mb: 1 }} />
         <Typography color="text.secondary">
-          No threads yet. Start a discussion!
+          Aún no hay temas. ¡Inicia una discusión!
         </Typography>
       </Box>
     );
@@ -52,16 +52,16 @@ export default function ThreadList({
           >
             <ListItemText
               primary={thread.title}
-              secondary={`by ${thread.author.display_name} · ${new Date(thread.last_activity_at).toLocaleDateString()}`}
+              secondary={`por ${thread.author.display_name} · ${new Date(thread.last_activity_at).toLocaleDateString()}`}
             />
-            <Chip label={`${thread.reply_count} replies`} size="small" variant="outlined" />
+            <Chip label={`${thread.reply_count} respuestas`} size="small" variant="outlined" />
           </ListItemButton>
         ))}
       </List>
       {hasNextPage && (
         <Box sx={{ textAlign: "center", py: 2 }}>
           <Button onClick={onLoadMore} disabled={isLoadingMore}>
-            {isLoadingMore ? <CircularProgress size={20} /> : "Load more"}
+            {isLoadingMore ? <CircularProgress size={20} /> : "Cargar más"}
           </Button>
         </Box>
       )}

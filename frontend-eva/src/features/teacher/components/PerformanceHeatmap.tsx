@@ -24,7 +24,7 @@ export default function PerformanceHeatmap({ cells }: PerformanceHeatmapProps) {
   if (cells.length === 0) {
     return (
       <Typography variant="body2" color="text.secondary">
-        No performance data available yet.
+        Aún no hay datos de rendimiento disponibles.
       </Typography>
     );
   }
@@ -45,7 +45,7 @@ export default function PerformanceHeatmap({ cells }: PerformanceHeatmapProps) {
               {topicCells.map((cell) => (
                 <Tooltip
                   key={cell.exercise_id}
-                  title={`Exercise #${cell.exercise_id}: ${Math.round(cell.accuracy * 100)}% accuracy (${cell.total_attempts} attempts)`}
+                  title={`Ejercicio #${cell.exercise_id}: ${Math.round(cell.accuracy * 100)}% precisión (${cell.total_attempts} intentos)`}
                 >
                   <Box
                     sx={{
@@ -65,14 +65,14 @@ export default function PerformanceHeatmap({ cells }: PerformanceHeatmapProps) {
 
       {/* Legend */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 2 }}>
-        <Typography variant="caption" color="text.secondary">Low</Typography>
+        <Typography variant="caption" color="text.secondary">Bajo</Typography>
         {[0.1, 0.3, 0.5, 0.7, 0.9].map((v) => (
           <Box
             key={v}
             sx={{ width: 16, height: 16, borderRadius: 0.5, bgcolor: getColor(v) }}
           />
         ))}
-        <Typography variant="caption" color="text.secondary">High</Typography>
+        <Typography variant="caption" color="text.secondary">Alto</Typography>
       </Box>
     </Paper>
   );

@@ -58,7 +58,7 @@ export default function MultipleChoiceExercise({
           onClick={handleSubmit}
           disabled={disabled || selected === ""}
         >
-          Submit Answer
+          Enviar respuesta
         </Button>
       </Box>
     </Paper>

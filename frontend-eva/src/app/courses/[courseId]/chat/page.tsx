@@ -22,12 +22,12 @@ export default function ChatPage({ params }: ChatPageProps) {
         startIcon={<ArrowBackIcon />}
         sx={{ mb: 2 }}
       >
-        Back to Course
+        Volver al curso
       </Button>
 
       <Box sx={{ mb: 3 }}>
         <Typography variant="h4" component="h1">
-          Course Chat
+          Chat del curso
         </Typography>
       </Box>
 

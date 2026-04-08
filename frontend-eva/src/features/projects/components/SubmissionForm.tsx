@@ -37,14 +37,14 @@ export default function SubmissionForm({ onSubmit, isPending }: SubmissionFormPr
 
     for (const file of selected) {
       if (file.size > MAX_FILE_SIZE) {
-        setError(`File "${file.name}" exceeds 10MB limit.`);
+        setError(`El archivo "${file.name}" excede el límite de 10MB.`);
         return;
       }
     }
 
     const combined = [...files, ...selected];
     if (combined.length > MAX_FILES) {
-      setError(`Maximum ${MAX_FILES} files allowed.`);
+      setError(`Máximo ${MAX_FILES} archivos permitidos.`);
       return;
     }
 
@@ -65,7 +65,7 @@ export default function SubmissionForm({ onSubmit, isPending }: SubmissionFormPr
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       <TextField
-        label="Submission description"
+        label="Descripción del envío"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         required
@@ -88,7 +88,7 @@ export default function SubmissionForm({ onSubmit, isPending }: SubmissionFormPr
           onClick={() => fileInputRef.current?.click()}
           disabled={files.length >= MAX_FILES}
         >
-          Attach Files ({files.length}/{MAX_FILES})
+          Adjuntar archivos ({files.length}/{MAX_FILES})
         </Button>
       </Box>
 
@@ -120,7 +120,7 @@ export default function SubmissionForm({ onSubmit, isPending }: SubmissionFormPr
         disabled={isPending || !description.trim()}
         sx={{ alignSelf: "flex-end" }}
       >
-        {isPending ? "Submitting…" : "Submit Project"}
+        {isPending ? "Enviando…" : "Enviar proyecto"}
       </Button>
     </Box>
   );

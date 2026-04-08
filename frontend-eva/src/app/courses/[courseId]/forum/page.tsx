@@ -87,7 +87,7 @@ export default function ForumPage({ params }: ForumPageProps) {
           startIcon={<ArrowBackIcon />}
           sx={{ mb: 2 }}
         >
-          Back to Forum
+          Volver al foro
         </Button>
 
         {threadLoading ? (
@@ -117,25 +117,25 @@ export default function ForumPage({ params }: ForumPageProps) {
         startIcon={<ArrowBackIcon />}
         sx={{ mb: 2 }}
       >
-        Back to Course
+        Volver al curso
       </Button>
 
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
         <Typography variant="h4" component="h1">
-          Forum
+          Foro
         </Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => setShowNewThread(true)}
         >
-          New Thread
+          Nuevo tema
         </Button>
       </Box>
 
       {threadsError && (
         <Alert severity="error" sx={{ mb: 2 }}>
-          Failed to load threads.
+          Error al cargar los temas.
         </Alert>
       )}
 
@@ -157,7 +157,7 @@ export default function ForumPage({ params }: ForumPageProps) {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>New Thread</DialogTitle>
+        <DialogTitle>Nuevo tema</DialogTitle>
         <DialogContent sx={{ pt: 2 }}>
           <ThreadForm
             onSubmit={handleCreateThread}

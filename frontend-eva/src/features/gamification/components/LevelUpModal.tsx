@@ -40,18 +40,18 @@ export default function LevelUpModal({
           <StarIcon sx={{ fontSize: 48, color: "primary.contrastText" }} />
         </Box>
         <Typography variant="h5" gutterBottom>
-          Level Up!
+          ¡Subiste de nivel!
         </Typography>
         <Typography variant="h3" color="primary" sx={{ fontWeight: 700 }}>
           {newLevel}
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-          Congratulations! Keep learning to reach the next level.
+          ¡Felicidades! Sigue aprendiendo para alcanzar el siguiente nivel.
         </Typography>
       </DialogContent>
       <DialogActions sx={{ justifyContent: "center", pb: 3 }}>
         <Button variant="contained" onClick={onClose}>
-          Continue
+          Continuar
         </Button>
       </DialogActions>
     </Dialog>

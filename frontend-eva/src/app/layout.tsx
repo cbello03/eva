@@ -5,7 +5,7 @@ import NavigationBar from "@/components/NavigationBar";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "EVA — Learning Platform",
+  title: "EVA — Plataforma de Aprendizaje",
   description: "Entorno Virtual de Enseñanza-Aprendizaje",
 };
 
@@ -15,14 +15,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body>
         <Providers>
           <NavigationBar />
           <Suspense
             fallback={
               <div style={{ display: "flex", justifyContent: "center", padding: "4rem" }}>
-                Loading…
+                Cargando…
               </div>
             }
           >

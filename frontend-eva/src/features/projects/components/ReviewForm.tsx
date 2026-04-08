@@ -55,7 +55,7 @@ export default function ReviewForm({ rubric, onSubmit, isPending }: ReviewFormPr
       ))}
 
       <TextField
-        label="Feedback"
+        label="Comentarios"
         value={feedback}
         onChange={(e) => setFeedback(e.target.value)}
         required
@@ -70,7 +70,7 @@ export default function ReviewForm({ rubric, onSubmit, isPending }: ReviewFormPr
         disabled={isPending || !feedback.trim()}
         sx={{ alignSelf: "flex-end" }}
       >
-        {isPending ? "Submitting…" : "Submit Review"}
+        {isPending ? "Enviando…" : "Enviar evaluación"}
       </Button>
     </Box>
   );

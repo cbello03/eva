@@ -72,7 +72,7 @@ export default function LessonPlayerPage({ params }: LessonPlayerPageProps) {
       <Container maxWidth="sm" sx={{ py: 4, textAlign: "center" }}>
         <CircularProgress />
         <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-          Loading lesson…
+          Cargando lección…
         </Typography>
       </Container>
     );
@@ -82,14 +82,14 @@ export default function LessonPlayerPage({ params }: LessonPlayerPageProps) {
     return (
       <Container maxWidth="sm" sx={{ py: 4 }}>
         <Alert severity="error" sx={{ mb: 2 }}>
-          Failed to load lesson. You may not be enrolled in this course.
+          Error al cargar la lección. Es posible que no estés inscrito en este curso.
         </Alert>
         <Button
           component={Link}
           href={`/courses/${courseId}`}
           startIcon={<ArrowBackIcon />}
         >
-          Back to Course
+          Volver al curso
         </Button>
       </Container>
     );
@@ -135,11 +135,11 @@ export default function LessonPlayerPage({ params }: LessonPlayerPageProps) {
           startIcon={<ArrowBackIcon />}
           size="small"
         >
-          Exit Lesson
+          Salir de la lección
         </Button>
         {session.retry_queue_size > 0 && (
           <Chip
-            label={`${session.retry_queue_size} to retry`}
+            label={`${session.retry_queue_size} por reintentar`}
             size="small"
             color="warning"
             variant="outlined"
@@ -162,13 +162,13 @@ export default function LessonPlayerPage({ params }: LessonPlayerPageProps) {
           <FeedbackIndicator result={feedback} visible={showFeedback} />
           {submitMutation.isError && (
             <Alert severity="error" sx={{ mt: 2 }}>
-              Failed to submit answer. Please try again.
+              Error al enviar la respuesta. Por favor, inténtalo de nuevo.
             </Alert>
           )}
         </>
       ) : (
         <Alert severity="info">
-          No more exercises available. The session should complete shortly.
+          No hay más ejercicios disponibles. La sesión debería completarse en breve.
         </Alert>
       )}
     </Container>
@@ -228,7 +228,7 @@ function ExerciseRenderer({
     default:
       return (
         <Alert severity="warning">
-          Unknown exercise type: {exercise.exercise_type}
+          Tipo de ejercicio desconocido: {exercise.exercise_type}
         </Alert>
       );
   }

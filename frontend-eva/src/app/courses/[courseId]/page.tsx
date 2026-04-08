@@ -54,7 +54,7 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
   if (error || !course) {
     return (
       <Container maxWidth="md" sx={{ py: 4 }}>
-        <Alert severity="error">Failed to load course.</Alert>
+        <Alert severity="error">Error al cargar el curso.</Alert>
       </Container>
     );
   }
@@ -69,7 +69,7 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
         startIcon={<ArrowBackIcon />}
         sx={{ mb: 2 }}
       >
-        Back to Courses
+        Volver a Cursos
       </Button>
 
       <Paper sx={{ p: 3, mb: 3 }}>
@@ -83,12 +83,12 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
             </Typography>
             <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
               <Chip
-                label={`${course.units.length} unit${course.units.length !== 1 ? "s" : ""}`}
+                label={`${course.units.length} unidad${course.units.length !== 1 ? "es" : ""}`}
                 size="small"
                 variant="outlined"
               />
               <Chip
-                label={`${totalLessons} lesson${totalLessons !== 1 ? "s" : ""}`}
+                label={`${totalLessons} lección${totalLessons !== 1 ? "es" : ""}`}
                 size="small"
                 variant="outlined"
               />
@@ -101,7 +101,7 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
                 <Box sx={{ width: 200 }}>
                   <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.5 }}>
                     <Typography variant="caption" color="text.secondary">
-                      Progress
+                      Progreso
                     </Typography>
                     <Typography variant="caption" sx={{ fontWeight: 600 }}>
                       {Math.round(progress)}%
@@ -121,7 +121,7 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
                   onClick={handleUnenroll}
                   disabled={unenrollMutation.isPending}
                 >
-                  {unenrollMutation.isPending ? "Unenrolling…" : "Unenroll"}
+                  {unenrollMutation.isPending ? "Desinscribiendo…" : "Desinscribirse"}
                 </Button>
               </>
             ) : (
@@ -131,7 +131,7 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
                 onClick={handleEnroll}
                 disabled={enrollMutation.isPending}
               >
-                {enrollMutation.isPending ? "Enrolling…" : "Enroll in Course"}
+                {enrollMutation.isPending ? "Inscribiendo…" : "Inscribirse en el curso"}
               </Button>
             )}
           </Box>
@@ -140,17 +140,17 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
 
       {enrollMutation.isError && (
         <Alert severity="error" sx={{ mb: 2 }}>
-          Failed to enroll. You may already be enrolled in this course.
+          Error al inscribirse. Es posible que ya estés inscrito en este curso.
         </Alert>
       )}
 
       <Typography variant="h5" component="h2" gutterBottom>
-        Course Content
+        Contenido del curso
       </Typography>
 
       {course.units.length === 0 ? (
         <Typography variant="body2" color="text.secondary">
-          This course has no content yet.
+          Este curso aún no tiene contenido.
         </Typography>
       ) : (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>

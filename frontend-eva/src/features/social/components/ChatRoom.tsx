@@ -110,7 +110,7 @@ export default function ChatRoom({ courseId }: ChatRoomProps) {
         <TextField
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Type a message…"
+          placeholder="Escribe un mensaje…"
           size="small"
           fullWidth
           disabled={status !== "connected"}

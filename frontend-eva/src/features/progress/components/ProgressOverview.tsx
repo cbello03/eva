@@ -41,28 +41,28 @@ export default function ProgressOverview({
       <Grid size={{ xs: 6, sm: 3 }}>
         <StatCard
           icon={<StarIcon color="primary" />}
-          label="Total XP"
+          label="XP Total"
           value={dashboard.total_xp.toLocaleString()}
         />
       </Grid>
       <Grid size={{ xs: 6, sm: 3 }}>
         <StatCard
           icon={<StarIcon color="secondary" />}
-          label="Level"
+          label="Nivel"
           value={dashboard.current_level}
         />
       </Grid>
       <Grid size={{ xs: 6, sm: 3 }}>
         <StatCard
           icon={<WhatshotIcon color="warning" />}
-          label="Streak"
-          value={`${dashboard.current_streak} days`}
+          label="Racha"
+          value={`${dashboard.current_streak} días`}
         />
       </Grid>
       <Grid size={{ xs: 6, sm: 3 }}>
         <StatCard
           icon={<SchoolIcon color="info" />}
-          label="Enrolled"
+          label="Inscritos"
           value={dashboard.courses_enrolled}
         />
       </Grid>

@@ -1,5 +1,5 @@
 import RouteLoading from "@/components/RouteLoading";
 
 export default function ProfileLoading() {
-  return <RouteLoading label="Loading profile…" />;
+  return <RouteLoading label="Cargando perfil…" />;
 }

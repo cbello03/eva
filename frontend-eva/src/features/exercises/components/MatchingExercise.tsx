@@ -56,7 +56,7 @@ export default function MatchingExercise({
         {questionText}
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        Match each item on the left with the correct item on the right.
+        Empareja cada elemento de la izquierda con el correcto de la derecha.
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         {config.pairs.map((pair) => (
@@ -71,10 +71,10 @@ export default function MatchingExercise({
               {pair.left}
             </Typography>
             <FormControl size="small" sx={{ minWidth: 180 }}>
-              <InputLabel>Select match</InputLabel>
+              <InputLabel>Seleccionar par</InputLabel>
               <Select
                 value={matches[pair.left] ?? ""}
-                label="Select match"
+                label="Seleccionar par"
                 onChange={(e) => handleChange(pair.left, e.target.value)}
                 disabled={disabled}
               >
@@ -94,7 +94,7 @@ export default function MatchingExercise({
           onClick={handleSubmit}
           disabled={disabled || !allMatched}
         >
-          Submit Answer
+          Enviar respuesta
         </Button>
       </Box>
     </Paper>

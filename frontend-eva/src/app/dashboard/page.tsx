@@ -45,7 +45,7 @@ export default function DashboardPage() {
   if (profileError) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Alert severity="error">Failed to load dashboard data.</Alert>
+        <Alert severity="error">Error al cargar los datos del panel.</Alert>
       </Container>
     );
   }
@@ -55,7 +55,7 @@ export default function DashboardPage() {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        Dashboard
+        Panel
       </Typography>
 
       {/* Stats row */}
@@ -64,7 +64,7 @@ export default function DashboardPage() {
           <Card variant="outlined">
             <CardContent>
               <Typography variant="overline" color="text.secondary">
-                XP &amp; Level
+                XP y Nivel
               </Typography>
               {profile && (
                 <XPDisplay
@@ -80,7 +80,7 @@ export default function DashboardPage() {
           <Card variant="outlined">
             <CardContent>
               <Typography variant="overline" color="text.secondary">
-                Streak
+                Racha
               </Typography>
               {profile && (
                 <StreakDisplay
@@ -96,7 +96,7 @@ export default function DashboardPage() {
           <Card variant="outlined">
             <CardContent>
               <Typography variant="overline" color="text.secondary">
-                Courses
+                Cursos
               </Typography>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
                 <SchoolIcon color="primary" />
@@ -104,7 +104,7 @@ export default function DashboardPage() {
                   {activeEnrollments.length}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  enrolled
+                  inscrito
                 </Typography>
               </Box>
             </CardContent>
@@ -118,11 +118,11 @@ export default function DashboardPage() {
         {/* Enrolled courses */}
         <Grid size={{ xs: 12, md: 6 }}>
           <Typography variant="h6" gutterBottom>
-            Enrolled Courses
+            Cursos inscritos
           </Typography>
           {activeEnrollments.length === 0 ? (
             <Typography variant="body2" color="text.secondary">
-              You haven&apos;t enrolled in any courses yet.
+              Aún no te has inscrito en ningún curso.
             </Typography>
           ) : (
             <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
@@ -143,7 +143,7 @@ export default function DashboardPage() {
                         {enrollment.course_title}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        {Math.round(enrollment.progress_percentage)}% complete
+                        {Math.round(enrollment.progress_percentage)}% completado
                       </Typography>
                     </Box>
                   </CardContent>

@@ -54,7 +54,7 @@ function ReplyItem({
         </IconButton>
         <Typography variant="caption">{reply.upvote_count}</Typography>
         {onFlag && (
-          <Tooltip title="Flag post">
+          <Tooltip title="Reportar publicación">
             <IconButton size="small" onClick={() => onFlag(reply.id)}>
               <FlagIcon fontSize="small" />
             </IconButton>
@@ -92,12 +92,12 @@ export default function ThreadDetail({
       <Divider />
 
       <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
-        Replies ({thread.replies.length})
+        Respuestas ({thread.replies.length})
       </Typography>
 
       {thread.replies.length === 0 ? (
         <Typography variant="body2" color="text.secondary">
-          No replies yet.
+          Aún no hay respuestas.
         </Typography>
       ) : (
         thread.replies.map((reply) => (

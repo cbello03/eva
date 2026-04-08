@@ -14,7 +14,7 @@ function RegistrationAlert() {
 
   return (
     <Alert severity="success" sx={{ width: "100%", mb: 2 }}>
-      Account created successfully. Please log in.
+      Cuenta creada exitosamente. Por favor, inicia sesión.
     </Alert>
   );
 }
@@ -31,10 +31,10 @@ export default function LoginPage() {
         }}
       >
         <Typography component="h1" variant="h4" sx={{ mb: 1 }}>
-          Welcome back
+          Bienvenido de nuevo
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-          Log in to continue learning
+          Inicia sesión para continuar aprendiendo
         </Typography>
 
         <Suspense>
@@ -46,9 +46,9 @@ export default function LoginPage() {
         </Box>
 
         <Typography variant="body2" sx={{ mt: 3 }}>
-          Don&apos;t have an account?{" "}
+          ¿No tienes una cuenta?{" "}
           <MuiLink component={Link} href="/register">
-            Sign up
+            Registrarse
           </MuiLink>
         </Typography>
       </Box>

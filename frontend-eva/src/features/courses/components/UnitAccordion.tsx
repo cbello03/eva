@@ -31,10 +31,10 @@ export default function UnitAccordion({
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, width: "100%" }}>
           <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-            Unit {unit.order}: {unit.title}
+            Unidad {unit.order}: {unit.title}
           </Typography>
           <Chip
-            label={`${unit.lessons.length} lesson${unit.lessons.length !== 1 ? "s" : ""}`}
+            label={`${unit.lessons.length} lección${unit.lessons.length !== 1 ? "es" : ""}`}
             size="small"
             variant="outlined"
             sx={{ ml: "auto", mr: 1 }}
@@ -53,7 +53,7 @@ export default function UnitAccordion({
           ))}
           {unit.lessons.length === 0 && (
             <Typography variant="body2" color="text.secondary" sx={{ py: 1 }}>
-              No lessons in this unit yet.
+              Aún no hay lecciones en esta unidad.
             </Typography>
           )}
         </List>

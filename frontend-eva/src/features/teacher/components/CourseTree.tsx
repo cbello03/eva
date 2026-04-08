@@ -97,7 +97,7 @@ export default function CourseTree({
                   <IconButton
                     size="small"
                     onClick={() => onDeleteUnit(unit.id)}
-                    aria-label={`Delete unit ${unit.title}`}
+                    aria-label={`Eliminar unidad ${unit.title}`}
                   >
                     <DeleteIcon fontSize="small" />
                   </IconButton>
@@ -116,7 +116,7 @@ export default function CourseTree({
               </ListItemIcon>
               <ListItemText
                 primary={unit.title}
-                secondary={`${unit.lessons.length} lesson(s)`}
+                secondary={`${unit.lessons.length} lección(es)`}
               />
             </ListItem>
 
@@ -136,7 +136,7 @@ export default function CourseTree({
                               e.stopPropagation();
                               onDeleteLesson(lesson.id);
                             }}
-                            aria-label={`Delete lesson ${lesson.title}`}
+                            aria-label={`Eliminar lección ${lesson.title}`}
                           >
                             <DeleteIcon fontSize="small" />
                           </IconButton>
@@ -150,7 +150,7 @@ export default function CourseTree({
                         primary={lesson.title}
                         secondary={
                           lesson.exercises
-                            ? `${lesson.exercises.length} exercise(s)`
+                            ? `${lesson.exercises.length} ejercicio(s)`
                             : undefined
                         }
                       />
@@ -181,7 +181,7 @@ export default function CourseTree({
                   <ListItem>
                     <TextField
                       size="small"
-                      placeholder="Lesson title"
+                      placeholder="Título de la lección"
                       value={newLessonTitle}
                       onChange={(e) => setNewLessonTitle(e.target.value)}
                       onKeyDown={(e) => {
@@ -195,7 +195,7 @@ export default function CourseTree({
                       size="small"
                       onClick={() => handleAddLesson(unit.id)}
                     >
-                      Add
+                      Agregar
                     </Button>
                   </ListItem>
                 ) : (
@@ -208,7 +208,7 @@ export default function CourseTree({
                         setNewLessonTitle("");
                       }}
                     >
-                      Add Lesson
+                      Agregar lección
                     </Button>
                   </ListItem>
                 )}
@@ -222,7 +222,7 @@ export default function CourseTree({
       <Box sx={{ display: "flex", gap: 1, mt: 1, alignItems: "center" }}>
         <TextField
           size="small"
-          placeholder="New unit title"
+          placeholder="Título de nueva unidad"
           value={newUnitTitle}
           onChange={(e) => setNewUnitTitle(e.target.value)}
           onKeyDown={(e) => {
@@ -230,7 +230,7 @@ export default function CourseTree({
           }}
         />
         <Button size="small" startIcon={<AddIcon />} onClick={handleAddUnit}>
-          Add Unit
+          Agregar unidad
         </Button>
       </Box>
     </Paper>

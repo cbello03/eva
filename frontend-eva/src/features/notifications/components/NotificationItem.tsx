@@ -12,13 +12,13 @@ function formatRelativeTime(dateStr: string): string {
   const now = Date.now();
   const diff = now - new Date(dateStr).getTime();
   const seconds = Math.floor(diff / 1000);
-  if (seconds < 60) return "just now";
+  if (seconds < 60) return "justo ahora";
   const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes}m ago`;
+  if (minutes < 60) return `hace ${minutes}m`;
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return `hace ${hours}h`;
   const days = Math.floor(hours / 24);
-  return `${days}d ago`;
+  return `hace ${days}d`;
 }
 
 export default function NotificationItem({

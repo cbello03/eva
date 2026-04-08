@@ -16,10 +16,10 @@ export default function RegisterPage() {
         }}
       >
         <Typography component="h1" variant="h4" sx={{ mb: 1 }}>
-          Create your account
+          Crea tu cuenta
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-          Start your learning journey on EVA
+          Comienza tu camino de aprendizaje en EVA
         </Typography>
 
         <Box sx={{ width: "100%" }}>
@@ -27,9 +27,9 @@ export default function RegisterPage() {
         </Box>
 
         <Typography variant="body2" sx={{ mt: 3 }}>
-          Already have an account?{" "}
+          ¿Ya tienes una cuenta?{" "}
           <MuiLink component={Link} href="/login">
-            Log in
+            Iniciar sesión
           </MuiLink>
         </Typography>
       </Box>

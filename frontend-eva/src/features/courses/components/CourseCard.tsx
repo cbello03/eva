@@ -63,7 +63,7 @@ export default function CourseCard({ course, enrollment }: CourseCardProps) {
             <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.5 }}>
               <Chip
                 icon={<CheckCircleIcon />}
-                label="Enrolled"
+                label="Inscrito"
                 size="small"
                 color="secondary"
                 variant="outlined"
@@ -89,7 +89,7 @@ export default function CourseCard({ course, enrollment }: CourseCardProps) {
           variant={isEnrolled ? "outlined" : "contained"}
           fullWidth
         >
-          {isEnrolled ? "Continue" : "View Course"}
+          {isEnrolled ? "Continuar" : "Ver curso"}
         </Button>
       </CardActions>
     </Card>

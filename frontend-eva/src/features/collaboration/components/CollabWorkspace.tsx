@@ -66,7 +66,7 @@ export default function CollabWorkspace({
   }
 
   if (error || !group) {
-    return <Alert severity="error">Failed to load group workspace.</Alert>;
+    return <Alert severity="error">Error al cargar el espacio de trabajo del grupo.</Alert>;
   }
 
   return (
@@ -74,14 +74,14 @@ export default function CollabWorkspace({
       <Grid size={{ xs: 12, md: 4 }}>
         <GroupMembers members={group.members} />
         <Typography variant="caption" color={wsStatus === "connected" ? "success.main" : "text.disabled"} sx={{ mt: 1, display: "block" }}>
-          Workspace: {wsStatus}
+          Espacio de trabajo: {wsStatus}
         </Typography>
       </Grid>
 
       <Grid size={{ xs: 12, md: 8 }}>
         <Paper sx={{ p: 2, mb: 2 }}>
           <Typography variant="subtitle2" gutterBottom>
-            Workspace Activity
+            Actividad del espacio de trabajo
           </Typography>
           <Box
             sx={{
@@ -94,7 +94,7 @@ export default function CollabWorkspace({
           >
             {updates.length === 0 ? (
               <Typography variant="body2" color="text.secondary">
-                No activity yet. Collaborate with your group!
+                Aún no hay actividad. ¡Colabora con tu grupo!
               </Typography>
             ) : (
               updates.map((update, i) => (

@@ -20,10 +20,10 @@ export default function CourseList({ courses, enrollments }: CourseListProps) {
     return (
       <Box sx={{ textAlign: "center", py: 8 }}>
         <Typography variant="h6" color="text.secondary">
-          No courses found
+          No se encontraron cursos
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Try adjusting your search or filters.
+          Intenta ajustar tu búsqueda o filtros.
         </Typography>
       </Box>
     );

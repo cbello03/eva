@@ -39,11 +39,11 @@ export default function CourseProgressDetail({
         variant="determinate"
         value={Math.min(progress.completion_percentage, 100)}
         sx={{ height: 8, borderRadius: 4, mb: 1 }}
-        aria-label={`${Math.round(progress.completion_percentage)}% complete`}
+        aria-label={`${Math.round(progress.completion_percentage)}% completado`}
       />
       <Typography variant="caption" color="text.secondary" sx={{ mb: 2, display: "block" }}>
-        {progress.lessons_completed} / {progress.total_lessons} lessons
-        completed · Score: {Math.round(progress.total_score)}%
+        {progress.lessons_completed} / {progress.total_lessons} lecciones
+        completadas · Puntuación: {Math.round(progress.total_score)}%
       </Typography>
 
       {progress.units.map((unit) => (
@@ -69,8 +69,8 @@ export default function CourseProgressDetail({
                     primary={lesson.lesson_title}
                     secondary={
                       lesson.is_completed
-                        ? `Score: ${Math.round(lesson.score)}%`
-                        : "Not completed"
+                        ? `Puntuación: ${Math.round(lesson.score)}%`
+                        : "No completada"
                     }
                   />
                 </ListItem>

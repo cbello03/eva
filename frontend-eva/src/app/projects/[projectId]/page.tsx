@@ -45,7 +45,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
   if (error || !project) {
     return (
       <Container maxWidth="md" sx={{ py: 4 }}>
-        <Alert severity="error">Failed to load project.</Alert>
+        <Alert severity="error">Error al cargar el proyecto.</Alert>
       </Container>
     );
   }
@@ -58,16 +58,16 @@ export default function ProjectPage({ params }: ProjectPageProps) {
         startIcon={<ArrowBackIcon />}
         sx={{ mb: 2 }}
       >
-        Back to Projects
+        Volver a Proyectos
       </Button>
 
       <ProjectDetail project={project} />
 
       <Box sx={{ mt: 3 }}>
         <Tabs value={tab} onChange={(_, v) => setTab(v)}>
-          <Tab label="Submit" />
-          <Tab label="Reviews" disabled={!submissionId} />
-          <Tab label="Review" disabled={!submissionId} />
+          <Tab label="Enviar" />
+          <Tab label="Reseñas" disabled={!submissionId} />
+          <Tab label="Evaluar" disabled={!submissionId} />
         </Tabs>
 
         <Box sx={{ mt: 2 }}>
@@ -75,12 +75,12 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             <>
               {submitMutation.isSuccess && (
                 <Alert severity="success" sx={{ mb: 2 }}>
-                  Project submitted successfully!
+                  ¡Proyecto enviado exitosamente!
                 </Alert>
               )}
               {submitMutation.isError && (
                 <Alert severity="error" sx={{ mb: 2 }}>
-                  Submission failed. Please try again.
+                  Error en el envío. Por favor, inténtalo de nuevo.
                 </Alert>
               )}
               <SubmissionForm
@@ -105,7 +105,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             <>
               {reviewMutation.isSuccess && (
                 <Alert severity="success" sx={{ mb: 2 }}>
-                  Review submitted!
+                  ¡Evaluación enviada!
                 </Alert>
               )}
               <ReviewForm

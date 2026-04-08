@@ -26,7 +26,7 @@ export default function AchievementGrid({
   return (
     <Box>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Earned ({earned.length})
+        Obtenidos ({earned.length})
       </Typography>
       <Grid container spacing={1.5} sx={{ mb: 3 }}>
         {earned.map((a) => (
@@ -37,14 +37,14 @@ export default function AchievementGrid({
         {earned.length === 0 && (
           <Grid size={12}>
             <Typography variant="body2" color="text.secondary">
-              No achievements earned yet. Keep learning!
+              Aún no has obtenido logros. ¡Sigue aprendiendo!
             </Typography>
           </Grid>
         )}
       </Grid>
 
       <Typography variant="subtitle2" sx={{ mb: 1 }}>
-        Locked ({locked.length})
+        Bloqueados ({locked.length})
       </Typography>
       <Grid container spacing={1.5}>
         {locked.map((a) => (
@@ -71,7 +71,7 @@ function AchievementCard({ achievement }: { achievement: Achievement }) {
     <Tooltip
       title={
         achievement.is_unlocked
-          ? `Unlocked: ${achievement.description}`
+          ? `Desbloqueado: ${achievement.description}`
           : `${achievement.current_progress}/${achievement.condition_value} — ${achievement.description}`
       }
     >
@@ -98,7 +98,7 @@ function AchievementCard({ achievement }: { achievement: Achievement }) {
               variant="determinate"
               value={progress}
               sx={{ mt: 0.5, height: 4, borderRadius: 2 }}
-              aria-label={`${Math.round(progress)}% progress`}
+              aria-label={`${Math.round(progress)}% progreso`}
             />
           )}
         </CardContent>

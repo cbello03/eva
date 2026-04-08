@@ -85,12 +85,12 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
   return (
     <Paper variant="outlined" sx={{ p: 2 }}>
       <Typography variant="subtitle1" gutterBottom>
-        New Exercise
+        Nuevo ejercicio
       </Typography>
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <TextField
-          label="Question"
+          label="Pregunta"
           value={questionText}
           onChange={(e) => setQuestionText(e.target.value)}
           multiline
@@ -101,20 +101,20 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
         <Box sx={{ display: "flex", gap: 2 }}>
           <TextField
             select
-            label="Type"
+            label="Tipo"
             value={exerciseType}
             onChange={(e) => setExerciseType(e.target.value as ExerciseType)}
             sx={{ minWidth: 180 }}
           >
-            <MenuItem value="multiple_choice">Multiple Choice</MenuItem>
-            <MenuItem value="fill_blank">Fill in the Blank</MenuItem>
-            <MenuItem value="matching">Matching</MenuItem>
-            <MenuItem value="free_text">Free Text</MenuItem>
+            <MenuItem value="multiple_choice">Opción múltiple</MenuItem>
+            <MenuItem value="fill_blank">Completar el espacio</MenuItem>
+            <MenuItem value="matching">Emparejamiento</MenuItem>
+            <MenuItem value="free_text">Texto libre</MenuItem>
           </TextField>
 
           <TextField
             select
-            label="Difficulty"
+            label="Dificultad"
             value={difficulty}
             onChange={(e) => setDifficulty(Number(e.target.value))}
             sx={{ minWidth: 100 }}
@@ -125,7 +125,7 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
           </TextField>
 
           <TextField
-            label="Topic"
+            label="Tema"
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
             sx={{ flex: 1 }}
@@ -136,7 +136,7 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
         {exerciseType === "multiple_choice" && (
           <Box>
             <Typography variant="caption" color="text.secondary">
-              Options (select the correct one)
+              Opciones (selecciona la correcta)
             </Typography>
             {mcOptions.map((opt, i) => (
               <Box key={i} sx={{ display: "flex", gap: 1, mt: 1, alignItems: "center" }}>
@@ -145,7 +145,7 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
                   name="correct"
                   checked={mcCorrectIndex === i}
                   onChange={() => setMcCorrectIndex(i)}
-                  aria-label={`Mark option ${i + 1} as correct`}
+                  aria-label={`Marcar opción ${i + 1} como correcta`}
                 />
                 <TextField
                   size="small"
@@ -155,7 +155,7 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
                     next[i] = e.target.value;
                     setMcOptions(next);
                   }}
-                  placeholder={`Option ${i + 1}`}
+                  placeholder={`Opción ${i + 1}`}
                   sx={{ flex: 1 }}
                 />
                 {mcOptions.length > 2 && (
@@ -166,7 +166,7 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
                       if (mcCorrectIndex >= mcOptions.length - 1)
                         setMcCorrectIndex(0);
                     }}
-                    aria-label="Remove option"
+                    aria-label="Eliminar opción"
                   >
                     <DeleteIcon fontSize="small" />
                   </IconButton>
@@ -179,7 +179,7 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
               onClick={() => setMcOptions([...mcOptions, ""])}
               sx={{ mt: 1 }}
             >
-              Add Option
+              Agregar opción
             </Button>
           </Box>
         )}
@@ -187,7 +187,7 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
         {exerciseType === "fill_blank" && (
           <Box>
             <TextField
-              label="Blank Position (word index)"
+              label="Posición del espacio (índice de palabra)"
               type="number"
               size="small"
               value={blankPosition}
@@ -195,7 +195,7 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
               sx={{ mb: 1 }}
             />
             <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 0.5 }}>
-              Accepted Answers
+              Respuestas aceptadas
             </Typography>
             {acceptedAnswers.map((ans, i) => (
               <Box key={i} sx={{ display: "flex", gap: 1, mb: 0.5 }}>
@@ -207,14 +207,14 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
                     next[i] = e.target.value;
                     setAcceptedAnswers(next);
                   }}
-                  placeholder={`Answer ${i + 1}`}
+                  placeholder={`Respuesta ${i + 1}`}
                   sx={{ flex: 1 }}
                 />
                 {acceptedAnswers.length > 1 && (
                   <IconButton
                     size="small"
                     onClick={() => setAcceptedAnswers(acceptedAnswers.filter((_, j) => j !== i))}
-                    aria-label="Remove answer"
+                    aria-label="Eliminar respuesta"
                   >
                     <DeleteIcon fontSize="small" />
                   </IconButton>
@@ -226,7 +226,7 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
               startIcon={<AddIcon />}
               onClick={() => setAcceptedAnswers([...acceptedAnswers, ""])}
             >
-              Add Answer
+              Agregar respuesta
             </Button>
           </Box>
         )}
@@ -234,7 +234,7 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
         {exerciseType === "matching" && (
           <Box>
             <Typography variant="caption" color="text.secondary">
-              Matching Pairs
+              Pares de emparejamiento
             </Typography>
             {matchingPairs.map((pair, i) => (
               <Box key={i} sx={{ display: "flex", gap: 1, mt: 1, alignItems: "center" }}>
@@ -246,7 +246,7 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
                     next[i] = { ...next[i], left: e.target.value };
                     setMatchingPairs(next);
                   }}
-                  placeholder="Left"
+                  placeholder="Izquierda"
                   sx={{ flex: 1 }}
                 />
                 <Typography variant="body2">→</Typography>
@@ -258,14 +258,14 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
                     next[i] = { ...next[i], right: e.target.value };
                     setMatchingPairs(next);
                   }}
-                  placeholder="Right"
+                  placeholder="Derecha"
                   sx={{ flex: 1 }}
                 />
                 {matchingPairs.length > 2 && (
                   <IconButton
                     size="small"
                     onClick={() => setMatchingPairs(matchingPairs.filter((_, j) => j !== i))}
-                    aria-label="Remove pair"
+                    aria-label="Eliminar par"
                   >
                     <DeleteIcon fontSize="small" />
                   </IconButton>
@@ -278,7 +278,7 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
               onClick={() => setMatchingPairs([...matchingPairs, { left: "", right: "" }])}
               sx={{ mt: 1 }}
             >
-              Add Pair
+              Agregar par
             </Button>
           </Box>
         )}
@@ -286,14 +286,14 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
         {exerciseType === "free_text" && (
           <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
             <TextField
-              label="Model Answer"
+              label="Respuesta modelo"
               value={modelAnswer}
               onChange={(e) => setModelAnswer(e.target.value)}
               multiline
               rows={2}
             />
             <TextField
-              label="Rubric"
+              label="Rúbrica"
               value={rubric}
               onChange={(e) => setRubric(e.target.value)}
               multiline
@@ -307,7 +307,7 @@ export default function ExerciseForm({ onSubmit, isSubmitting }: ExerciseFormPro
           onClick={handleSubmit}
           disabled={!questionText.trim() || isSubmitting}
         >
-          {isSubmitting ? "Adding…" : "Add Exercise"}
+          {isSubmitting ? "Agregando…" : "Agregar ejercicio"}
         </Button>
       </Box>
     </Paper>

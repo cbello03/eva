@@ -37,7 +37,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
       <Box sx={{ display: "flex", gap: 1, mb: 3, flexWrap: "wrap" }}>
         <Chip
           icon={<ScheduleIcon />}
-          label={`Due: ${new Date(project.submission_deadline).toLocaleDateString()}`}
+          label={`Fecha límite: ${new Date(project.submission_deadline).toLocaleDateString()}`}
           color={isOverdue ? "error" : "default"}
           size="small"
           variant="outlined"
@@ -45,7 +45,7 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
         {project.peer_review_enabled && (
           <Chip
             icon={<GroupIcon />}
-            label={`Peer review (${project.peer_reviewers_count} reviewers)`}
+            label={`Revisión por pares (${project.peer_reviewers_count} revisores)`}
             size="small"
             variant="outlined"
           />
@@ -55,14 +55,14 @@ export default function ProjectDetail({ project }: ProjectDetailProps) {
       {project.rubric.length > 0 && (
         <>
           <Typography variant="h6" gutterBottom>
-            Rubric
+            Rúbrica
           </Typography>
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell>Criterion</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell align="right">Max Score</TableCell>
+                <TableCell>Criterio</TableCell>
+                <TableCell>Descripción</TableCell>
+                <TableCell align="right">Puntuación máxima</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

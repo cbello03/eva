@@ -35,11 +35,11 @@ export default function LessonComplete({
     >
       <TrophyIcon sx={{ fontSize: 64, color: "warning.main", mb: 2 }} />
       <Typography variant="h4" gutterBottom>
-        Lesson Complete!
+        ¡Lección completada!
       </Typography>
       <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-        You answered {correctFirstAttempt} of {totalExercises} correctly on the
-        first try ({accuracy}% accuracy).
+        Respondiste {correctFirstAttempt} de {totalExercises} correctamente en el
+        primer intento ({accuracy}% de precisión).
       </Typography>
       <Box sx={{ display: "flex", justifyContent: "center", gap: 2 }}>
         <Button
@@ -48,7 +48,7 @@ export default function LessonComplete({
           variant="contained"
           startIcon={<BackIcon />}
         >
-          Back to Course
+          Volver al curso
         </Button>
       </Box>
     </Paper>

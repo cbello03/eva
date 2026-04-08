@@ -21,7 +21,7 @@ export default function ReplyForm({ onSubmit, isPending }: ReplyFormProps) {
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", gap: 2, mt: 2 }}>
       <TextField
-        label="Write a reply…"
+        label="Escribe una respuesta…"
         value={body}
         onChange={(e) => setBody(e.target.value)}
         required
@@ -36,7 +36,7 @@ export default function ReplyForm({ onSubmit, isPending }: ReplyFormProps) {
         disabled={isPending || !body.trim()}
         sx={{ alignSelf: "flex-end" }}
       >
-        {isPending ? "Sending…" : "Reply"}
+        {isPending ? "Enviando…" : "Responder"}
       </Button>
     </Box>
   );

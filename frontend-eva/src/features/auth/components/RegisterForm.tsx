@@ -39,10 +39,10 @@ function strengthColor(score: number): "error" | "warning" | "info" | "success" 
 }
 
 function strengthLabel(score: number): string {
-  if (score <= 25) return "Weak";
-  if (score <= 50) return "Fair";
-  if (score <= 75) return "Good";
-  return "Strong";
+  if (score <= 25) return "Débil";
+  if (score <= 50) return "Regular";
+  if (score <= 75) return "Buena";
+  return "Fuerte";
 }
 
 export function RegisterForm() {
@@ -72,7 +72,7 @@ export function RegisterForm() {
       const axiosError = err as AxiosError<{ detail?: string }>;
       const message =
         axiosError.response?.data?.detail ??
-        "Registration failed. Please try again.";
+        "Error en el registro. Por favor, inténtalo de nuevo.";
       setServerError(message);
     }
   };
@@ -92,7 +92,7 @@ export function RegisterForm() {
 
       <TextField
         {...register("display_name")}
-        label="Display Name"
+        label="Nombre"
         autoComplete="name"
         error={!!errors.display_name}
         helperText={errors.display_name?.message}
@@ -101,7 +101,7 @@ export function RegisterForm() {
 
       <TextField
         {...register("email")}
-        label="Email"
+        label="Correo electrónico"
         type="email"
         autoComplete="email"
         error={!!errors.email}
@@ -112,7 +112,7 @@ export function RegisterForm() {
       <Box>
         <TextField
           {...register("password")}
-          label="Password"
+          label="Contraseña"
           type="password"
           autoComplete="new-password"
           error={!!errors.password}
@@ -128,7 +128,7 @@ export function RegisterForm() {
               sx={{ height: 6, borderRadius: 3 }}
             />
             <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
-              Password strength: {strengthLabel(strength)}
+              Seguridad de la contraseña: {strengthLabel(strength)}
             </Typography>
           </Box>
         )}
@@ -142,7 +142,7 @@ export function RegisterForm() {
         fullWidth
         sx={{ mt: 1 }}
       >
-        {isSubmitting ? <CircularProgress size={24} /> : "Create Account"}
+        {isSubmitting ? <CircularProgress size={24} /> : "Crear cuenta"}
       </Button>
     </Box>
   );

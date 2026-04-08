@@ -27,12 +27,12 @@ export default function FillBlankExercise({
         {questionText}
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        Fill in the blank:
+        Completa el espacio en blanco:
       </Typography>
       <TextField
         fullWidth
         size="small"
-        placeholder="Type your answer…"
+        placeholder="Escribe tu respuesta…"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         disabled={disabled}
@@ -46,7 +46,7 @@ export default function FillBlankExercise({
         onClick={handleSubmit}
         disabled={disabled || !value.trim()}
       >
-        Submit Answer
+        Enviar respuesta
       </Button>
     </Paper>
   );

@@ -84,7 +84,7 @@ export default function CourseBuilderPage({ params }: PageProps) {
   if (error || !course) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Alert severity="error">Failed to load course.</Alert>
+        <Alert severity="error">Error al cargar el curso.</Alert>
       </Container>
     );
   }
@@ -115,7 +115,7 @@ export default function CourseBuilderPage({ params }: PageProps) {
         {/* Course tree */}
         <Grid size={{ xs: 12, md: 6 }}>
           <Typography variant="h6" gutterBottom>
-            Course Structure
+            Estructura del curso
           </Typography>
           <CourseTree
             units={course.units}
@@ -130,7 +130,7 @@ export default function CourseBuilderPage({ params }: PageProps) {
           {selectedLessonId ? (
             <>
               <Typography variant="h6" gutterBottom>
-                Add Exercise to Lesson
+                Agregar ejercicio a la lección
               </Typography>
               <ExerciseForm
                 onSubmit={handleAddExercise}
@@ -140,7 +140,7 @@ export default function CourseBuilderPage({ params }: PageProps) {
           ) : (
             <Box sx={{ py: 4, textAlign: "center" }}>
               <Typography variant="body2" color="text.secondary">
-                Select a lesson from the tree to add exercises.
+                Selecciona una lección del árbol para agregar ejercicios.
               </Typography>
             </Box>
           )}

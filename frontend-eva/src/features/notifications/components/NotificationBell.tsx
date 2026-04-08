@@ -34,8 +34,8 @@ export default function NotificationBell() {
         onClick={handleOpen}
         aria-label={
           unreadCount > 0
-            ? `${unreadCount} unread notifications`
-            : "Notifications"
+            ? `${unreadCount} notificaciones sin leer`
+            : "Notificaciones"
         }
       >
         <Badge

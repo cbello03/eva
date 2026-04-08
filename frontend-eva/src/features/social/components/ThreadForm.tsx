@@ -23,7 +23,7 @@ export default function ThreadForm({ onSubmit, isPending }: ThreadFormProps) {
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       <TextField
-        label="Thread title"
+        label="Título del tema"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
@@ -31,7 +31,7 @@ export default function ThreadForm({ onSubmit, isPending }: ThreadFormProps) {
         fullWidth
       />
       <TextField
-        label="Body"
+        label="Contenido"
         value={body}
         onChange={(e) => setBody(e.target.value)}
         required
@@ -46,7 +46,7 @@ export default function ThreadForm({ onSubmit, isPending }: ThreadFormProps) {
         disabled={isPending || !title.trim() || !body.trim()}
         sx={{ alignSelf: "flex-end" }}
       >
-        {isPending ? "Posting…" : "Create Thread"}
+        {isPending ? "Publicando…" : "Crear tema"}
       </Button>
     </Box>
   );

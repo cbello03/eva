@@ -29,22 +29,22 @@ export default function StudentAnalyticsTable({
   if (students.length === 0) {
     return (
       <Typography variant="body2" color="text.secondary">
-        No students enrolled yet.
+        Aún no hay estudiantes inscritos.
       </Typography>
     );
   }
 
   return (
     <TableContainer component={Paper} variant="outlined">
-      <Table size="small" aria-label="Student analytics">
+      <Table size="small" aria-label="Analíticas de estudiantes">
         <TableHead>
           <TableRow>
-            <TableCell>Student</TableCell>
-            <TableCell>Progress</TableCell>
-            <TableCell align="right">Score</TableCell>
-            <TableCell align="right">Streak</TableCell>
-            <TableCell align="right">Last Active</TableCell>
-            <TableCell align="right">Details</TableCell>
+            <TableCell>Estudiante</TableCell>
+            <TableCell>Progreso</TableCell>
+            <TableCell align="right">Puntuación</TableCell>
+            <TableCell align="right">Racha</TableCell>
+            <TableCell align="right">Última actividad</TableCell>
+            <TableCell align="right">Detalles</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -77,7 +77,7 @@ export default function StudentAnalyticsTable({
                   component={Link}
                   href={`/teacher/analytics/${courseId}/students/${student.id}`}
                   size="small"
-                  aria-label={`View details for ${student.display_name}`}
+                  aria-label={`Ver detalles de ${student.display_name}`}
                 >
                   <VisibilityIcon fontSize="small" />
                 </IconButton>

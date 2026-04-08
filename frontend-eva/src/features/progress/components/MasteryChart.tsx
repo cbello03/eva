@@ -30,11 +30,11 @@ export default function MasteryChart({ scores }: MasteryChartProps) {
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
-        Topic Mastery
+        Dominio por tema
       </Typography>
       {sorted.length === 0 ? (
         <Typography variant="body2" color="text.secondary">
-          No mastery data yet. Complete some exercises to see your progress.
+          Aún no hay datos de dominio. Completa algunos ejercicios para ver tu progreso.
         </Typography>
       ) : (
         <List disablePadding>
@@ -67,7 +67,7 @@ export default function MasteryChart({ scores }: MasteryChartProps) {
                       value={pct}
                       color={getMasteryColor(score.mastery_score)}
                       sx={{ height: 6, borderRadius: 3 }}
-                      aria-label={`${score.topic}: ${pct}% mastery`}
+                      aria-label={`${score.topic}: ${pct}% dominio`}
                     />
                   }
                   disableTypography

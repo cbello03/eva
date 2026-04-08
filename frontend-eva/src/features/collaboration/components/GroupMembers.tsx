@@ -20,7 +20,7 @@ export default function GroupMembers({ members }: GroupMembersProps) {
   return (
     <Paper sx={{ p: 2 }}>
       <Typography variant="subtitle2" gutterBottom>
-        Group Members ({members.length})
+        Miembros del grupo ({members.length})
       </Typography>
       <List dense disablePadding>
         {members.map((member) => (
@@ -32,7 +32,7 @@ export default function GroupMembers({ members }: GroupMembersProps) {
             </ListItemAvatar>
             <ListItemText
               primary={member.display_name}
-              secondary={`Joined ${new Date(member.joined_at).toLocaleDateString()}`}
+              secondary={`Se unió el ${new Date(member.joined_at).toLocaleDateString()}`}
             />
           </ListItem>
         ))}

@@ -52,7 +52,7 @@ export default function CourseAnalyticsPage({ params }: PageProps) {
   if (analyticsError) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Alert severity="error">Failed to load analytics.</Alert>
+        <Alert severity="error">Error al cargar las analíticas.</Alert>
       </Container>
     );
   }
@@ -60,7 +60,7 @@ export default function CourseAnalyticsPage({ params }: PageProps) {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        Course Analytics
+        Analíticas del curso
       </Typography>
 
       {/* Aggregate stats */}
@@ -72,7 +72,7 @@ export default function CourseAnalyticsPage({ params }: PageProps) {
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <PeopleIcon color="primary" />
                   <Typography variant="overline" color="text.secondary">
-                    Enrolled
+                    Inscritos
                   </Typography>
                 </Box>
                 <Typography variant="h5">{analytics.total_enrolled}</Typography>
@@ -85,7 +85,7 @@ export default function CourseAnalyticsPage({ params }: PageProps) {
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <TrendingUpIcon color="primary" />
                   <Typography variant="overline" color="text.secondary">
-                    Avg Completion
+                    Completado promedio
                   </Typography>
                 </Box>
                 <Typography variant="h5">
@@ -100,7 +100,7 @@ export default function CourseAnalyticsPage({ params }: PageProps) {
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <ScoreIcon color="primary" />
                   <Typography variant="overline" color="text.secondary">
-                    Avg Score
+                    Puntuación promedio
                   </Typography>
                 </Box>
                 <Typography variant="h5">
@@ -115,7 +115,7 @@ export default function CourseAnalyticsPage({ params }: PageProps) {
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <TimerIcon color="primary" />
                   <Typography variant="overline" color="text.secondary">
-                    Avg Time/Lesson
+                    Tiempo promedio/Lección
                   </Typography>
                 </Box>
                 <Typography variant="h5">
@@ -131,7 +131,7 @@ export default function CourseAnalyticsPage({ params }: PageProps) {
 
       {/* Student list */}
       <Typography variant="h6" gutterBottom>
-        Students
+        Estudiantes
       </Typography>
       <StudentAnalyticsTable
         students={students ?? []}
@@ -142,7 +142,7 @@ export default function CourseAnalyticsPage({ params }: PageProps) {
 
       {/* Performance heatmap */}
       <Typography variant="h6" gutterBottom>
-        Performance Heatmap
+        Mapa de rendimiento
       </Typography>
       <PerformanceHeatmap cells={heatmap ?? []} />
     </Container>

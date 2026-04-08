@@ -38,7 +38,7 @@ export function LoginForm() {
       const axiosError = err as AxiosError<{ detail?: string }>;
       const message =
         axiosError.response?.data?.detail ??
-        "Invalid credentials. Please try again.";
+        "Credenciales inválidas. Por favor, inténtalo de nuevo.";
       setServerError(message);
     }
   };
@@ -58,7 +58,7 @@ export function LoginForm() {
 
       <TextField
         {...register("email")}
-        label="Email"
+        label="Correo electrónico"
         type="email"
         autoComplete="email"
         error={!!errors.email}
@@ -68,7 +68,7 @@ export function LoginForm() {
 
       <TextField
         {...register("password")}
-        label="Password"
+        label="Contraseña"
         type="password"
         autoComplete="current-password"
         error={!!errors.password}
@@ -84,7 +84,7 @@ export function LoginForm() {
         fullWidth
         sx={{ mt: 1 }}
       >
-        {isSubmitting ? <CircularProgress size={24} /> : "Log in"}
+        {isSubmitting ? <CircularProgress size={24} /> : "Iniciar sesión"}
       </Button>
     </Box>
   );

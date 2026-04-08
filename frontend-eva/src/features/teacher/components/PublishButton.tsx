@@ -40,7 +40,7 @@ export default function PublishButton({
       const axiosErr = err as AxiosError<{ detail?: string }>;
       setError(
         axiosErr.response?.data?.detail ??
-          "Failed to publish course. Ensure all lessons have at least one exercise.",
+          "Error al publicar el curso. Asegúrate de que todas las lecciones tengan al menos un ejercicio.",
       );
     } finally {
       setPublishing(false);
@@ -50,7 +50,7 @@ export default function PublishButton({
   if (status === "published") {
     return (
       <Button variant="outlined" disabled startIcon={<PublishIcon />}>
-        Published
+        Publicado
       </Button>
     );
   }
@@ -63,27 +63,27 @@ export default function PublishButton({
         startIcon={<PublishIcon />}
         onClick={() => setOpen(true)}
       >
-        Publish Course
+        Publicar curso
       </Button>
 
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>Publish Course</DialogTitle>
+        <DialogTitle>Publicar curso</DialogTitle>
         <DialogContent>
           <Typography variant="body2" sx={{ mb: 2 }}>
-            Publishing will make this course visible to all students. Ensure
-            every lesson has at least one exercise.
+            Publicar hará que este curso sea visible para todos los estudiantes. Asegúrate
+            de que cada lección tenga al menos un ejercicio.
           </Typography>
           {error && <Alert severity="error">{error}</Alert>}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={() => setOpen(false)}>Cancelar</Button>
           <Button
             variant="contained"
             color="success"
             onClick={handlePublish}
             disabled={publishing}
           >
-            {publishing ? "Publishing…" : "Confirm Publish"}
+            {publishing ? "Publicando…" : "Confirmar publicación"}
           </Button>
         </DialogActions>
       </Dialog>

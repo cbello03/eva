@@ -14,7 +14,7 @@ export default function ProgressBar({ current, total }: ProgressBarProps) {
     <Box sx={{ width: "100%", mb: 3 }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.5 }}>
         <Typography variant="caption" color="text.secondary">
-          Progress
+          Progreso
         </Typography>
         <Typography variant="caption" sx={{ fontWeight: 600 }}>
           {current}/{total}

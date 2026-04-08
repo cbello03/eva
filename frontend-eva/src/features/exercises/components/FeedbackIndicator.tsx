@@ -26,7 +26,7 @@ export default function FeedbackIndicator({
         sx={{ mt: 2, mb: 1 }}
       >
         <Typography variant="body2" sx={{ fontWeight: 600 }}>
-          {result.is_correct ? "Correct!" : "Incorrect"}
+          {result.is_correct ? "¡Correcto!" : "Incorrecto"}
         </Typography>
         {result.feedback && (
           <Typography variant="body2">{result.feedback}</Typography>

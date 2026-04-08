@@ -25,10 +25,10 @@ export default function GroupSubmitForm({
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       {isSuccess && (
-        <Alert severity="success">Group work submitted!</Alert>
+        <Alert severity="success">¡Trabajo grupal enviado!</Alert>
       )}
       <TextField
-        label="Group answer"
+        label="Respuesta del grupo"
         value={answer}
         onChange={(e) => setAnswer(e.target.value)}
         required
@@ -42,7 +42,7 @@ export default function GroupSubmitForm({
         disabled={isPending || !answer.trim()}
         sx={{ alignSelf: "flex-end" }}
       >
-        {isPending ? "Submitting…" : "Submit Group Work"}
+        {isPending ? "Enviando…" : "Enviar trabajo grupal"}
       </Button>
     </Box>
   );

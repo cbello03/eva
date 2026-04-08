@@ -43,7 +43,7 @@ export default function NotificationList() {
     return (
       <Box sx={{ p: 3, textAlign: "center" }}>
         <Typography variant="body2" color="text.secondary">
-          No notifications yet
+          Aún no hay notificaciones
         </Typography>
       </Box>
     );
@@ -60,13 +60,13 @@ export default function NotificationList() {
           py: 1,
         }}
       >
-        <Typography variant="subtitle2">Notifications</Typography>
+        <Typography variant="subtitle2">Notificaciones</Typography>
         <Button
           size="small"
           onClick={handleMarkAllRead}
           disabled={markAllRead.isPending}
         >
-          Mark all read
+          Marcar todo como leído
         </Button>
       </Box>
       <Divider />
@@ -85,7 +85,7 @@ export default function NotificationList() {
               onClick={() => fetchNextPage()}
               disabled={isFetchingNextPage}
             >
-              {isFetchingNextPage ? "Loading..." : "Load more"}
+              {isFetchingNextPage ? "Cargando..." : "Cargar más"}
             </Button>
           </Box>
         )}

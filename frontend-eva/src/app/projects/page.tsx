@@ -23,15 +23,15 @@ export default function ProjectsPage() {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        Projects
+        Proyectos
       </Typography>
       <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-        View and submit projects from your enrolled courses.
+        Consulta y envía proyectos de tus cursos inscritos.
       </Typography>
 
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
-          Failed to load projects.
+          Error al cargar los proyectos.
         </Alert>
       )}
 
@@ -41,7 +41,7 @@ export default function ProjectsPage() {
         </Box>
       ) : !enrollments || enrollments.length === 0 ? (
         <Alert severity="info">
-          Enroll in a course to see available projects.
+          Inscríbete en un curso para ver los proyectos disponibles.
         </Alert>
       ) : (
         <Grid container spacing={2}>
@@ -56,7 +56,7 @@ export default function ProjectsPage() {
                     </Typography>
                     <Chip
                       icon={<ScheduleIcon />}
-                      label={`${Math.round(enrollment.progress_percentage)}% complete`}
+                      label={`${Math.round(enrollment.progress_percentage)}% completado`}
                       size="small"
                       variant="outlined"
                     />
@@ -69,7 +69,7 @@ export default function ProjectsPage() {
                       variant="outlined"
                       fullWidth
                     >
-                      View Course Projects
+                      Ver proyectos del curso
                     </Button>
                   </CardActions>
                 </Card>

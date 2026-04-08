@@ -30,11 +30,11 @@ export default function LandingPage() {
         }}
       >
         <Typography variant="h2" component="h1" gutterBottom>
-          Learn smarter, together
+          Aprende mejor, en comunidad
         </Typography>
         <Typography variant="h6" color="text.secondary" sx={{ mb: 4, maxWidth: 560 }}>
-          EVA combines interactive lessons, gamification, and social learning
-          into one platform. Build skills at your own pace.
+          EVA combina lecciones interactivas, gamificación y aprendizaje social
+          en una sola plataforma. Avanza a tu propio ritmo.
         </Typography>
 
         <Stack direction="row" spacing={2}>
@@ -44,7 +44,7 @@ export default function LandingPage() {
             variant="contained"
             size="large"
           >
-            Get started
+            Comenzar
           </Button>
           <Button
             component={Link}
@@ -52,7 +52,7 @@ export default function LandingPage() {
             variant="outlined"
             size="large"
           >
-            Log in
+            Iniciar sesión
           </Button>
         </Stack>
       </Box>
@@ -64,18 +64,18 @@ export default function LandingPage() {
       >
         <FeatureCard
           icon={<School fontSize="large" color="primary" />}
-          title="Interactive lessons"
-          description="Duolingo-style exercises with instant feedback and retry mechanics."
+          title="Lecciones interactivas"
+          description="Ejercicios con retroalimentación instantánea y mecánicas de reintento."
         />
         <FeatureCard
           icon={<EmojiEvents fontSize="large" color="secondary" />}
-          title="XP & achievements"
-          description="Earn points, level up, maintain streaks, and climb the leaderboard."
+          title="XP y logros"
+          description="Gana puntos, sube de nivel, mantén tu racha y escala en la tabla de posiciones."
         />
         <FeatureCard
           icon={<Group fontSize="large" color="primary" />}
-          title="Social learning"
-          description="Forums, real-time chat, and collaborative projects with peers."
+          title="Aprendizaje social"
+          description="Foros, chat en tiempo real y proyectos colaborativos con compañeros."
         />
       </Stack>
     </Container>

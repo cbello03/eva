@@ -84,7 +84,7 @@ export default function NavigationBar() {
                 color={isActive("/dashboard") ? "primary" : "inherit"}
                 size="small"
               >
-                Dashboard
+                Panel
               </Button>
               <Button
                 component={Link}
@@ -93,7 +93,7 @@ export default function NavigationBar() {
                 color={isActive("/courses") ? "primary" : "inherit"}
                 size="small"
               >
-                Courses
+                Cursos
               </Button>
               {isTeacher && (
                 <Button
@@ -103,18 +103,18 @@ export default function NavigationBar() {
                   color={isActive("/teacher") ? "primary" : "inherit"}
                   size="small"
                 >
-                  Teach
+                  Enseñar
                 </Button>
               )}
             </Box>
 
-            <IconButton size="small" aria-label="notifications">
+            <IconButton size="small" aria-label="notificaciones">
               <Badge badgeContent={0} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
 
-            <IconButton onClick={handleMenuOpen} size="small" aria-label="account menu">
+            <IconButton onClick={handleMenuOpen} size="small" aria-label="menú de cuenta">
               <Avatar
                 sx={{ width: 32, height: 32, bgcolor: "primary.main", fontSize: 14 }}
               >
@@ -142,11 +142,11 @@ export default function NavigationBar() {
                 onClick={handleMenuClose}
               >
                 <ListItemIcon><PersonIcon fontSize="small" /></ListItemIcon>
-                <ListItemText>Profile</ListItemText>
+                <ListItemText>Perfil</ListItemText>
               </MenuItem>
               <MenuItem onClick={handleLogout}>
                 <ListItemIcon><LogoutIcon fontSize="small" /></ListItemIcon>
-                <ListItemText>Log out</ListItemText>
+                <ListItemText>Cerrar sesión</ListItemText>
               </MenuItem>
             </Menu>
           </>
@@ -155,10 +155,10 @@ export default function NavigationBar() {
         {!isAuthenticated && (
           <Box sx={{ display: "flex", gap: 1, ml: "auto" }}>
             <Button component={Link} href="/login" variant="text">
-              Log in
+              Iniciar sesión
             </Button>
             <Button component={Link} href="/register" variant="contained">
-              Sign up
+              Registrarse
             </Button>
           </Box>
         )}

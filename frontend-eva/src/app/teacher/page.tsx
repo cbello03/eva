@@ -37,7 +37,7 @@ export default function TeacherDashboardPage() {
   if (error) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Alert severity="error">Failed to load courses.</Alert>
+        <Alert severity="error">Error al cargar los cursos.</Alert>
       </Container>
     );
   }
@@ -45,22 +45,22 @@ export default function TeacherDashboardPage() {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        Teacher Dashboard
+        Panel del profesor
       </Typography>
 
       {courses && courses.length === 0 ? (
         <Typography variant="body2" color="text.secondary">
-          You don&apos;t have any courses yet.
+          Aún no tienes ningún curso.
         </Typography>
       ) : (
         <TableContainer component={Paper} variant="outlined">
           <Table aria-label="Teacher courses">
             <TableHead>
               <TableRow>
-                <TableCell>Title</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell align="right">Last Modified</TableCell>
-                <TableCell align="right">Actions</TableCell>
+                <TableCell>Título</TableCell>
+                <TableCell>Estado</TableCell>
+                <TableCell align="right">Última modificación</TableCell>
+                <TableCell align="right">Acciones</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -84,7 +84,7 @@ export default function TeacherDashboardPage() {
                       component={Link}
                       href={`/teacher/courses/${course.id}/builder`}
                       size="small"
-                      aria-label="Edit course"
+                      aria-label="Editar curso"
                     >
                       <EditIcon fontSize="small" />
                     </IconButton>
@@ -92,7 +92,7 @@ export default function TeacherDashboardPage() {
                       component={Link}
                       href={`/teacher/analytics/${course.id}`}
                       size="small"
-                      aria-label="View analytics"
+                      aria-label="Ver analíticas"
                     >
                       <BarChartIcon fontSize="small" />
                     </IconButton>

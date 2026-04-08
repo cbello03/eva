@@ -33,7 +33,7 @@ export default function XPDisplay({ totalXP, currentLevel }: XPDisplayProps) {
       <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
         <Chip
           icon={<StarIcon />}
-          label={`Level ${currentLevel}`}
+          label={`Nivel ${currentLevel}`}
           color="primary"
           size="small"
         />
@@ -45,10 +45,10 @@ export default function XPDisplay({ totalXP, currentLevel }: XPDisplayProps) {
         variant="determinate"
         value={progress}
         sx={{ height: 8, borderRadius: 4 }}
-        aria-label={`${Math.round(progress)}% to next level`}
+        aria-label={`${Math.round(progress)}% para el siguiente nivel`}
       />
       <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
-        {xpInLevel.toLocaleString()} / {xpNeeded.toLocaleString()} XP to Level{" "}
+        {xpInLevel.toLocaleString()} / {xpNeeded.toLocaleString()} XP para Nivel{" "}
         {currentLevel + 1}
       </Typography>
     </Box>

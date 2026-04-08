@@ -18,13 +18,13 @@ export default function StreakDisplay({
     <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
       <Chip
         icon={<WhatshotIcon />}
-        label={`${currentStreak} day${currentStreak !== 1 ? "s" : ""}`}
+        label={`${currentStreak} día${currentStreak !== 1 ? "s" : ""}`}
         color={isActive ? "warning" : "default"}
         variant={isActive ? "filled" : "outlined"}
-        aria-label={`Current streak: ${currentStreak} days`}
+        aria-label={`Racha actual: ${currentStreak} días`}
       />
       <Typography variant="caption" color="text.secondary">
-        Best: {longestStreak} day{longestStreak !== 1 ? "s" : ""}
+        Mejor: {longestStreak} día{longestStreak !== 1 ? "s" : ""}
       </Typography>
     </Box>
   );

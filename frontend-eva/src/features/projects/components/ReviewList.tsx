@@ -18,7 +18,7 @@ export default function ReviewList({ reviews, rubric }: ReviewListProps) {
   if (reviews.length === 0) {
     return (
       <Typography variant="body2" color="text.secondary">
-        No reviews yet.
+        Aún no hay evaluaciones.
       </Typography>
     );
   }

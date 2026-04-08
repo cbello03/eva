@@ -20,7 +20,7 @@ function getColor(lessonsCompleted: number): string {
 const CELL_SIZE = 14;
 const CELL_GAP = 2;
 const DAYS_IN_WEEK = 7;
-const DAY_LABELS = ["", "Mon", "", "Wed", "", "Fri", ""];
+const DAY_LABELS = ["", "Lun", "", "Mié", "", "Vie", ""];
 
 export default function ActivityHeatmap({ data }: ActivityHeatmapProps) {
   const { grid, weeks } = useMemo(() => {
@@ -56,7 +56,7 @@ export default function ActivityHeatmap({ data }: ActivityHeatmapProps) {
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
-        Activity (Last 90 Days)
+        Actividad (Últimos 90 días)
       </Typography>
       <Box sx={{ display: "flex", gap: `${CELL_GAP}px`, overflow: "auto" }}>
         {/* Day labels */}
@@ -114,7 +114,7 @@ export default function ActivityHeatmap({ data }: ActivityHeatmapProps) {
               return (
                 <Tooltip
                   key={dayIdx}
-                  title={`${cell.date}: ${lessons} lesson${lessons !== 1 ? "s" : ""}, ${xp} XP`}
+                  title={`${cell.date}: ${lessons} lección${lessons !== 1 ? "es" : ""}, ${xp} XP`}
                 >
                   <Box
                     sx={{
@@ -125,7 +125,7 @@ export default function ActivityHeatmap({ data }: ActivityHeatmapProps) {
                       cursor: "default",
                     }}
                     role="img"
-                    aria-label={`${cell.date}: ${lessons} lessons completed`}
+                    aria-label={`${cell.date}: ${lessons} lecciones completadas`}
                   />
                 </Tooltip>
               );

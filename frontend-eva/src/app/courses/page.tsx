@@ -60,12 +60,12 @@ export default function CoursesPage() {
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        Courses
+        Cursos
       </Typography>
 
       <Box sx={{ display: "flex", gap: 2, mb: 3, flexWrap: "wrap" }}>
         <TextField
-          placeholder="Search courses…"
+          placeholder="Buscar cursos…"
           size="small"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -87,15 +87,15 @@ export default function CoursesPage() {
           onChange={(_, v: Filter | null) => { if (v) setFilter(v); }}
           size="small"
         >
-          <ToggleButton value="all">All</ToggleButton>
-          <ToggleButton value="enrolled">Enrolled</ToggleButton>
-          <ToggleButton value="available">Available</ToggleButton>
+          <ToggleButton value="all">Todos</ToggleButton>
+          <ToggleButton value="enrolled">Inscritos</ToggleButton>
+          <ToggleButton value="available">Disponibles</ToggleButton>
         </ToggleButtonGroup>
       </Box>
 
       {coursesError && (
         <Alert severity="error" sx={{ mb: 2 }}>
-          Failed to load courses. Please try again.
+          Error al cargar los cursos. Por favor, inténtalo de nuevo.
         </Alert>
       )}
 
