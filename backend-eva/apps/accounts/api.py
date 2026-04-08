@@ -1,10 +1,8 @@
 """Accounts API routes — authentication, profile, and role management."""
 
-from __future__ import annotations
-
 import jwt
 from django.conf import settings
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from ninja import Router
 from ninja.security import HttpBearer
 
@@ -108,13 +106,12 @@ def register(request: HttpRequest, payload: RegisterIn):
     )
 
 
-@router.post("/auth/login", response=TokenOut, auth=None)
+@router.post("/auth/login", auth=None)
 @_login_limiter("login")
 def login(request: HttpRequest, payload: LoginIn):
     """Authenticate and return an access token. Sets refresh token as cookie."""
     pair = AuthService.login(payload)
-    body = TokenOut(access_token=pair.access_token)
-    response = router.api.create_response(request, body.dict(), status=200)
+    response = JsonResponse({"access_token": pair.access_token})
     return _set_refresh_cookie(response, pair.refresh_token)
 
 
@@ -122,7 +119,7 @@ def login(request: HttpRequest, payload: LoginIn):
 # Cookie-based endpoint (no Bearer, reads cookie)
 # ---------------------------------------------------------------------------
 
-@router.post("/auth/refresh", response=TokenOut, auth=None)
+@router.post("/auth/refresh", auth=None)
 def refresh(request: HttpRequest):
     """Rotate tokens using the refresh token cookie."""
     refresh_token = request.COOKIES.get(_REFRESH_COOKIE, "")
@@ -130,8 +127,7 @@ def refresh(request: HttpRequest):
         raise InvalidCredentialsError("No refresh token provided")
 
     pair = AuthService.refresh_tokens(refresh_token)
-    body = TokenOut(access_token=pair.access_token)
-    response = router.api.create_response(request, body.dict(), status=200)
+    response = JsonResponse({"access_token": pair.access_token})
     return _set_refresh_cookie(response, pair.refresh_token)
 
 
@@ -139,14 +135,14 @@ def refresh(request: HttpRequest):
 # Authenticated endpoints (Bearer JWT)
 # ---------------------------------------------------------------------------
 
-@router.post("/auth/logout", response={204: None}, auth=jwt_auth)
+@router.post("/auth/logout", auth=jwt_auth)
 def logout(request: HttpRequest):
     """Logout — revoke refresh token and clear cookie."""
     refresh_token = request.COOKIES.get(_REFRESH_COOKIE, "")
     if refresh_token:
         AuthService.logout(refresh_token)
 
-    response = router.api.create_response(request, None, status=204)
+    response = HttpResponse(status=204)
     return _clear_refresh_cookie(response)
 
 

@@ -11,3 +11,6 @@ wheels/
 
 .env
 /__pycache__/
+
+# Collected static files
+staticfiles/

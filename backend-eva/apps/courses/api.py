@@ -1,7 +1,5 @@
 """Courses API routes — course management, units, lessons, enrollment."""
 
-from __future__ import annotations
-
 from django.http import HttpRequest
 from ninja import Router
 

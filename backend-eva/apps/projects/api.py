@@ -1,7 +1,5 @@
 """Projects API routes — project CRUD, submissions, and reviews."""
 
-from __future__ import annotations
-
 from django.http import HttpRequest
 from ninja import File, Form, Router, UploadedFile
 

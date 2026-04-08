@@ -1,7 +1,5 @@
 """Notifications API routes — list, unread count, mark read."""
 
-from __future__ import annotations
-
 from django.http import HttpRequest
 from ninja import Query, Router
 

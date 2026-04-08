@@ -1,7 +1,5 @@
 """Progress app Pydantic schemas for request/response validation."""
 
-from __future__ import annotations
-
 import datetime
 
 from ninja import Schema

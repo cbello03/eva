@@ -1,7 +1,5 @@
 """Social API routes — forums (threads, replies, flagging, upvotes)."""
 
-from __future__ import annotations
-
 from django.http import HttpRequest
 from ninja import Query, Router
 

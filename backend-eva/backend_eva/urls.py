@@ -67,3 +67,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", api.urls),
 ]
+
+# Serve static files in development (Django admin CSS/JS)
+from django.conf import settings  # noqa: E402
+
+if settings.DEBUG:
+    from django.conf.urls.static import static  # noqa: E402
+
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

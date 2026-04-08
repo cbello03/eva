@@ -29,8 +29,8 @@ SEED_USERS = [
         "display_name": "Demo Admin",
         "password": "admin123",
         "role": Role.ADMIN,
-        "is_superuser": False,
-        "is_staff": False,
+        "is_superuser": True,
+        "is_staff": True,
     },
     {
         "email": "superadmin@eva.local",

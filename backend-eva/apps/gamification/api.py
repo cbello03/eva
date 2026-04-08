@@ -1,7 +1,5 @@
 """Gamification API routes — profile, leaderboard, achievements, XP history."""
 
-from __future__ import annotations
-
 from django.http import HttpRequest
 from ninja import Query, Router
 

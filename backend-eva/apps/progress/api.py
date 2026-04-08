@@ -1,7 +1,5 @@
 """Progress and analytics API routes — student progress + teacher analytics."""
 
-from __future__ import annotations
-
 from django.http import HttpRequest
 from ninja import Router
 

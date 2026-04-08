@@ -29,15 +29,17 @@ function processQueue(error: unknown, token: string | null = null): void {
   failedQueue = [];
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 /**
  * Axios instance configured for the EVA backend API.
- * - baseURL: /api/v1
+ * - baseURL: points directly to the Django backend
  * - withCredentials: true (sends httpOnly cookies for refresh token)
  * - Request interceptor: attaches Bearer token from Zustand store
  * - Response interceptor: handles 401 (token refresh), 403, 429, 5xx
  */
 export const apiClient = axios.create({
-  baseURL: "/api/v1",
+  baseURL: `${API_BASE_URL}/api/v1`,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -93,7 +95,7 @@ apiClient.interceptors.response.use(
         // Call refresh endpoint — the Refresh_Token is sent automatically
         // via the httpOnly cookie (withCredentials: true).
         const { data } = await axios.post<{ access_token: string }>(
-          "/api/v1/auth/refresh",
+          `${API_BASE_URL}/api/v1/auth/refresh`,
           {},
           { withCredentials: true },
         );

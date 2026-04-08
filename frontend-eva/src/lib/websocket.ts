@@ -129,8 +129,10 @@ export class WebSocketManager {
       return;
     }
 
-    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-    const host = window.location.host;
+    const backendOrigin = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+    const parsed = new URL(backendOrigin);
+    const protocol = parsed.protocol === "https:" ? "wss:" : "ws:";
+    const host = parsed.host;
     const url = `${protocol}//${host}${this.endpoint}?token=${encodeURIComponent(token)}`;
 
     this.setStatus(

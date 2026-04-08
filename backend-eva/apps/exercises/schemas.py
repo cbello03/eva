@@ -1,6 +1,6 @@
 """Exercises app Pydantic schemas for request/response validation."""
 
-from __future__ import annotations
+from typing import Self
 
 from ninja import Schema
 from pydantic import field_validator, model_validator
@@ -34,7 +34,7 @@ class MultipleChoiceConfig(Schema):
         return v
 
     @model_validator(mode="after")
-    def validate_correct_index(self) -> MultipleChoiceConfig:
+    def validate_correct_index(self) -> Self:
         if self.correct_index < 0 or self.correct_index >= len(self.options):
             raise ValueError(
                 "correct_index must be a valid index into options"
@@ -145,7 +145,7 @@ class ExerciseCreateIn(Schema):
         return v
 
     @model_validator(mode="after")
-    def validate_config_and_collab(self) -> ExerciseCreateIn:
+    def validate_config_and_collab(self) -> Self:
         # Validate config against exercise type
         validator_cls = _CONFIG_VALIDATORS.get(self.exercise_type)
         if validator_cls is not None:

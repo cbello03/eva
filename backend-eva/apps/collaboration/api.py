@@ -1,7 +1,5 @@
 """Collaboration API routes — group exercises and shared workspaces."""
 
-from __future__ import annotations
-
 from django.http import HttpRequest
 from ninja import Router
 

@@ -1,11 +1,10 @@
 """Projects app Pydantic schemas for request/response validation."""
 
-from __future__ import annotations
-
 from datetime import datetime
 
 from ninja import Schema
 from pydantic import field_validator, model_validator
+from typing import Self
 
 
 # ------------------------------------------------------------------
@@ -69,7 +68,7 @@ class ProjectCreateIn(Schema):
         return v
 
     @model_validator(mode="after")
-    def validate_peer_reviewers_count(self) -> ProjectCreateIn:
+    def validate_peer_reviewers_count(self) -> Self:
         if self.peer_review_enabled and self.peer_reviewers_count < 2:
             raise ValueError(
                 "peer_reviewers_count must be >= 2 when peer_review_enabled is True"

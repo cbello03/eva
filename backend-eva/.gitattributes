@@ -1,0 +1,2 @@
+*.sh text eol=lf
+entrypoint.dev.sh text eol=lf

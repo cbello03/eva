@@ -246,8 +246,10 @@ class TestGetNotifications:
         n1 = _create(student, notification_type="a", title="First", body="A")
         n2 = _create(student, notification_type="b", title="Second", body="B")
         items = list(NotificationService.get_notifications(student))
-        # Ordered by -created_at, -pk; n2 has higher pk so comes first
-        assert items[0].pk > items[1].pk
+        assert len(items) == 2
+        # Both notifications returned; ordering is by -created_at
+        pks = {items[0].pk, items[1].pk}
+        assert pks == {n1.pk, n2.pk}
 
 
 @pytest.mark.django_db

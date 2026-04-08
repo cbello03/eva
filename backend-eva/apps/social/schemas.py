@@ -1,7 +1,5 @@
 """Social app Pydantic schemas for request/response validation."""
 
-from __future__ import annotations
-
 from datetime import datetime
 
 from ninja import Schema

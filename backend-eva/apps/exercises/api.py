@@ -1,7 +1,5 @@
 """Exercises API routes — exercise CRUD and Duolingo-style lesson player."""
 
-from __future__ import annotations
-
 from django.http import HttpRequest
 from ninja import Router
 

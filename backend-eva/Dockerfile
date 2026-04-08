@@ -12,16 +12,21 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
 # ---------- dev stage (used by docker-compose) ----------
 FROM base AS dev
 
-# Install all dependencies including dev
+# Pre-install deps so rebuilds are fast (layer cache).
+# The entrypoint re-runs uv sync at startup because the source volume
+# mount overwrites /app, but the .venv is preserved via a named volume.
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-install-project
 
 # Source is volume-mounted in docker-compose, but copy for standalone builds
 COPY . .
 
+# Make entrypoint executable
+RUN chmod +x entrypoint.dev.sh
+
 EXPOSE 8000
 
-# Daphne dev server with auto-reload via watchfiles
+ENTRYPOINT ["./entrypoint.dev.sh"]
 CMD ["uv", "run", "daphne", "-b", "0.0.0.0", "-p", "8000", "backend_eva.asgi:application"]
 
 # ---------- production stage ----------
