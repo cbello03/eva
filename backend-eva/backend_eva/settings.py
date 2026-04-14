@@ -200,7 +200,7 @@ CELERY_TIMEZONE = "UTC"
 from celery.schedules import crontab  # noqa: E402
 
 CELERY_BEAT_SCHEDULE = {
-    "reset-expired-streaks": {
+    "reset-expired-streaks-daily": {
         "task": "gamification.reset_expired_streaks",
         "schedule": crontab(hour=0, minute=0),  # Daily at 00:00 UTC
     },
@@ -208,13 +208,17 @@ CELERY_BEAT_SCHEDULE = {
         "task": "gamification.reset_weekly_leaderboard",
         "schedule": crontab(hour=0, minute=0, day_of_week=1),  # Monday 00:00 UTC
     },
-    "process-spaced-repetition": {
+    "process-spaced-repetition-daily": {
         "task": "progress.process_spaced_repetition",
-        "schedule": crontab(hour=1, minute=0),  # Daily at 01:00 UTC
+        "schedule": crontab(hour=0, minute=0),  # Daily at 00:00 UTC
+    },
+    "aggregate-analytics-hourly": {
+        "task": "progress.aggregate_analytics",
+        "schedule": crontab(minute=0),  # Every hour at :00
     },
     "check-inactive-collab-members": {
         "task": "collaboration.check_inactive_collab_members",
-        "schedule": crontab(hour=2, minute=0),  # Daily at 02:00 UTC
+        "schedule": crontab(minute=0, hour="*/6"),  # Every 6 hours
     },
 }
 
