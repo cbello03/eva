@@ -18,6 +18,7 @@ import {
   PersonRemove as UnenrollIcon,
   Forum as ForumIcon,
   Chat as ChatIcon,
+  SmartToy as SmartToyIcon,
 } from "@mui/icons-material";
 import Link from "next/link";
 import { useCourse, useEnrollments, useEnroll, useUnenroll } from "@/features/courses/hooks";
@@ -173,6 +174,16 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
             disabled={!canAccessSocial}
           >
             Chat en vivo
+          </Button>
+          <Button
+            component={Link}
+            href={`/courses/${courseId}/assistant`}
+            startIcon={<SmartToyIcon />}
+            variant="outlined"
+            size="small"
+            disabled={!canAccessSocial}
+          >
+            Asistente IA
           </Button>
         </Box>
         {!canAccessSocial && (

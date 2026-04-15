@@ -48,6 +48,9 @@ class EnvSettings(BaseSettings):
     redis_url: str = Field(
         default="redis://localhost:6379/0", alias="REDIS_URL")
 
+    # LLM (Google Gemini)
+    gemini_api_key: str = Field(default="", alias="GEMINI_API_KEY")
+
     # CORS
     cors_allowed_origins: str = Field(
         default="http://localhost:3000",
@@ -246,3 +249,8 @@ CORS_ALLOWED_ORIGINS = [
     o.strip() for o in env.cors_allowed_origins.split(",") if o.strip()
 ]
 CORS_ALLOW_CREDENTIALS = True
+
+# ---------------------------------------------------------------------------
+# LLM settings
+# ---------------------------------------------------------------------------
+GEMINI_API_KEY = env.gemini_api_key

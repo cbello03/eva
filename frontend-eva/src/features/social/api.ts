@@ -48,6 +48,18 @@ export interface ChatMessage {
   sent_at: string;
 }
 
+export interface ChatbotAnswer {
+  course_id: number;
+  mode: "brief" | "detailed";
+  question: string;
+  answer: string;
+}
+
+export interface ChatbotTurn {
+  role: "user" | "assistant";
+  content: string;
+}
+
 interface ForumReplyApi {
   id: number;
   thread_id: number;
@@ -173,4 +185,18 @@ export async function toggleUpvote(replyId: number): Promise<ForumReply> {
     `/forum/replies/${replyId}/upvote`,
   );
   return mapReply(response.data);
+}
+
+/** Ask a question to the course-scoped chatbot. */
+export async function askCourseChatbot(
+  courseId: number,
+  question: string,
+  mode: "brief" | "detailed" = "brief",
+  history: ChatbotTurn[] = [],
+): Promise<ChatbotAnswer> {
+  const response = await apiClient.post<ChatbotAnswer>(
+    `/courses/${courseId}/chatbot/ask`,
+    { question, mode, history },
+  );
+  return response.data;
 }

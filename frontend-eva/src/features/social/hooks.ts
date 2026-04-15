@@ -84,3 +84,16 @@ export function useUpvote(threadId: number) {
     },
   });
 }
+
+// ── useCourseChatbot: ask question to course assistant ───────────────
+
+export function useCourseChatbot(courseId: number) {
+  return useMutation({
+    mutationFn: (data: {
+      question: string;
+      mode: "brief" | "detailed";
+      history: socialApi.ChatbotTurn[];
+    }) =>
+      socialApi.askCourseChatbot(courseId, data.question, data.mode, data.history),
+  });
+}

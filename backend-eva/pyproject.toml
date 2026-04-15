@@ -17,6 +17,9 @@ dependencies = [
     "channels-redis>=4.3,<5.0",
     "django-extensions>=4.1",
     "django-cors-headers>=4.9.0",
+    "langchain>=1.2.15",
+    "langgraph>=1.1.6",
+    "langchain-google-genai>=4.2.1",
 ]
 
 [dependency-groups]

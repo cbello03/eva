@@ -6,6 +6,8 @@ from ninja import Query, Router
 from apps.accounts.api import jwt_auth
 from apps.accounts.models import Role
 from apps.social.schemas import (
+    ChatbotAnswerOut,
+    ChatbotQuestionIn,
     AuthorOut,
     ReplyCreateIn,
     ReplyOut,
@@ -13,6 +15,7 @@ from apps.social.schemas import (
     ThreadListOut,
     ThreadOut,
 )
+from apps.social.chatbot import CourseChatbotService
 from apps.social.models import ReplyUpvote
 from apps.social.services import ForumService
 from common.permissions import require_role
@@ -149,4 +152,26 @@ def toggle_upvote(request: HttpRequest, reply_id: int):
         upvote_count=reply.upvote_count,
         has_upvoted=has_upvoted,
         created_at=reply.created_at,
+    )
+
+
+@router.post("/courses/{course_id}/chatbot/ask", response=ChatbotAnswerOut)
+def ask_course_chatbot(
+    request: HttpRequest,
+    course_id: int,
+    payload: ChatbotQuestionIn,
+):
+    """Answer a question using only the context of the selected course."""
+    answer = CourseChatbotService.ask(
+        request.auth,
+        course_id,
+        payload.question,
+        payload.mode,
+        payload.history,
+    )
+    return ChatbotAnswerOut(
+        course_id=course_id,
+        mode=payload.mode,
+        question=payload.question,
+        answer=answer,
     )

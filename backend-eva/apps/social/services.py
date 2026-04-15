@@ -60,10 +60,16 @@ class ForumService:
     # ------------------------------------------------------------------
 
     @staticmethod
-    def create_thread(user: User, course_id: int, title: str, body: str) -> ForumThread:
-        """Create a new forum thread in a course."""
+    def ensure_course_access(user: User, course_id: int) -> Course:
+        """Return course if user can access social features for it."""
         course = ForumService._get_course(course_id)
         _check_enrollment(user, course)
+        return course
+
+    @staticmethod
+    def create_thread(user: User, course_id: int, title: str, body: str) -> ForumThread:
+        """Create a new forum thread in a course."""
+        course = ForumService.ensure_course_access(user, course_id)
 
         now = tz.now()
         return ForumThread.objects.create(
@@ -85,8 +91,7 @@ class ForumService:
 
         Returns (total_count, page_items).
         """
-        course = ForumService._get_course(course_id)
-        _check_enrollment(user, course)
+        course = ForumService.ensure_course_access(user, course_id)
 
         qs = (
             ForumThread.objects.filter(course=course, is_hidden=False)
