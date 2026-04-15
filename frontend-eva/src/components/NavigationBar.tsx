@@ -21,7 +21,6 @@ import {
 import {
   School as SchoolIcon,
   Dashboard as DashboardIcon,
-  Leaderboard as LeaderboardIcon,
   Notifications as NotificationsIcon,
   Person as PersonIcon,
   Logout as LogoutIcon,

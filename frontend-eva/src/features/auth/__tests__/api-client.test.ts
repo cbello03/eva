@@ -21,13 +21,24 @@ const axiosModule = await import("axios");
 const axios = axiosModule.default;
 const { AxiosHeaders } = axiosModule;
 
+type InterceptorHandler<TIn, TOut = TIn> = {
+  fulfilled?: (value: TIn) => TOut | Promise<TOut>;
+  rejected?: (error: unknown) => unknown;
+};
+
+type InterceptorWithHandlers<TIn, TOut = TIn> = {
+  handlers: InterceptorHandler<TIn, TOut>[];
+};
+
 // Helper to get interceptor handlers
 function getRequestInterceptor() {
-  return (apiClient.interceptors.request as any).handlers[0]?.fulfilled;
+  const manager = apiClient.interceptors.request as unknown as InterceptorWithHandlers<InternalAxiosRequestConfig>;
+  return manager.handlers[0]?.fulfilled;
 }
 
 function getResponseRejected() {
-  return (apiClient.interceptors.response as any).handlers[0]?.rejected;
+  const manager = apiClient.interceptors.response as unknown as InterceptorWithHandlers<unknown, unknown>;
+  return manager.handlers[0]?.rejected;
 }
 
 describe("apiClient", () => {
@@ -73,7 +84,7 @@ describe("apiClient", () => {
       const originalConfig = {
         headers: new AxiosHeaders(),
         _retry: false,
-      } as any;
+      } as InternalAxiosRequestConfig & { _retry?: boolean };
 
       const error = {
         config: originalConfig,
@@ -89,7 +100,7 @@ describe("apiClient", () => {
       }
 
       expect(axios.post).toHaveBeenCalledWith(
-        "/api/v1/auth/refresh",
+        "http://localhost:8000/api/v1/auth/refresh",
         {},
         { withCredentials: true },
       );
@@ -106,7 +117,7 @@ describe("apiClient", () => {
       const originalConfig = {
         headers: new AxiosHeaders(),
         _retry: false,
-      } as any;
+      } as InternalAxiosRequestConfig & { _retry?: boolean };
 
       const error = {
         config: originalConfig,
@@ -136,11 +147,12 @@ describe("apiClient", () => {
       try {
         await getResponseRejected()(error);
         expect.unreachable("should have thrown");
-      } catch (e: any) {
+      } catch (e: unknown) {
         expect(e).toBeInstanceOf(ApiError);
-        expect(e.status).toBe(403);
-        expect(e.code).toBe("ACCESS_DENIED");
-        expect(e.message).toBe("Not allowed");
+        const apiError = e as ApiError;
+        expect(apiError.status).toBe(403);
+        expect(apiError.code).toBe("ACCESS_DENIED");
+        expect(apiError.message).toBe("Not allowed");
       }
     });
 
@@ -157,11 +169,12 @@ describe("apiClient", () => {
       try {
         await getResponseRejected()(error);
         expect.unreachable("should have thrown");
-      } catch (e: any) {
+      } catch (e: unknown) {
         expect(e).toBeInstanceOf(ApiError);
-        expect(e.status).toBe(429);
-        expect(e.code).toBe("RATE_LIMITED");
-        expect(e.retryAfter).toBe(30);
+        const apiError = e as ApiError;
+        expect(apiError.status).toBe(429);
+        expect(apiError.code).toBe("RATE_LIMITED");
+        expect(apiError.retryAfter).toBe(30);
       }
     });
 
@@ -178,10 +191,11 @@ describe("apiClient", () => {
       try {
         await getResponseRejected()(error);
         expect.unreachable("should have thrown");
-      } catch (e: any) {
+      } catch (e: unknown) {
         expect(e).toBeInstanceOf(ApiError);
-        expect(e.status).toBe(500);
-        expect(e.code).toBe("SERVER_ERROR");
+        const apiError = e as ApiError;
+        expect(apiError.status).toBe(500);
+        expect(apiError.code).toBe("SERVER_ERROR");
       }
     });
 

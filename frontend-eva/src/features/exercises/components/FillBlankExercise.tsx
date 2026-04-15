@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
+import { Button, Paper, TextField, Typography } from "@mui/material";
 
 interface FillBlankExerciseProps {
   questionText: string;

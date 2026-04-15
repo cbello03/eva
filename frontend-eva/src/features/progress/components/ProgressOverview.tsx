@@ -4,7 +4,6 @@ import { Grid, Card, CardContent, Typography, Box } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import WhatshotIcon from "@mui/icons-material/Whatshot";
 import SchoolIcon from "@mui/icons-material/School";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import type { ProgressDashboard } from "../types";
 
 interface ProgressOverviewProps {

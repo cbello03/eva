@@ -81,6 +81,7 @@ beforeEach(() => {
   vi.useFakeTimers();
   MockWebSocket.reset();
   vi.stubGlobal("WebSocket", MockWebSocket);
+  vi.stubEnv("NEXT_PUBLIC_API_URL", "https://eva.test");
   // Mock window.location for URL construction
   vi.stubGlobal("location", {
     protocol: "https:",
@@ -108,6 +109,7 @@ describe("WebSocketManager", () => {
     });
 
     it("uses ws: protocol for http origins", () => {
+      vi.stubEnv("NEXT_PUBLIC_API_URL", "http://localhost:3000");
       vi.stubGlobal("location", { protocol: "http:", host: "localhost:3000" });
       const ws = createManager();
       ws.connect();
