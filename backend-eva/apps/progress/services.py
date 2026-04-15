@@ -282,6 +282,42 @@ class ProgressService:
     # ------------------------------------------------------------------
 
     @staticmethod
+    @transaction.atomic
+    def record_daily_activity(
+        student: User,
+        *,
+        lessons_completed: int = 0,
+        xp_earned: int = 0,
+        time_spent_minutes: int = 0,
+    ) -> DailyActivity:
+        """Upsert daily activity totals for the student.
+
+        This method aggregates activity for the current local date.
+        """
+        today = tz.localdate()
+        activity, _ = DailyActivity.objects.get_or_create(
+            student=student,
+            date=today,
+            defaults={
+                "lessons_completed": 0,
+                "xp_earned": 0,
+                "time_spent_minutes": 0,
+            },
+        )
+        activity.lessons_completed += max(0, lessons_completed)
+        activity.xp_earned += max(0, xp_earned)
+        activity.time_spent_minutes += max(0, time_spent_minutes)
+        activity.save(
+            update_fields=[
+                "lessons_completed",
+                "xp_earned",
+                "time_spent_minutes",
+                "updated_at",
+            ]
+        )
+        return activity
+
+    @staticmethod
     def get_activity_heatmap(
         student: User, days: int = 90
     ) -> list[ActivityDay]:

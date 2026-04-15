@@ -336,7 +336,26 @@ class ExerciseService:
                 lesson_id=session.lesson_id,
                 score=lesson_score,
             )
-            # TODO: Award XP via GamificationService on lesson completion
+            # Keep gamification/activity updates best-effort so lesson flow
+            # cannot fail if auxiliary systems have transient issues.
+            try:
+                from apps.gamification.services import GamificationService
+
+                xp_earned = 50 + int(round(lesson_score / 2))
+                GamificationService.award_xp(
+                    student=student,
+                    source_type="lesson",
+                    source_id=session.lesson_id,
+                    amount=xp_earned,
+                )
+                GamificationService.update_streak(student)
+                ProgressService.record_daily_activity(
+                    student=student,
+                    lessons_completed=1,
+                    xp_earned=xp_earned,
+                )
+            except Exception:
+                pass
 
         session.save()
 

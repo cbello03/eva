@@ -350,7 +350,8 @@ class GamificationService:
     def _leaderboard_from_db(period: str, user: User) -> dict:
         """DB fallback for leaderboard when Redis is unavailable."""
         profiles = (
-            GamificationProfile.objects.select_related("student")
+            GamificationProfile.objects.filter(total_xp__gt=0)
+            .select_related("student")
             .order_by("-total_xp")[:100]
         )
 
@@ -371,12 +372,13 @@ class GamificationService:
         user_xp = 0
         if user_profile:
             user_xp = user_profile.total_xp
-            user_rank = (
-                GamificationProfile.objects.filter(
-                    total_xp__gt=user_profile.total_xp
-                ).count()
-                + 1
-            )
+            if user_profile.total_xp > 0:
+                user_rank = (
+                    GamificationProfile.objects.filter(
+                        total_xp__gt=user_profile.total_xp
+                    ).count()
+                    + 1
+                )
 
         return {
             "period": period,

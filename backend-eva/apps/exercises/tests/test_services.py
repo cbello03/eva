@@ -7,6 +7,8 @@ import pytest
 from apps.accounts.models import Role, User
 from apps.courses.models import Course, Enrollment, Lesson, Unit
 from apps.exercises.models import AnswerRecord, Exercise, LessonSession
+from apps.gamification.models import GamificationProfile, XPTransaction
+from apps.progress.models import DailyActivity
 from apps.exercises.schemas import ExerciseCreateIn, ExerciseUpdateIn
 from apps.exercises.services import (
     ExerciseAlreadyAnsweredError,
@@ -335,6 +337,21 @@ class TestSubmitAnswer:
         assert session.is_completed is True
         assert session.completed_at is not None
         assert session.correct_first_attempt == 2
+
+        # Gamification should be awarded on lesson completion
+        profile = GamificationProfile.objects.get(student=student)
+        assert profile.total_xp > 0
+        assert profile.current_streak == 1
+        assert XPTransaction.objects.filter(
+            student=student,
+            source_type="lesson",
+            source_id=lesson.pk,
+        ).exists()
+
+        # Daily activity should reflect completed lesson and XP gained
+        activity = DailyActivity.objects.get(student=student)
+        assert activity.lessons_completed == 1
+        assert activity.xp_earned > 0
 
     def test_retry_flow(self, teacher, lesson, student, enrollment):
         """Wrong answer → retry at end → correct on retry → completed."""
