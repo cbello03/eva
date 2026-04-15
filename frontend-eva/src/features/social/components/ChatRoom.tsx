@@ -22,6 +22,38 @@ export default function ChatRoom({ courseId }: ChatRoomProps) {
 
   const currentUserId = useAuthStore((s) => s.user?.id);
 
+  const normalizeMessage = (message: unknown): ChatMessageType | null => {
+    if (!message || typeof message !== "object") return null;
+    const raw = message as {
+      id?: number;
+      course_id?: number;
+      author_id?: number;
+      author_display_name?: string;
+      content?: string;
+      sent_at?: string;
+    };
+    if (
+      typeof raw.id !== "number" ||
+      typeof raw.course_id !== "number" ||
+      typeof raw.author_id !== "number" ||
+      typeof raw.author_display_name !== "string" ||
+      typeof raw.content !== "string" ||
+      typeof raw.sent_at !== "string"
+    ) {
+      return null;
+    }
+    return {
+      id: raw.id,
+      course_id: raw.course_id,
+      author: {
+        id: raw.author_id,
+        display_name: raw.author_display_name,
+      },
+      content: raw.content,
+      sent_at: raw.sent_at,
+    };
+  };
+
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
@@ -44,9 +76,11 @@ export default function ChatRoom({ courseId }: ChatRoomProps) {
       };
 
       if (msg.type === "history" && msg.messages) {
-        setMessages(msg.messages);
+        setMessages(msg.messages.map(normalizeMessage).filter((m): m is ChatMessageType => Boolean(m)));
       } else if (msg.type === "message" && msg.message) {
-        setMessages((prev) => [...prev, msg.message!]);
+        const normalized = normalizeMessage(msg.message);
+        if (!normalized) return;
+        setMessages((prev) => [...prev, normalized]);
       }
     });
 

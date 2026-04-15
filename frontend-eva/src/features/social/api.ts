@@ -48,6 +48,65 @@ export interface ChatMessage {
   sent_at: string;
 }
 
+interface ForumReplyApi {
+  id: number;
+  thread_id: number;
+  author_id: number;
+  author_display_name: string;
+  body: string;
+  is_hidden: boolean;
+  upvote_count: number;
+  created_at: string;
+}
+
+interface ForumThreadApi {
+  id: number;
+  course_id: number;
+  author_id: number;
+  author_display_name: string;
+  title: string;
+  body: string;
+  is_hidden: boolean;
+  last_activity_at: string;
+  created_at: string;
+  replies?: ForumReplyApi[];
+}
+
+interface PaginatedThreadsApi {
+  count: number;
+  next_offset: number | null;
+  results: ForumThreadApi[];
+}
+
+const mapReply = (reply: ForumReplyApi): ForumReply => ({
+  id: reply.id,
+  thread_id: reply.thread_id,
+  author: {
+    id: reply.author_id,
+    display_name: reply.author_display_name,
+  },
+  body: reply.body,
+  is_hidden: reply.is_hidden,
+  upvote_count: reply.upvote_count,
+  has_upvoted: false,
+  created_at: reply.created_at,
+});
+
+const mapThread = (thread: ForumThreadApi): ForumThread => ({
+  id: thread.id,
+  course_id: thread.course_id,
+  author: {
+    id: thread.author_id,
+    display_name: thread.author_display_name,
+  },
+  title: thread.title,
+  body: thread.body,
+  is_hidden: thread.is_hidden,
+  reply_count: thread.replies?.length ?? 0,
+  last_activity_at: thread.last_activity_at,
+  created_at: thread.created_at,
+});
+
 // ── API functions ────────────────────────────────────────────────────
 
 /** List forum threads for a course (paginated). */
@@ -56,11 +115,15 @@ export async function listThreads(
   offset = 0,
   limit = 20,
 ): Promise<PaginatedThreads> {
-  const response = await apiClient.get<PaginatedThreads>(
+  const response = await apiClient.get<PaginatedThreadsApi>(
     `/courses/${courseId}/forum/threads`,
     { params: { offset, limit } },
   );
-  return response.data;
+  return {
+    count: response.data.count,
+    next_offset: response.data.next_offset,
+    results: response.data.results.map(mapThread),
+  };
 }
 
 /** Create a new forum thread. */
@@ -68,19 +131,23 @@ export async function createThread(
   courseId: number,
   data: { title: string; body: string },
 ): Promise<ForumThread> {
-  const response = await apiClient.post<ForumThread>(
+  const response = await apiClient.post<ForumThreadApi>(
     `/courses/${courseId}/forum/threads`,
     data,
   );
-  return response.data;
+  return mapThread(response.data);
 }
 
 /** Get a thread with its replies. */
 export async function getThread(threadId: number): Promise<ThreadDetail> {
-  const response = await apiClient.get<ThreadDetail>(
+  const response = await apiClient.get<ForumThreadApi>(
     `/forum/threads/${threadId}`,
   );
-  return response.data;
+  const thread = response.data;
+  return {
+    ...mapThread(thread),
+    replies: (thread.replies ?? []).map(mapReply),
+  };
 }
 
 /** Reply to a thread. */
@@ -88,11 +155,11 @@ export async function createReply(
   threadId: number,
   data: { body: string },
 ): Promise<ForumReply> {
-  const response = await apiClient.post<ForumReply>(
+  const response = await apiClient.post<ForumReplyApi>(
     `/forum/threads/${threadId}/replies`,
     data,
   );
-  return response.data;
+  return mapReply(response.data);
 }
 
 /** Flag a post (Teacher/Admin only). */
@@ -102,8 +169,8 @@ export async function flagPost(postId: number): Promise<void> {
 
 /** Toggle upvote on a reply. */
 export async function toggleUpvote(replyId: number): Promise<ForumReply> {
-  const response = await apiClient.post<ForumReply>(
+  const response = await apiClient.post<ForumReplyApi>(
     `/forum/replies/${replyId}/upvote`,
   );
-  return response.data;
+  return mapReply(response.data);
 }

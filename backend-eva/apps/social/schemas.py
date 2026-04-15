@@ -53,16 +53,26 @@ class ReplyCreateIn(Schema):
 # Response schemas
 # ------------------------------------------------------------------
 
+class AuthorOut(Schema):
+    """Lightweight author representation."""
+
+    id: int
+    display_name: str
+
+
 class ReplyOut(Schema):
     """Forum reply representation in API responses."""
 
     id: int
     thread_id: int
+    author: AuthorOut
+    # Legacy flat fields kept for backward compatibility.
     author_id: int
     author_display_name: str
     body: str
     is_hidden: bool
     upvote_count: int
+    has_upvoted: bool = False
     created_at: datetime
 
 
@@ -71,11 +81,14 @@ class ThreadOut(Schema):
 
     id: int
     course_id: int
+    author: AuthorOut
+    # Legacy flat fields kept for backward compatibility.
     author_id: int
     author_display_name: str
     title: str
     body: str
     is_hidden: bool
+    reply_count: int = 0
     last_activity_at: datetime
     created_at: datetime
     replies: list[ReplyOut] = []
@@ -94,6 +107,8 @@ class ChatMessageOut(Schema):
 
     id: int
     course_id: int
+    author: AuthorOut
+    # Legacy flat fields kept for backward compatibility.
     author_id: int
     author_display_name: str
     content: str

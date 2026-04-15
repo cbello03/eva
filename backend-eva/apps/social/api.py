@@ -6,12 +6,14 @@ from ninja import Query, Router
 from apps.accounts.api import jwt_auth
 from apps.accounts.models import Role
 from apps.social.schemas import (
+    AuthorOut,
     ReplyCreateIn,
     ReplyOut,
     ThreadCreateIn,
     ThreadListOut,
     ThreadOut,
 )
+from apps.social.models import ReplyUpvote
 from apps.social.services import ForumService
 from common.permissions import require_role
 
@@ -30,6 +32,7 @@ def _thread_out(thread, include_replies: bool = False) -> ThreadOut:
             replies.append(ReplyOut(
                 id=r.pk,
                 thread_id=r.thread_id,
+                author=AuthorOut(id=r.author_id, display_name=r.author.display_name),
                 author_id=r.author_id,
                 author_display_name=r.author.display_name,
                 body=r.body,
@@ -40,11 +43,13 @@ def _thread_out(thread, include_replies: bool = False) -> ThreadOut:
     return ThreadOut(
         id=thread.pk,
         course_id=thread.course_id,
+        author=AuthorOut(id=thread.author_id, display_name=thread.author.display_name),
         author_id=thread.author_id,
         author_display_name=thread.author.display_name,
         title=thread.title,
         body=thread.body,
         is_hidden=thread.is_hidden,
+        reply_count=thread.replies.filter(is_hidden=False).count(),
         last_activity_at=thread.last_activity_at,
         created_at=thread.created_at,
         replies=replies,
@@ -101,11 +106,13 @@ def create_reply(request: HttpRequest, thread_id: int, payload: ReplyCreateIn):
     return 201, ReplyOut(
         id=reply.pk,
         thread_id=reply.thread_id,
+        author=AuthorOut(id=reply.author_id, display_name=request.auth.display_name),
         author_id=reply.author_id,
         author_display_name=request.auth.display_name,
         body=reply.body,
         is_hidden=reply.is_hidden,
         upvote_count=reply.upvote_count,
+        has_upvoted=False,
         created_at=reply.created_at,
     )
 
@@ -130,13 +137,16 @@ def flag_post(request: HttpRequest, post_id: int, post_type: str = Query("thread
 def toggle_upvote(request: HttpRequest, reply_id: int):
     """Toggle upvote on a forum reply."""
     reply = ForumService.toggle_upvote(request.auth, reply_id)
+    has_upvoted = ReplyUpvote.objects.filter(reply=reply, user=request.auth).exists()
     return ReplyOut(
         id=reply.pk,
         thread_id=reply.thread_id,
+        author=AuthorOut(id=reply.author_id, display_name=reply.author.display_name),
         author_id=reply.author_id,
         author_display_name=reply.author.display_name,
         body=reply.body,
         is_hidden=reply.is_hidden,
         upvote_count=reply.upvote_count,
+        has_upvoted=has_upvoted,
         created_at=reply.created_at,
     )

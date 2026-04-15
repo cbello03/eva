@@ -16,6 +16,8 @@ import {
   ArrowBack as ArrowBackIcon,
   PersonAdd as EnrollIcon,
   PersonRemove as UnenrollIcon,
+  Forum as ForumIcon,
+  Chat as ChatIcon,
 } from "@mui/icons-material";
 import Link from "next/link";
 import { useCourse, useEnrollments, useEnroll, useUnenroll } from "@/features/courses/hooks";
@@ -31,6 +33,7 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
   const courseId = Number(courseIdStr);
   const { user } = useAuth();
   const isStudent = user?.role === "student";
+  const isTeacherOrAdmin = user?.role === "teacher" || user?.role === "admin";
 
   const { data: course, isLoading, error } = useCourse(courseId);
   const { data: enrollments } = useEnrollments();
@@ -42,6 +45,7 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
   );
   const isEnrolled = Boolean(enrollment);
   const progress = enrollment?.progress_percentage ?? 0;
+  const canAccessSocial = isEnrolled || isTeacherOrAdmin;
 
   const handleEnroll = () => enrollMutation.mutate(courseId);
   const handleUnenroll = () => unenrollMutation.mutate(courseId);
@@ -143,6 +147,39 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
             )}
           </Box>
         </Box>
+      </Paper>
+
+      <Paper sx={{ p: 2, mb: 3 }}>
+        <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
+          Comunidad del curso
+        </Typography>
+        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+          <Button
+            component={Link}
+            href={`/courses/${courseId}/forum`}
+            startIcon={<ForumIcon />}
+            variant="outlined"
+            size="small"
+            disabled={!canAccessSocial}
+          >
+            Foro
+          </Button>
+          <Button
+            component={Link}
+            href={`/courses/${courseId}/chat`}
+            startIcon={<ChatIcon />}
+            variant="outlined"
+            size="small"
+            disabled={!canAccessSocial}
+          >
+            Chat en vivo
+          </Button>
+        </Box>
+        {!canAccessSocial && (
+          <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
+            Inscribete al curso para acceder al foro y al chat.
+          </Typography>
+        )}
       </Paper>
 
       {enrollMutation.isError && (
