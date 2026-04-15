@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useCallback, useState } from "react";
+import { use, useState } from "react";
 import {
   Container,
   Typography,
@@ -61,31 +61,28 @@ export default function LessonPlayerPage({ params }: LessonPlayerPageProps) {
     );
   }
 
-  const handleSubmit = useCallback(
-    (answer: Record<string, unknown>) => {
-      if (!session?.current_exercise) return;
+  const handleSubmit = (answer: Record<string, unknown>) => {
+    if (!session?.current_exercise) return;
 
-      submitMutation.mutate(
-        {
-          exerciseId: session.current_exercise.id,
-          data: { answer },
-        },
-        {
-          onSuccess: (result) => {
-            setFeedback(result);
-            setShowFeedback(true);
+    submitMutation.mutate(
+      {
+        exerciseId: session.current_exercise.id,
+        data: { answer },
+      },
+      {
+        onSuccess: (result) => {
+          setFeedback(result);
+          setShowFeedback(true);
 
-            // Auto-advance after showing feedback
-            setTimeout(() => {
-              setShowFeedback(false);
-              setFeedback(null);
-            }, 2000);
-          },
+          // Auto-advance after showing feedback
+          setTimeout(() => {
+            setShowFeedback(false);
+            setFeedback(null);
+          }, 2000);
         },
-      );
-    },
-    [session?.current_exercise, submitMutation],
-  );
+      },
+    );
+  };
 
   if (isLoading) {
     return (
