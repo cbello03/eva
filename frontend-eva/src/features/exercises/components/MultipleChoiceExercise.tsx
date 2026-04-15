@@ -27,6 +27,14 @@ export default function MultipleChoiceExercise({
 }: MultipleChoiceExerciseProps) {
   const [selected, setSelected] = useState<string>("");
 
+  const getOptionLabel = (option: MultipleChoiceConfig["options"][number]) =>
+    typeof option === "string" ? option : option.text;
+
+  const getOptionKey = (
+    option: MultipleChoiceConfig["options"][number],
+    index: number,
+  ) => (typeof option === "string" ? `${option}-${index}` : String(option.id));
+
   const handleSubmit = () => {
     if (selected === "") return;
     onSubmit({ selected_index: Number(selected) });
@@ -43,10 +51,10 @@ export default function MultipleChoiceExercise({
       >
         {config.options.map((option, index) => (
           <FormControlLabel
-            key={index}
+            key={getOptionKey(option, index)}
             value={String(index)}
             control={<Radio />}
-            label={option}
+            label={getOptionLabel(option)}
             disabled={disabled}
             sx={{ mb: 0.5 }}
           />

@@ -13,8 +13,13 @@ export interface MatchingPair {
   right: string;
 }
 
+export interface MultipleChoiceOption {
+  id: number | string;
+  text: string;
+}
+
 export interface MultipleChoiceConfig {
-  options: string[];
+  options: Array<string | MultipleChoiceOption>;
   correct_index: number;
 }
 

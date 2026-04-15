@@ -67,6 +67,14 @@ class ExerciseAlreadyAnsweredError(DomainError):
         super().__init__(detail)
 
 
+class InvalidExerciseConfigError(DomainError):
+    status_code = 400
+    code = "invalid_exercise_config"
+
+    def __init__(self, detail: str = "Exercise configuration is invalid"):
+        super().__init__(detail)
+
+
 # ------------------------------------------------------------------
 # Helper functions
 # ------------------------------------------------------------------
@@ -359,7 +367,24 @@ def _evaluate_answer(
 
     if etype == "multiple_choice":
         selected = answer.get("selected_index")
-        correct_idx = config["correct_index"]
+        options = config.get("options", [])
+        correct_idx = config.get("correct_index")
+
+        # Backward compatibility: support seeded configs with
+        # {"options":[{"id","text"}...], "correct":"<id>"}.
+        if correct_idx is None:
+            correct_id = config.get("correct")
+            if correct_id is not None and isinstance(options, list):
+                for idx, option in enumerate(options):
+                    if isinstance(option, dict) and option.get("id") == correct_id:
+                        correct_idx = idx
+                        break
+
+        if not isinstance(correct_idx, int):
+            raise InvalidExerciseConfigError(
+                "Multiple choice config must include valid 'correct_index' or 'correct' option id"
+            )
+
         is_correct = selected == correct_idx
         correct_answer = None if is_correct else {"selected_index": correct_idx}
         feedback = "Correct!" if is_correct else "Incorrect."
@@ -367,9 +392,27 @@ def _evaluate_answer(
 
     if etype == "fill_blank":
         submitted_text = str(answer.get("text", "")).strip().lower()
-        accepted = [a.strip().lower() for a in config["accepted_answers"]]
+        accepted_answers = config.get("accepted_answers")
+
+        # Backward compatibility: support seeded configs with
+        # {"blanks":[{"id":"...","correct":"..."}]}.
+        if accepted_answers is None:
+            blanks = config.get("blanks", [])
+            if isinstance(blanks, list):
+                accepted_answers = [
+                    blank.get("correct")
+                    for blank in blanks
+                    if isinstance(blank, dict) and blank.get("correct")
+                ]
+
+        if not isinstance(accepted_answers, list) or len(accepted_answers) == 0:
+            raise InvalidExerciseConfigError(
+                "Fill blank config must include non-empty 'accepted_answers' or legacy 'blanks'"
+            )
+
+        accepted = [str(a).strip().lower() for a in accepted_answers]
         is_correct = submitted_text in accepted
-        correct_answer = None if is_correct else {"accepted_answers": config["accepted_answers"]}
+        correct_answer = None if is_correct else {"accepted_answers": accepted_answers}
         feedback = "Correct!" if is_correct else "Incorrect."
         return is_correct, correct_answer, feedback
 
