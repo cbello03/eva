@@ -10,16 +10,22 @@ import {
   CircularProgress,
   Alert,
   Divider,
+  Button,
 } from "@mui/material";
 import SchoolIcon from "@mui/icons-material/School";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import { useGamificationProfile } from "@/features/gamification/hooks";
 import { useEnrollments } from "@/features/courses/hooks";
+import { useAuth } from "@/features/auth/hooks";
 import XPDisplay from "@/features/gamification/components/XPDisplay";
 import StreakDisplay from "@/features/gamification/components/StreakDisplay";
 import LeaderboardTable from "@/features/gamification/components/LeaderboardTable";
+import Link from "next/link";
 
 export default function DashboardPage() {
+  const { user } = useAuth();
+  const isStudent = user?.role === "student";
+
   const {
     data: profile,
     isLoading: profileLoading,
@@ -29,6 +35,19 @@ export default function DashboardPage() {
     data: enrollments,
     isLoading: enrollmentsLoading,
   } = useEnrollments();
+
+  if (user && !isStudent) {
+    return (
+      <Container maxWidth="md" sx={{ py: 4 }}>
+        <Alert severity="info" sx={{ mb: 2 }}>
+          Este panel es para estudiantes. Como profesor, usa el panel docente para ver cursos y analiticas.
+        </Alert>
+        <Button component={Link} href="/teacher" variant="contained">
+          Ir al panel del profesor
+        </Button>
+      </Container>
+    );
+  }
 
   const isLoading = profileLoading || enrollmentsLoading;
 

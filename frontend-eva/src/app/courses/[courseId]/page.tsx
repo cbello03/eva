@@ -19,6 +19,7 @@ import {
 } from "@mui/icons-material";
 import Link from "next/link";
 import { useCourse, useEnrollments, useEnroll, useUnenroll } from "@/features/courses/hooks";
+import { useAuth } from "@/features/auth/hooks";
 import UnitAccordion from "@/features/courses/components/UnitAccordion";
 
 interface CourseDetailPageProps {
@@ -28,6 +29,8 @@ interface CourseDetailPageProps {
 export default function CourseDetailPage({ params }: CourseDetailPageProps) {
   const { courseId: courseIdStr } = use(params);
   const courseId = Number(courseIdStr);
+  const { user } = useAuth();
+  const isStudent = user?.role === "student";
 
   const { data: course, isLoading, error } = useCourse(courseId);
   const { data: enrollments } = useEnrollments();
@@ -96,7 +99,7 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
           </Box>
 
           <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 1 }}>
-            {isEnrolled ? (
+            {isStudent && isEnrolled ? (
               <>
                 <Box sx={{ width: 200 }}>
                   <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.5 }}>
@@ -124,7 +127,7 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
                   {unenrollMutation.isPending ? "Desinscribiendo…" : "Desinscribirse"}
                 </Button>
               </>
-            ) : (
+            ) : isStudent ? (
               <Button
                 variant="contained"
                 startIcon={<EnrollIcon />}
@@ -133,6 +136,10 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
               >
                 {enrollMutation.isPending ? "Inscribiendo…" : "Inscribirse en el curso"}
               </Button>
+            ) : (
+              <Alert severity="info" sx={{ maxWidth: 320 }}>
+                Vista de profesor: la inscripcion y reproduccion de lecciones es solo para estudiantes.
+              </Alert>
             )}
           </Box>
         </Box>

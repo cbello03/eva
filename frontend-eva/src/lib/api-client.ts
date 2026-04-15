@@ -138,7 +138,6 @@ apiClient.interceptors.response.use(
       const message =
         (error.response.data as { detail?: string })?.detail ??
         "You do not have permission to perform this action.";
-      console.error("[API] Access denied:", message);
       // Surface a structured error for UI consumption
       return Promise.reject(
         new ApiError(403, "ACCESS_DENIED", message),
@@ -152,7 +151,6 @@ apiClient.interceptors.response.use(
       const message = seconds
         ? `Too many requests. Please try again in ${seconds} seconds.`
         : "Too many requests. Please try again later.";
-      console.warn("[API] Rate limited:", message);
       return Promise.reject(
         new ApiError(429, "RATE_LIMITED", message, seconds),
       );
@@ -160,7 +158,6 @@ apiClient.interceptors.response.use(
 
     // ── 5xx Server Error: generic error ──
     if (status >= 500) {
-      console.error("[API] Server error:", status, error.response.data);
       return Promise.reject(
         new ApiError(
           status,

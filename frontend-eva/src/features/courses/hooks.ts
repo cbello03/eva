@@ -3,6 +3,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import { useAuthStore } from "@/features/auth/store";
 import * as coursesApi from "./api";
 
 // ── Query keys ───────────────────────────────────────────────────────
@@ -35,9 +36,13 @@ export function useCourse(courseId: number) {
 // ── useEnrollments: student's enrolled courses with progress ─────────
 
 export function useEnrollments() {
+  const { isAuthenticated, user } = useAuthStore();
+  const isStudent = user?.role === "student";
+
   return useQuery({
     queryKey: courseKeys.enrollments,
     queryFn: coursesApi.listEnrollments,
+    enabled: isAuthenticated && isStudent,
   });
 }
 

@@ -42,9 +42,9 @@ export default function PerformanceHeatmap({ cells }: PerformanceHeatmapProps) {
               {topic}
             </Typography>
             <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
-              {topicCells.map((cell) => (
+              {topicCells.map((cell, index) => (
                 <Tooltip
-                  key={cell.exercise_id}
+                  key={`${topic}-${cell.exercise_id}-${index}`}
                   title={`Ejercicio #${cell.exercise_id}: ${Math.round(cell.accuracy * 100)}% precisión (${cell.total_attempts} intentos)`}
                 >
                   <Box

@@ -13,6 +13,7 @@ import {
 import { ArrowBack as ArrowBackIcon } from "@mui/icons-material";
 import Link from "next/link";
 import { useLessonSession, useSubmitAnswer } from "@/features/exercises/hooks";
+import { useAuth } from "@/features/auth/hooks";
 import type { AnswerResult, Exercise } from "@/features/exercises/types";
 import ProgressBar from "@/features/exercises/components/ProgressBar";
 import FeedbackIndicator from "@/features/exercises/components/FeedbackIndicator";
@@ -30,6 +31,8 @@ export default function LessonPlayerPage({ params }: LessonPlayerPageProps) {
   const { courseId: courseIdStr, lessonId: lessonIdStr } = use(params);
   const courseId = Number(courseIdStr);
   const lessonId = Number(lessonIdStr);
+  const { user } = useAuth();
+  const isStudent = user?.role === "student";
 
   const {
     data: session,
@@ -40,6 +43,23 @@ export default function LessonPlayerPage({ params }: LessonPlayerPageProps) {
 
   const [feedback, setFeedback] = useState<AnswerResult | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
+
+  if (user && !isStudent) {
+    return (
+      <Container maxWidth="sm" sx={{ py: 4 }}>
+        <Alert severity="info" sx={{ mb: 2 }}>
+          La reproduccion de lecciones esta disponible solo para estudiantes.
+        </Alert>
+        <Button
+          component={Link}
+          href={`/courses/${courseId}`}
+          startIcon={<ArrowBackIcon />}
+        >
+          Volver al curso
+        </Button>
+      </Container>
+    );
+  }
 
   const handleSubmit = useCallback(
     (answer: Record<string, unknown>) => {

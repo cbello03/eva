@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useLogin } from "@/features/auth/hooks";
 import { loginSchema, type LoginFormData } from "@/features/auth/schemas";
+import { useAuthStore } from "@/features/auth/store";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { AxiosError } from "axios";
@@ -33,7 +34,8 @@ export function LoginForm() {
     setServerError(null);
     try {
       await loginMutation.mutateAsync(data);
-      router.push("/dashboard");
+      const role = useAuthStore.getState().user?.role;
+      router.push(role === "teacher" || role === "admin" ? "/teacher" : "/dashboard");
     } catch (err) {
       const axiosError = err as AxiosError<{ detail?: string }>;
       const message =

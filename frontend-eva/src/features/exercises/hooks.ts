@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useAuthStore } from "@/features/auth/store";
 import * as exercisesApi from "./api";
 import type { AnswerSubmission } from "./types";
 
@@ -11,6 +12,9 @@ export const exerciseKeys = {
 // ── useLessonSession: start or resume a lesson player session ────────
 
 export function useLessonSession(lessonId: number) {
+  const { isAuthenticated, user } = useAuthStore();
+  const isStudent = user?.role === "student";
+
   return useQuery({
     queryKey: exerciseKeys.session(lessonId),
     queryFn: async () => {
@@ -20,7 +24,7 @@ export function useLessonSession(lessonId: number) {
         return await exercisesApi.startLesson(lessonId);
       }
     },
-    enabled: lessonId > 0,
+    enabled: isAuthenticated && isStudent && lessonId > 0,
     staleTime: 0, // Always refetch to get latest session state
   });
 }

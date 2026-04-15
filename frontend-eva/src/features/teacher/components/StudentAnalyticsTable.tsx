@@ -48,8 +48,8 @@ export default function StudentAnalyticsTable({
           </TableRow>
         </TableHead>
         <TableBody>
-          {students.map((student) => (
-            <TableRow key={student.id}>
+          {students.map((student, index) => (
+            <TableRow key={`${student.id}-${student.email}-${index}`}>
               <TableCell>{student.display_name}</TableCell>
               <TableCell>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>

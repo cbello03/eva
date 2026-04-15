@@ -55,6 +55,7 @@ export default function NavigationBar() {
   const isActive = (path: string) => pathname === path || pathname.startsWith(path + "/");
 
   const isTeacher = user?.role === "teacher" || user?.role === "admin";
+  const dashboardPath = isTeacher ? "/teacher" : "/dashboard";
 
   return (
     <AppBar position="sticky" color="default" elevation={1} sx={{ bgcolor: "background.paper" }}>
@@ -62,7 +63,7 @@ export default function NavigationBar() {
         <Typography
           variant="h6"
           component={Link}
-          href={isAuthenticated ? "/dashboard" : "/"}
+          href={isAuthenticated ? dashboardPath : "/"}
           sx={{
             fontFamily: "'Fraunces', serif",
             fontWeight: 700,
@@ -79,9 +80,9 @@ export default function NavigationBar() {
             <Box sx={{ display: "flex", gap: 0.5, flexGrow: 1 }}>
               <Button
                 component={Link}
-                href="/dashboard"
+                href={dashboardPath}
                 startIcon={<DashboardIcon />}
-                color={isActive("/dashboard") ? "primary" : "inherit"}
+                color={isActive(dashboardPath) ? "primary" : "inherit"}
                 size="small"
               >
                 Panel
