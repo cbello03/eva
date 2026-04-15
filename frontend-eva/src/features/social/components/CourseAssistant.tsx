@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useEffect } from "react";
+import Link from "next/link";
 import {
   Alert,
   Box,
@@ -18,6 +19,7 @@ import {
   Select,
   TextField,
   Typography,
+  Link as MuiLink,
 } from "@mui/material";
 import { useCourseChatbot } from "@/features/social/hooks";
 import type { ChatbotTurn } from "@/features/social/api";
@@ -28,27 +30,18 @@ interface CourseAssistantProps {
 
 export default function CourseAssistant({ courseId }: CourseAssistantProps) {
   const askMutation = useCourseChatbot(courseId);
+  const storageKey = `eva-course-assistant-history-${courseId}`;
   const [question, setQuestion] = useState("");
   const [lastQuestion, setLastQuestion] = useState<string | null>(null);
   const [mode, setMode] = useState<"brief" | "detailed">("brief");
-  const [history, setHistory] = useState<ChatbotTurn[]>([]);
-  const [confirmClearOpen, setConfirmClearOpen] = useState(false);
-  const storageKey = `eva-course-assistant-history-${courseId}`;
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  const [history, setHistory] = useState<ChatbotTurn[]>(() => {
+    if (typeof window === "undefined") return [];
     try {
       const raw = window.localStorage.getItem(storageKey);
-      if (!raw) {
-        setHistory([]);
-        return;
-      }
+      if (!raw) return [];
       const parsed = JSON.parse(raw) as unknown;
-      if (!Array.isArray(parsed)) {
-        setHistory([]);
-        return;
-      }
-      const sanitized = parsed
+      if (!Array.isArray(parsed)) return [];
+      return parsed
         .filter(
           (item): item is ChatbotTurn =>
             typeof item === "object" &&
@@ -60,11 +53,11 @@ export default function CourseAssistant({ courseId }: CourseAssistantProps) {
             typeof (item as { content: string }).content === "string",
         )
         .slice(-8);
-      setHistory(sanitized);
     } catch {
-      setHistory([]);
+      return [];
     }
-  }, [storageKey]);
+  });
+  const [confirmClearOpen, setConfirmClearOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -186,6 +179,25 @@ export default function CourseAssistant({ courseId }: CourseAssistantProps) {
             Modo: {askMutation.data.mode === "brief" ? "breve" : "detallada"}
           </Typography>
           <Typography variant="body2">{askMutation.data.answer}</Typography>
+          {askMutation.data.sources.length > 0 && (
+            <Box sx={{ mt: 1.25 }}>
+              <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 0.25 }}>
+                Fuentes del curso
+              </Typography>
+              {askMutation.data.sources.map((source, idx) => (
+                <MuiLink
+                  key={`source-${idx}`}
+                  component={Link}
+                  href={source.href}
+                  underline="hover"
+                  color="text.secondary"
+                  sx={{ display: "block", fontSize: "0.75rem" }}
+                >
+                  - {source.label}
+                </MuiLink>
+              ))}
+            </Box>
+          )}
         </Box>
       )}
 

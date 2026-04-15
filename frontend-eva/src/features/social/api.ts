@@ -53,6 +53,12 @@ export interface ChatbotAnswer {
   mode: "brief" | "detailed";
   question: string;
   answer: string;
+  sources: ChatbotSource[];
+}
+
+export interface ChatbotSource {
+  label: string;
+  href: string;
 }
 
 export interface ChatbotTurn {

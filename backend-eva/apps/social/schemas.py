@@ -159,6 +159,13 @@ class ChatMessageOut(Schema):
     sent_at: datetime
 
 
+class ChatbotSourceOut(Schema):
+    """Reference source used by chatbot answers."""
+
+    label: str
+    href: str
+
+
 class ChatbotAnswerOut(Schema):
     """Course chatbot response."""
 
@@ -166,3 +173,4 @@ class ChatbotAnswerOut(Schema):
     mode: str
     question: str
     answer: str
+    sources: list[ChatbotSourceOut] = []

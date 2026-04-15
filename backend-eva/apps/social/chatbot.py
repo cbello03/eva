@@ -10,6 +10,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph import END, START, StateGraph
 
 from apps.courses.models import Unit
+from apps.projects.models import Project
 from apps.social.services import ForumService
 from common.exceptions import DomainError
 
@@ -27,6 +28,7 @@ class ChatbotState(TypedDict):
     mode: str
     history: list[dict[str, str]]
     course_context: str
+    course_sources: list[dict[str, str]]
     answer: str
 
 
@@ -36,12 +38,18 @@ class CourseChatbotService:
     _graph = None
 
     @staticmethod
-    def _build_course_context(course) -> str:
+    def _build_course_context(course) -> tuple[str, list[dict[str, str]]]:
         units = (
             Unit.objects.filter(course=course)
             .prefetch_related("lessons__exercises")
             .order_by("order")
         )
+        projects = list(Project.objects.filter(course=course).order_by("created_at"))
+        key_topics: set[str] = set()
+        key_terms: set[str] = set()
+        sources: list[dict[str, str]] = [
+            {"label": f"Curso: {course.title}", "href": f"/courses/{course.pk}"}
+        ]
 
         context_lines = [
             f"Curso: {course.title}",
@@ -51,14 +59,37 @@ class CourseChatbotService:
         ]
         for unit in units:
             context_lines.append(f"- Unidad {unit.order}: {unit.title}")
+            sources.append(
+                {
+                    "label": f"Unidad {unit.order}: {unit.title}",
+                    "href": f"/courses/{course.pk}",
+                }
+            )
+            key_terms.update(unit.title.lower().split())
             lessons = list(unit.lessons.all().order_by("order"))
             for lesson in lessons:
                 context_lines.append(f"  - Leccion {lesson.order}: {lesson.title}")
+                sources.append(
+                    {
+                        "label": f"Unidad {unit.order}, Leccion {lesson.order}: {lesson.title}",
+                        "href": f"/courses/{course.pk}/lessons/{lesson.pk}",
+                    }
+                )
+                key_terms.update(lesson.title.lower().split())
                 exercises = list(lesson.exercises.all().order_by("order"))
                 for exercise in exercises:
                     topic = exercise.topic or "sin tema"
+                    if topic and topic != "sin tema":
+                        key_topics.add(topic)
+                    key_terms.update(exercise.question_text.lower().split())
                     context_lines.append(
                         f"    - Ejercicio {exercise.order} [{exercise.exercise_type}] ({topic}): {exercise.question_text}"
+                    )
+                    sources.append(
+                        {
+                            "label": f"Leccion {lesson.order}, Ejercicio {exercise.order}: {exercise.question_text[:80]}",
+                            "href": f"/courses/{course.pk}/lessons/{lesson.pk}",
+                        }
                     )
             if not lessons:
                 context_lines.append("  - Sin lecciones")
@@ -66,7 +97,47 @@ class CourseChatbotService:
         if not units:
             context_lines.append("- Curso sin unidades definidas")
 
-        return "\n".join(context_lines)
+        context_lines.append("")
+        context_lines.append("Temas clave del curso:")
+        if key_topics:
+            context_lines.append("- " + ", ".join(sorted(key_topics)))
+        else:
+            context_lines.append("- Sin temas explicitos")
+
+        context_lines.append("")
+        context_lines.append("Proyectos del curso:")
+        if not projects:
+            context_lines.append("- Sin proyectos definidos")
+        else:
+            for idx, project in enumerate(projects, start=1):
+                context_lines.append(f"- Proyecto {idx}: {project.title}")
+                sources.append(
+                    {
+                        "label": f"Proyecto {idx}: {project.title}",
+                        "href": f"/projects/{project.pk}",
+                    }
+                )
+                context_lines.append(f"  - Descripcion: {project.description}")
+                if isinstance(project.rubric, list) and project.rubric:
+                    criteria = [
+                        str(item.get("criterion", "")).strip()
+                        for item in project.rubric
+                        if isinstance(item, dict) and item.get("criterion")
+                    ]
+                    if criteria:
+                        context_lines.append(
+                            f"  - Criterios de evaluacion: {', '.join(criteria)}"
+                        )
+
+        deduped_sources = []
+        seen = set()
+        for source in sources:
+            source_label = source.get("label", "")
+            if source_label in seen:
+                continue
+            seen.add(source_label)
+            deduped_sources.append(source)
+        return "\n".join(context_lines), deduped_sources[:12]
 
     @classmethod
     def _get_graph(cls):
@@ -101,6 +172,10 @@ class CourseChatbotService:
                 "'vamos paso a paso') cuando encajen de forma natural.\n"
                 "Evita exageraciones, caricaturas o modismos forzados.\n"
                 "Responde solo usando la informacion del curso proporcionada.\n"
+                "Puedes explicar conceptos base del curso (definiciones y ejemplos sencillos) "
+                "cuando sean coherentes con el titulo, descripcion, temas o ejercicios del curso.\n"
+                "Al final de cada respuesta agrega una linea con este formato exacto:\n"
+                "Fuentes: <lista separada por '; ' con 1 a 3 referencias concretas del curso>.\n"
                 f"{style_instruction}\n"
                 "Si la pregunta no pertenece al curso o no se puede responder con ese contexto, "
                 "responde exactamente: 'Solo puedo responder preguntas sobre este curso en particular.'\n"
@@ -112,6 +187,8 @@ class CourseChatbotService:
             )
             user_prompt = (
                 f"Contexto del curso:\n{state['course_context']}\n\n"
+                "Referencias disponibles:\n"
+                f"{'; '.join(source.get('label', '') for source in state.get('course_sources', []))}\n\n"
                 f"Historial reciente (si existe):\n{history_text or 'Sin historial previo'}\n\n"
                 f"Pregunta del estudiante:\n{state['question']}"
             )
@@ -140,7 +217,7 @@ class CourseChatbotService:
         question: str,
         mode: str = "brief",
         history: list[dict[str, str]] | None = None,
-    ) -> str:
+    ) -> tuple[str, list[dict[str, str]]]:
         question = question.strip()
         if not question:
             raise DomainError("Question is required")
@@ -153,7 +230,7 @@ class CourseChatbotService:
             history = history[-8:]
 
         course = ForumService.ensure_course_access(user, course_id)
-        course_context = cls._build_course_context(course)
+        course_context, course_sources = cls._build_course_context(course)
         graph = cls._get_graph()
         result = graph.invoke(
             {
@@ -161,6 +238,39 @@ class CourseChatbotService:
                 "mode": mode,
                 "history": history,
                 "course_context": course_context,
+                "course_sources": course_sources,
             }
         )
-        return result.get("answer", "").strip()
+        raw_answer = result.get("answer", "").strip()
+        default_sources = course_sources[:3]
+        if "Fuentes:" not in raw_answer:
+            return raw_answer, default_sources
+
+        answer_text, _, sources_text = raw_answer.partition("Fuentes:")
+        parsed_sources = [
+            source.strip()
+            for source in sources_text.split(";")
+            if source.strip()
+        ]
+        if not parsed_sources:
+            return answer_text.strip(), default_sources
+
+        source_map = {
+            source.get("label", "").strip().lower(): source for source in course_sources
+        }
+        matched_sources: list[dict[str, str]] = []
+        for parsed in parsed_sources:
+            normalized = parsed.lower()
+            matched = source_map.get(normalized)
+            if matched is None:
+                for source in course_sources:
+                    label = source.get("label", "").lower()
+                    if normalized in label or label in normalized:
+                        matched = source
+                        break
+            if matched and matched not in matched_sources:
+                matched_sources.append(matched)
+            if len(matched_sources) >= 3:
+                break
+
+        return answer_text.strip(), (matched_sources if matched_sources else default_sources)

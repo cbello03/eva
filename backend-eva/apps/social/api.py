@@ -162,7 +162,7 @@ def ask_course_chatbot(
     payload: ChatbotQuestionIn,
 ):
     """Answer a question using only the context of the selected course."""
-    answer = CourseChatbotService.ask(
+    answer, sources = CourseChatbotService.ask(
         request.auth,
         course_id,
         payload.question,
@@ -174,4 +174,5 @@ def ask_course_chatbot(
         mode=payload.mode,
         question=payload.question,
         answer=answer,
+        sources=sources,
     )
