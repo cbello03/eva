@@ -8,6 +8,7 @@ from django.utils import timezone as tz
 from apps.accounts.models import User
 from apps.courses.models import Enrollment, Lesson
 from apps.exercises.models import AnswerRecord, Exercise, LessonSession
+from apps.progress.services import ProgressService
 from apps.exercises.schemas import (
     AnswerResult,
     ExerciseCreateIn,
@@ -317,8 +318,25 @@ class ExerciseService:
         if session.current_exercise_index >= len(sequence):
             session.is_completed = True
             session.completed_at = tz.now()
+            lesson_exercises = list(session.lesson.exercises.values_list("pk", flat=True))
+            total_lesson_exercises = len(lesson_exercises)
+            correct_lesson_answers = AnswerRecord.objects.filter(
+                student=student,
+                session=session,
+                exercise_id__in=lesson_exercises,
+                is_correct=True,
+            ).count()
+            lesson_score = (
+                (correct_lesson_answers / total_lesson_exercises) * 100.0
+                if total_lesson_exercises > 0
+                else 0.0
+            )
+            ProgressService.update_lesson_progress(
+                student=student,
+                lesson_id=session.lesson_id,
+                score=lesson_score,
+            )
             # TODO: Award XP via GamificationService on lesson completion
-            # TODO: Update progress via ProgressService on lesson completion
 
         session.save()
 

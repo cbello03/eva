@@ -8,6 +8,8 @@ from django.utils import timezone as tz
 
 from apps.accounts.models import Role, User
 from apps.courses.models import Course, Enrollment, Lesson, Unit
+from apps.progress.models import CourseProgress
+from apps.progress.services import ProgressService
 from apps.courses.schemas import CourseCreateIn, CourseUpdateIn
 from common.exceptions import (
     CourseNotPublishedError,
@@ -275,6 +277,7 @@ class CourseService:
             # Re-activate a previously deactivated enrollment
             existing.is_active = True
             existing.save(update_fields=["is_active", "updated_at"])
+            ProgressService.initialize_course_progress(student, course.pk)
             return existing
 
         try:
@@ -284,8 +287,7 @@ class CourseService:
         except IntegrityError:
             raise DuplicateEnrollmentError()
 
-        # Initialize progress tracking (ProgressService not yet implemented,
-        # will be wired in the progress app task)
+        ProgressService.initialize_course_progress(student, course.pk)
         return enrollment
 
     @staticmethod
@@ -309,6 +311,12 @@ class CourseService:
             .select_related("course")
             .order_by("-enrolled_at")
         )
+        progress_map = {
+            cp.course_id: cp.completion_percentage
+            for cp in CourseProgress.objects.filter(
+                student=student, course_id__in=[e.course_id for e in enrollments]
+            )
+        }
         results = []
         for enrollment in enrollments:
             results.append({
@@ -317,7 +325,7 @@ class CourseService:
                 "course_title": enrollment.course.title,
                 "is_active": enrollment.is_active,
                 "enrolled_at": enrollment.enrolled_at,
-                "progress_percentage": 0.0,  # Will be filled by ProgressService
+                "progress_percentage": progress_map.get(enrollment.course_id, 0.0),
             })
         return results
 
